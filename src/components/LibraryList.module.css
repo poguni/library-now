@@ -262,4 +262,15 @@
   .cards {
     gap: 8px;
   }
+
+  /* 시트 안에서는 필터 칩을 한 줄로, 가로로 넘김 (DESIGN 5.10) */
+  .filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .fchip {
+    flex: none;
+  }
 }

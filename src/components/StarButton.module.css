@@ -1,0 +1,22 @@
+.star {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin: -10px -12px -10px 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+}
+
+.star[aria-pressed='true'] {
+  color: var(--star);
+}
+
+.star:focus-visible {
+  outline-offset: -6px;
+}

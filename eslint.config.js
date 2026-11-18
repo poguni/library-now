@@ -5,7 +5,17 @@ import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', 'design', '.playwright-mcp', '.omc'] },
+  {
+    ignores: [
+      'dist',
+      'node_modules',
+      'design',
+      '.playwright-mcp',
+      '.omc',
+      'test-results',
+      'playwright-report',
+    ],
+  },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

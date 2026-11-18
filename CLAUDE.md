@@ -32,10 +32,8 @@ npm run test         # Vitest 단위 테스트
 npm run lint         # ESLint + Prettier 검사
 npm run format       # Prettier로 서식 정리
 npm run data:build   # data/raw + data/overrides + data/holidays → public/data/*.json (검증 실패 시 중단)
+npm run test:e2e     # Playwright 화면 테스트 (1440×900·390×844 × 테마 3종, 주요 동작). 처음 한 번 `npx playwright install chromium`
 ```
-
-아직 없는 스크립트 (해당 단계에서 추가):
-- `npm run test:e2e`: Playwright 화면 테스트, `--trace off` 기본 (M1 이후)
 
 ## 폴더 구조
 ```

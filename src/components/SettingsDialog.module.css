@@ -1,0 +1,238 @@
+.dialog {
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--pop-shadow);
+  overflow: hidden;
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog::backdrop {
+  background: var(--map-grid);
+  backdrop-filter: blur(2px);
+}
+
+.head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 8px 8px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.head h2 {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: 20px;
+}
+
+.body {
+  overflow-y: auto;
+  padding: 16px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.sec {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sec > h3,
+.sec > legend {
+  margin: 0 0 4px;
+  padding: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.themes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+/* 각 미리보기 카드는 자기 테마의 토큰으로 그려집니다 */
+.theme {
+  position: relative;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.theme:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.theme:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.theme input {
+  position: absolute;
+  opacity: 0;
+}
+
+.preview {
+  height: 64px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-2);
+}
+
+.pTop {
+  flex: 0 0 16px;
+  background: var(--top-bg);
+}
+
+.pCard {
+  margin: 8px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+
+.pCard i {
+  height: 20px;
+  font-style: normal;
+  font-size: 10px;
+}
+
+.themeName {
+  font-family: var(--font-head);
+  font-weight: 700;
+}
+
+.themeDesc {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.hint {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.place {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.field {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.field input {
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--field);
+  color: var(--text);
+}
+
+.empty {
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.btn {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+}
+
+.info {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 14px;
+  font-size: 13px;
+}
+
+.info dt {
+  color: var(--muted);
+}
+
+.info dd {
+  margin: 0;
+}
+
+.info ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+@media (max-width: 767px) {
+  .dialog {
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .themes {
+    gap: 6px;
+  }
+}

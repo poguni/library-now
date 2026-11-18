@@ -52,8 +52,8 @@ export function buildRows(
 
 /** 목록 정렬 (F7): 거리순 / 남은 이용 시간순 / 이름순 */
 export type SortKey = 'distance' | 'time' | 'name';
-/** 목록 필터 (F9): 지금 열린 곳만 / 21시 이후까지 운영 */
-export type FilterKey = 'openNow' | 'late';
+/** 목록 필터 (F9): 지금 열린 곳만 / 21시 이후까지 운영 / 즐겨찾기만 */
+export type FilterKey = 'openNow' | 'late' | 'favorites';
 
 /** "21시 이후까지 운영" 기준 시각(분) */
 export const LATE_CLOSE_MINUTES = 21 * 60;
@@ -64,7 +64,12 @@ const closesLate = (s: Status) =>
 
 export function filterRows(
   rows: readonly LibraryRow[],
-  opts: { offDistricts: ReadonlySet<string>; query: string; filters: readonly FilterKey[] },
+  opts: {
+    offDistricts: ReadonlySet<string>;
+    query: string;
+    filters: readonly FilterKey[];
+    favorites?: readonly string[];
+  },
 ): LibraryRow[] {
   const q = opts.query.replace(/\s+/g, '');
   return rows.filter(
@@ -72,7 +77,8 @@ export function filterRows(
       !opts.offDistricts.has(r.lib.district) &&
       r.lib.name.replace(/\s+/g, '').includes(q) &&
       (!opts.filters.includes('openNow') || isOpenNow(r.status)) &&
-      (!opts.filters.includes('late') || closesLate(r.status)),
+      (!opts.filters.includes('late') || closesLate(r.status)) &&
+      (!opts.filters.includes('favorites') || (opts.favorites ?? []).includes(r.lib.id)),
   );
 }
 

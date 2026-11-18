@@ -168,6 +168,33 @@
   pointer-events: none;
 }
 
+.settings {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--top-line);
+  background: var(--top-chip);
+  color: var(--top-text);
+  display: grid;
+  place-items: center;
+}
+
+.seg button {
+  white-space: nowrap;
+}
+
+/* 태블릿: 폭이 모자라 기준 시각 칩을 숨깁니다 (기준 시각 바꾸기는 M4) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .top {
+    gap: 10px;
+  }
+
+  .now {
+    display: none;
+  }
+}
+
 /* 스마트폰 (DESIGN 4.3): 앱 이름 / 모드 세그먼트 / 가로 스크롤 칩 */
 @media (max-width: 767px) {
   .top {
@@ -223,8 +250,10 @@
     height: 34px;
   }
 
+  /* 스마트폰은 아래 탭 바에 설정이 있습니다 */
   .vline,
-  .spacer {
+  .spacer,
+  .settings {
     display: none;
   }
 }

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { FAVORITES_KEY, readFavorites, saveFavorites } from './favorites';
 import { PLACES_KEY, readPlaces, savePlace } from './places';
 import { SETTINGS_KEY, readMode, readPrefs, saveMode, savePrefs } from './settings';
 
@@ -87,5 +88,24 @@ describe('집·직장 저장 (ln.places)', () => {
     ).toBeNull();
     expect(readPlaces(brokenStorage)).toEqual({ home: null, work: null });
     expect(savePlace(brokenStorage, 'work', { name: '직장', lat: 37, lng: 127 })).toBe(false);
+  });
+});
+
+describe('즐겨찾기 저장 (ln.favorites)', () => {
+  it('순서를 지켜 저장하고 읽음', () => {
+    const s = memoryStorage();
+    expect(readFavorites(s)).toEqual([]);
+    expect(saveFavorites(s, ['b', 'a'])).toBe(true);
+    expect(readFavorites(s)).toEqual(['b', 'a']);
+    expect(JSON.parse(s.data[FAVORITES_KEY]!).version).toBe(1);
+  });
+
+  it('깨진 값, 문자열이 아닌 항목, 막힌 저장소', () => {
+    expect(readFavorites(memoryStorage({ [FAVORITES_KEY]: '{oops' }))).toEqual([]);
+    expect(readFavorites(memoryStorage({ [FAVORITES_KEY]: '{"ids":["a",3,null]}' }))).toEqual([
+      'a',
+    ]);
+    expect(readFavorites(brokenStorage)).toEqual([]);
+    expect(saveFavorites(brokenStorage, ['a'])).toBe(false);
   });
 });

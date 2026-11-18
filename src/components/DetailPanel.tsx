@@ -1,55 +1,157 @@
-// 오른쪽 패널 (DESIGN 5.8): 고른 도서관의 기본 정보·운영시간·휴관 규칙, 고르지 않았으면 오늘 요약 (PRD 8.2)
-// 휴관 달력(M3)은 다음 단계에서 추가합니다.
-import { Ban, X } from 'lucide-react';
+// 오른쪽 패널 (DESIGN 5.8): 탭(상세 / 휴관 달력), 고른 도서관의 상세, 고르지 않았으면 오늘 요약 (PRD 8.2)
+import { Ban, BookOpen, CalendarDays, PanelRightClose, X } from 'lucide-react';
 import type { Place } from '../domain/directions';
 import type { LibraryRow } from '../domain/list';
 import { formatDate, ROOM_NAME, type StatusView } from '../domain/present';
-import { hoursFor } from '../domain/schedule';
-import { type DateKey, toSeoul, weekdayOf } from '../domain/time';
+import { type ScheduleContext, hoursFor } from '../domain/schedule';
+import { type DateKey, formatTime, toSeoul, weekdayOf } from '../domain/time';
 import type { Library, Room, RoomKey, TimeRange, WeekHours } from '../domain/types';
-import styles from './DetailPanel.module.css';
 import { ArrivalBox } from './ArrivalBox';
+import { ClosureCalendar } from './ClosureCalendar';
+import styles from './DetailPanel.module.css';
 import { DirectionsBar } from './DirectionsBar';
+import { MiniCalendar } from './MiniCalendar';
+import { StarButton } from './StarButton';
+
+export type DetailTab = 'detail' | 'calendar';
 
 interface Props {
   row: LibraryRow | null;
+  /** 지금 목록에 보이는 줄 (오늘 요약용) */
   rows: readonly LibraryRow[];
+  /** 선택한 구의 도서관 (달력용) */
+  libraries: readonly Library[];
   mode: RoomKey;
   now: Date;
   origin: Place | null;
+  ctx: ScheduleContext;
+  holidayYears: readonly number[];
+  favorites: readonly string[];
+  onToggleFavorite(id: string): void;
+  onSelect(id: string): void;
   onClose(): void;
+  tab: DetailTab;
+  onTab(tab: DetailTab): void;
+  /** 스마트폰은 아래 탭 바가 대신하므로 탭 줄을 숨김 */
+  showTabs: boolean;
+  /** 데스크탑에서 패널 접기 */
+  onCollapse?: () => void;
   className?: string;
 }
 
-export function DetailPanel({ row, rows, mode, now, origin, onClose, className }: Props) {
+const TABS: { key: DetailTab; label: string; Icon: typeof BookOpen }[] = [
+  { key: 'detail', label: '상세', Icon: BookOpen },
+  { key: 'calendar', label: '휴관 달력', Icon: CalendarDays },
+];
+
+export function DetailPanel(props: Props) {
+  const { row, rows, mode, now, tab, favorites, showTabs } = props;
   const today = toSeoul(now).date;
   return (
     <aside
-      className={`${styles.detail} ${className ?? ''}`}
-      aria-label={row ? `${row.lib.name} 상세` : '오늘 요약'}
-      data-open={row ? '' : undefined}
+      className={`${styles.detail} ${props.className ?? ''}`}
+      aria-label="도서관 상세와 휴관 달력"
+      data-open={row || tab === 'calendar' ? '' : undefined}
     >
-      {row ? (
-        <LibraryDetail row={row} mode={mode} now={now} origin={origin} onClose={onClose} />
-      ) : (
-        <Summary rows={rows} mode={mode} today={today} />
+      {showTabs && (
+        <div className={styles.tabs} role="tablist" aria-label="오른쪽 패널">
+          {TABS.map(({ key, label, Icon }) => (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              id={`tab-${key}`}
+              aria-selected={tab === key}
+              aria-controls="detail-tabpanel"
+              className={`${styles.tab} ln-tab`}
+              onClick={() => props.onTab(key)}
+            >
+              <Icon size={16} strokeWidth={1.8} aria-hidden="true" />
+              {label}
+            </button>
+          ))}
+          {props.onCollapse && (
+            <button
+              type="button"
+              className={styles.collapse}
+              aria-label="오른쪽 패널 접기"
+              onClick={props.onCollapse}
+            >
+              <PanelRightClose size={18} strokeWidth={1.8} aria-hidden="true" />
+            </button>
+          )}
+        </div>
       )}
+      <div
+        className={styles.body}
+        id="detail-tabpanel"
+        role={showTabs ? 'tabpanel' : undefined}
+        aria-labelledby={showTabs ? `tab-${tab}` : undefined}
+      >
+        {tab === 'calendar' ? (
+          <ClosureCalendar
+            libraries={props.libraries}
+            favorites={favorites}
+            room={mode}
+            today={today}
+            ctx={props.ctx}
+            years={props.holidayYears}
+            onSelectLibrary={(id) => {
+              props.onSelect(id);
+              props.onTab('detail');
+            }}
+          />
+        ) : row ? (
+          <LibraryDetail
+            row={row}
+            mode={mode}
+            now={now}
+            origin={props.origin}
+            ctx={props.ctx}
+            favorite={favorites.includes(row.lib.id)}
+            onToggleFavorite={() => props.onToggleFavorite(row.lib.id)}
+            onClose={props.onClose}
+          />
+        ) : (
+          <Summary
+            rows={rows}
+            mode={mode}
+            today={today}
+            favorites={favorites}
+            onSelect={props.onSelect}
+          />
+        )}
+      </div>
     </aside>
   );
 }
+
+const liveClose = (r: LibraryRow) =>
+  r.status.kind === 'open' || r.status.kind === 'soon' || r.status.kind === 'opening'
+    ? r.status.close
+    : -1;
 
 function Summary({
   rows,
   mode,
   today,
+  favorites,
+  onSelect,
 }: {
   rows: readonly LibraryRow[];
   mode: RoomKey;
   today: DateKey;
+  favorites: readonly string[];
+  onSelect(id: string): void;
 }) {
   const count = (tones: string[]) => rows.filter((r) => tones.includes(r.view.tone)).length;
+  const latest = rows.reduce<LibraryRow | null>(
+    (best, r) => (liveClose(r) > (best ? liveClose(best) : -1) ? r : best),
+    null,
+  );
+  const favRows = favorites.flatMap((id) => rows.filter((r) => r.lib.id === id));
   return (
-    <div className={styles.body}>
+    <>
       <div>
         <h2 className={`${styles.title} ln-detail-title`}>오늘 요약</h2>
         <span className={styles.sub}>
@@ -62,10 +164,38 @@ function Summary({
         <Stat tone="ended" label="오늘 운영 종료" value={count(['ended'])} />
         <Stat tone="closed" label="오늘 휴관" value={count(['closed'])} />
       </dl>
+      {latest && (
+        <p className={styles.hint}>
+          가장 늦게까지 여는 곳:{' '}
+          <button type="button" className={styles.link} onClick={() => onSelect(latest.lib.id)}>
+            {latest.lib.name}
+          </button>{' '}
+          ({formatTime(liveClose(latest))}까지)
+        </p>
+      )}
+      <section className={styles.sec}>
+        <h3 className={`${styles.secTitle} ln-sec-title`}>즐겨찾기</h3>
+        {favRows.length === 0 ? (
+          <p className={styles.hint}>목록이나 상세에서 별을 누르면 여기에 모아 봅니다.</p>
+        ) : (
+          <ul className={styles.favs}>
+            {favRows.map((r) => (
+              <li key={r.lib.id}>
+                <button type="button" className={styles.link} onClick={() => onSelect(r.lib.id)}>
+                  {r.lib.name}
+                </button>
+                <span className="ln-badge" data-tone={r.view.tone}>
+                  {r.view.badge}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
       <p className={styles.hint}>
         목록이나 지도에서 도서관을 고르면 운영시간과 휴관 규칙을 볼 수 있습니다.
       </p>
-    </div>
+    </>
   );
 }
 
@@ -93,12 +223,18 @@ function LibraryDetail({
   mode,
   now,
   origin,
+  ctx,
+  favorite,
+  onToggleFavorite,
   onClose,
 }: {
   row: LibraryRow;
   mode: RoomKey;
   now: Date;
   origin: Place | null;
+  ctx: ScheduleContext;
+  favorite: boolean;
+  onToggleFavorite(): void;
   onClose(): void;
 }) {
   const today = toSeoul(now).date;
@@ -115,7 +251,7 @@ function LibraryDetail({
   );
 
   return (
-    <div className={styles.body}>
+    <>
       <div className={styles.head}>
         <div className={styles.grow}>
           <h2 className={`${styles.title} ln-detail-title`}>{lib.name}</h2>
@@ -135,14 +271,17 @@ function LibraryDetail({
             <span>{otherText(other, OTHER[mode])}</span>
           </div>
         </div>
-        <button type="button" className={styles.close} aria-label="닫기" onClick={onClose}>
+        <StarButton on={favorite} name={lib.name} onToggle={onToggleFavorite} />
+        <button type="button" className={styles.close} aria-label="상세 닫기" onClick={onClose}>
           <X size={20} strokeWidth={1.8} aria-hidden="true" />
         </button>
       </div>
 
       <ArrivalBox row={row} mode={mode} now={now} originName={origin?.name ?? null} />
 
-      <DirectionsBar lib={lib} origin={origin} />
+      <div className={styles.acts}>
+        <DirectionsBar lib={lib} origin={origin} />
+      </div>
 
       <p className={styles.address}>{lib.address}</p>
 
@@ -165,11 +304,13 @@ function LibraryDetail({
         </p>
       </section>
 
+      <MiniCalendar lib={lib} room={mode} today={today} ctx={ctx} />
+
       <p className={styles.src}>
         <span>데이터 기준 {lib.source.baseDate ?? '–'}</span>
         <span>홈페이지 확인 {lib.source.checkedAt}</span>
       </p>
-    </div>
+    </>
   );
 }
 

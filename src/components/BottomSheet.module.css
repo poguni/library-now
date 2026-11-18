@@ -1,0 +1,68 @@
+.sheet {
+  position: absolute;
+  z-index: 1100;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 416px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-top-left-radius: var(--sheet-r);
+  border-top-right-radius: var(--sheet-r);
+  box-shadow: var(--pop-shadow);
+  transition: height 250ms ease-out;
+}
+
+.sheet[data-snap='low'] {
+  height: 120px;
+}
+
+.sheet[data-snap='full'] {
+  height: 100%;
+}
+
+.sheet[data-dragging] {
+  transition: none;
+}
+
+.handle {
+  flex: none;
+  height: 28px;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  touch-action: none;
+  cursor: grab;
+}
+
+.handle i {
+  width: 40px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--line);
+}
+
+.title {
+  flex: none;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 낮게: 손잡이와 제목만 */
+.sheet[data-snap='low'] .content {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    transition: none;
+  }
+}

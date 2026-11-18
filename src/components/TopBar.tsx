@@ -1,5 +1,5 @@
 // 상단 바 (DESIGN 5.1): 지역 칩(F2), 이용 모드(F3), 기준 시각 표시
-import { BookOpen, ChevronDown, Pencil } from 'lucide-react';
+import { BookOpen, ChevronDown, Pencil, SlidersHorizontal } from 'lucide-react';
 import { formatDate, ROOM_NAME } from '../domain/present';
 import { formatTime, toSeoul } from '../domain/time';
 import type { RoomKey } from '../domain/types';
@@ -19,6 +19,7 @@ interface Props {
   onOriginChoice(choice: OriginChoice): void;
   /** 지도에서 집·직장 위치 지정 시작 */
   onPickPlace(kind: PlaceKind): void;
+  onSettings(): void;
 }
 
 const MODES: { key: RoomKey; label: string; Icon: typeof BookOpen }[] = [
@@ -111,6 +112,15 @@ export function TopBar(props: Props) {
           지금 · {formatDate(seoul.date)} {formatTime(seoul.minutes)}
         </span>
       </span>
+
+      <button
+        type="button"
+        className={styles.settings}
+        aria-label="설정"
+        onClick={props.onSettings}
+      >
+        <SlidersHorizontal size={18} strokeWidth={1.8} aria-hidden="true" />
+      </button>
     </header>
   );
 }

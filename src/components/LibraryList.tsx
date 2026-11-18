@@ -6,6 +6,7 @@ import { ROOM_NAME } from '../domain/present';
 import { formatKm, formatTravel } from '../domain/travel';
 import type { RoomKey } from '../domain/types';
 import styles from './LibraryList.module.css';
+import { StarButton } from './StarButton';
 
 interface Props {
   rows: readonly LibraryRow[];
@@ -26,13 +27,16 @@ interface Props {
   selectedId: string | null;
   onSelect(id: string): void;
   onHover(id: string | null): void;
+  favorites: readonly string[];
+  onToggleFavorite(id: string): void;
   loading: boolean;
   className?: string;
 }
 
 const FILTERS: { key: FilterKey; label: string }[] = [
   { key: 'openNow', label: '지금 열린 곳만' },
-  { key: 'late', label: '21시 이후까지' },
+  { key: 'late', label: '21시 이후' },
+  { key: 'favorites', label: '즐겨찾기' },
 ];
 
 export function LibraryList(props: Props) {
@@ -133,8 +137,10 @@ export function LibraryList(props: Props) {
               <LibraryCard
                 row={row}
                 selected={row.lib.id === props.selectedId}
+                favorite={props.favorites.includes(row.lib.id)}
                 onSelect={props.onSelect}
                 onHover={props.onHover}
+                onToggleFavorite={props.onToggleFavorite}
               />
             </li>
           ))}
@@ -147,11 +153,14 @@ export function LibraryList(props: Props) {
 interface CardProps {
   row: LibraryRow;
   selected: boolean;
+  favorite: boolean;
   onSelect(id: string): void;
   onHover(id: string | null): void;
+  onToggleFavorite(id: string): void;
 }
 
-function LibraryCard({ row, selected, onSelect, onHover }: CardProps) {
+function LibraryCard(props: CardProps) {
+  const { row, selected, onSelect, onHover } = props;
   const { lib, view, travel, ruleText } = row;
   const ref = useRef<HTMLElement>(null);
 
@@ -199,6 +208,11 @@ function LibraryCard({ row, selected, onSelect, onHover }: CardProps) {
           {view.badge}
         </span>
         <span className={styles.note}>{view.note}</span>
+        <StarButton
+          on={props.favorite}
+          name={lib.name}
+          onToggle={() => props.onToggleFavorite(lib.id)}
+        />
       </div>
     </article>
   );

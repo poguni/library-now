@@ -10,9 +10,15 @@
 
 .top {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 8px;
+  gap: 4px 8px;
+}
+
+.top .num,
+.top > .lbl {
+  white-space: nowrap;
 }
 
 .lbl {

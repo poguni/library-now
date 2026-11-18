@@ -16,6 +16,15 @@
   grid-template-areas: 'list map detail';
 }
 
+/* 상세 패널을 접으면 지도가 그만큼 넓어짐 */
+.body[data-collapsed] {
+  grid-template-columns: clamp(360px, 25vw, 420px) minmax(0, 1fr) 0;
+}
+
+.body[data-collapsed] .detail {
+  display: none;
+}
+
 .list {
   grid-area: list;
 }
@@ -26,6 +35,23 @@
 
 .detail {
   grid-area: detail;
+}
+
+/* 패널 펼치기·달력 열기: 지도 컨트롤 아래 */
+.panelBtn {
+  position: absolute;
+  z-index: 1000;
+  top: 216px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow);
 }
 
 .message {
@@ -49,27 +75,42 @@
     box-shadow: var(--pop-shadow);
   }
 
-  .body:not([data-selected]) .detail {
+  .detail:not([data-open]) {
     display: none;
   }
 }
 
-/* 스마트폰 (767px 이하): 위 지도, 아래 목록. 고르면 목록 자리에 상세 (바텀 시트는 M3) */
-@media (max-width: 767px) {
-  .body {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 38dvh minmax(0, 1fr);
-    grid-template-areas:
-      'map'
-      'list';
-  }
+/* 스마트폰 (767px 이하): 지도 전체 + 바텀 시트 (DESIGN 4.3) */
+.phoneBody {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+}
 
-  .detail {
-    grid-area: list;
-    justify-self: stretch;
-    width: auto;
-    border-left: 0;
-    border-top: 1px solid var(--line);
-    box-shadow: none;
-  }
+.phoneBody .map {
+  grid-area: 1 / 1;
+}
+
+.phoneBody .sheetPanel {
+  flex: 1;
+  min-height: 0;
+  border: 0;
+  box-shadow: none;
+  background: var(--surface);
+}
+
+.sheetTitle {
+  margin: 0;
+  padding: 0 16px 8px;
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sheetTitle b {
+  font-family: var(--font-num);
 }

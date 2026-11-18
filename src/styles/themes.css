@@ -63,6 +63,12 @@
   --pop-shadow: 0 10px 24px rgba(42, 33, 24, 0.18);
   --sheet-r: 10px;
   --tile-filter: sepia(0.25) saturate(0.85) brightness(1.02);
+  /* 휴관 달력의 즐겨찾기 도서관 점 (F11). 서로 구분되는 5색 */
+  --fav-1: #2e5240;
+  --fav-2: #2f5b86;
+  --fav-3: #b0561a;
+  --fav-4: #8a6a12;
+  --fav-5: #7a3e6e;
 }
 
 /* ===== 말랑 (Soft) ===== */
@@ -124,6 +130,11 @@
   --pop-shadow: 0 12px 28px rgba(110, 82, 201, 0.18);
   --sheet-r: 24px;
   --tile-filter: saturate(0.75) brightness(1.04) hue-rotate(-8deg);
+  --fav-1: #6e52c9;
+  --fav-2: #2f7fa8;
+  --fav-3: #c2571a;
+  --fav-4: #24704f;
+  --fav-5: #c23c6e;
 }
 
 /* ===== 모노 (Mono) ===== */
@@ -185,6 +196,11 @@
   --pop-shadow: 0 12px 30px rgba(14, 17, 22, 0.16);
   --sheet-r: 16px;
   --tile-filter: grayscale(0.85) contrast(1.05);
+  --fav-1: #2445e8;
+  --fav-2: #0f7a4a;
+  --fav-3: #b04a06;
+  --fav-4: #7a3ec2;
+  --fav-5: #0e1116;
 }
 
 /* ===== 테마별 공통 보정 ===== */
@@ -307,4 +323,15 @@
 [data-theme='mono'] .ln-hero .ln-num {
   font-size: 36px;
   letter-spacing: -0.03em;
+}
+
+/* --- 달력·탭 (DESIGN 2.4) --- */
+[data-theme='pastel'] .ln-cal > span {
+  border-radius: 50%;
+}
+[data-theme='pastel'] .ln-tab[aria-selected='true'] {
+  border-bottom-width: 3px;
+}
+[data-theme='mono'] .ln-tab[aria-selected='true'] {
+  border-bottom-color: var(--text);
 }

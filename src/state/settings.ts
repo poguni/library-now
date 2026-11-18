@@ -61,7 +61,7 @@ export interface ListPrefs {
 
 const ORIGINS: readonly OriginChoice[] = ['current', 'home', 'work'];
 const SORTS: readonly SortKey[] = ['distance', 'time', 'name'];
-const FILTERS: readonly FilterKey[] = ['openNow', 'late'];
+const FILTERS: readonly FilterKey[] = ['openNow', 'late', 'favorites'];
 
 const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
   allowed.includes(value as T) ? (value as T) : fallback;

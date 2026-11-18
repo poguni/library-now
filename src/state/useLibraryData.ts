@@ -3,15 +3,24 @@ import { useEffect, useState } from 'react';
 import type { HolidayMap } from '../domain/schedule';
 import type { HolidaysFile, LibrariesFile, Library } from '../domain/types';
 
-interface MetaFile {
+export interface MetaFile {
+  generatedAt: string;
   districts: string[];
+  baseDates: string[];
   holidayYears: number[];
+  sources: { name: string; provider: string; license: string | null }[];
 }
 
 export type DataState =
   | { kind: 'loading' }
   | { kind: 'error' }
-  | { kind: 'ready'; libraries: Library[]; districts: string[]; holidays: HolidayMap };
+  | {
+      kind: 'ready';
+      libraries: Library[];
+      districts: string[];
+      holidays: HolidayMap;
+      meta: MetaFile;
+    };
 
 async function getJson<T>(path: string): Promise<T> {
   const res = await fetch(`${import.meta.env.BASE_URL}data/${path}`);
@@ -29,7 +38,7 @@ async function load(): Promise<DataState> {
   );
   const holidays = new Map(years.flatMap((f) => f.holidays.map((h) => [h.date, h.name] as const)));
   const districts = [...meta.districts].sort((a, b) => a.localeCompare(b, 'ko'));
-  return { kind: 'ready', libraries: libs.libraries, districts, holidays };
+  return { kind: 'ready', libraries: libs.libraries, districts, holidays, meta };
 }
 
 export function useLibraryData(): DataState {

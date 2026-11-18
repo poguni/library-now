@@ -127,6 +127,21 @@ describe('필터 (F9)', () => {
     ]);
   });
 
+  it('즐겨찾기만', () => {
+    const list = rows('19:05');
+    expect(
+      names(
+        filterRows(list, {
+          offDistricts: none,
+          query: '',
+          filters: ['favorites'],
+          favorites: ['y2', 'g1'],
+        }),
+      ),
+    ).toEqual(['가까운도서관', '월요휴관도서관']);
+    expect(filterRows(list, { offDistricts: none, query: '', filters: ['favorites'] })).toEqual([]);
+  });
+
   it('구 선택과 이름 검색(띄어쓰기 무시)', () => {
     const list = rows('19:05');
     expect(
