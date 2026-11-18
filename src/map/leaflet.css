@@ -1,0 +1,174 @@
+/* Leaflet 요소 모양 (DESIGN 5.6·5.7). Leaflet이 만드는 요소라 전역 클래스를 씁니다. 값은 모두 토큰. */
+
+.leaflet-container {
+  font-family: var(--font-body);
+  background: var(--map-bg);
+}
+
+/* 테마별 타일 필터는 타일에만 (DESIGN 2.5) */
+.leaflet-tile-pane {
+  filter: var(--tile-filter);
+}
+
+/* ---- 마커: 클릭 영역 44×44, 가운데 상태색 점 ---- */
+.ln-mk {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.ln-mk:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.ln-dot {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--b-fg);
+  color: var(--marker-ring);
+  border: 3px solid var(--marker-ring);
+  box-shadow: var(--pop-shadow);
+  transition: transform 150ms ease-out;
+}
+
+.ln-dot svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 색만으로 구분하지 않도록 상태 기호를 점 모서리에 (PRD F1) */
+.ln-sym {
+  position: absolute;
+  top: -7px;
+  right: -8px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--b-fg);
+  color: var(--b-fg);
+  font-size: 8px;
+  line-height: 1;
+}
+
+.ln-sym::before {
+  content: var(--b-sym);
+}
+
+.ln-tag {
+  position: absolute;
+  left: calc(50% + 19px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 2px 8px;
+  border-radius: var(--pill);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--b-fg);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.ln-far .ln-tag {
+  display: none;
+}
+
+.ln-mk.is-hover .ln-dot {
+  transform: scale(1.15);
+}
+
+.ln-mk.is-hover .ln-tag {
+  display: block;
+  border-color: var(--b-fg);
+}
+
+.ln-mk.is-sel .ln-dot {
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 0 0 6px var(--accent-ring);
+}
+
+.ln-mk.is-sel .ln-dot svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ln-mk.is-sel .ln-tag {
+  display: none;
+}
+
+/* ---- 팝업 ---- */
+.ln-pop .leaflet-popup-content-wrapper {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--pop-shadow);
+}
+
+.ln-pop .leaflet-popup-tip {
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.ln-pop .leaflet-popup-content {
+  margin: 12px 44px 12px 14px;
+}
+
+.ln-pop .leaflet-popup-content > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ln-pop .leaflet-popup-content b {
+  font-family: var(--font-head);
+  font-size: 15px;
+}
+
+.ln-pop-line {
+  color: var(--muted);
+}
+
+.ln-pop a.leaflet-popup-close-button {
+  width: 44px;
+  height: 44px;
+  font: 20px/44px var(--font-body);
+  color: var(--muted);
+}
+
+/* ---- 출처 표기 (항상 표시) ---- */
+.leaflet-container .leaflet-control-attribution {
+  padding: 3px 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 11px;
+  border-top-left-radius: var(--radius-sm);
+}
+
+.leaflet-container .leaflet-control-attribution a {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ln-dot {
+    transition: none;
+  }
+}

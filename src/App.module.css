@@ -3,66 +3,73 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: var(--bg);
 }
 
-.top {
-  flex: 0 0 64px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 20px;
-  background: var(--top-bg);
-  color: var(--top-text);
-  border-bottom: 1px solid var(--top-line);
-}
-
-.logo {
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-sm);
-  background: var(--logo-bg);
-  color: var(--logo-ink);
-  display: grid;
-  place-items: center;
-  font-family: var(--font-head);
-  font-weight: 700;
-}
-
-.brand {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.15;
-}
-
-.brand b {
-  font-family: var(--font-head);
-  font-size: 19px;
-}
-
-.brand span {
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--top-muted);
-}
-
+/* 데스크탑 (1200px 이상): 목록 360~420 · 지도 나머지 · 상세 400~480 (DESIGN 4.2) */
 .body {
+  position: relative;
   flex: 1;
   min-height: 0;
-  padding: 20px;
-  background: var(--surface-2);
-  color: var(--muted);
+  display: grid;
+  grid-template-columns: clamp(360px, 25vw, 420px) minmax(0, 1fr) clamp(400px, 27.8vw, 480px);
+  grid-template-areas: 'list map detail';
 }
 
-@media (max-width: 767px) {
-  .top {
-    padding: 0 16px;
-  }
+.list {
+  grid-area: list;
+}
 
-  .brand b {
-    font-size: 18px;
-  }
+.map {
+  grid-area: map;
+}
 
+.detail {
+  grid-area: detail;
+}
+
+.message {
+  margin: 0;
+  padding: 24px 20px;
+  color: var(--text);
+}
+
+/* 태블릿 (768~1199px): 목록 + 지도 2단, 상세는 지도 위 오른쪽 서랍 (DESIGN 4.1) */
+@media (max-width: 1199px) {
   .body {
-    padding: 16px;
+    grid-template-columns: 320px minmax(0, 1fr);
+    grid-template-areas: 'list map';
+  }
+
+  .detail {
+    grid-area: map;
+    justify-self: end;
+    width: min(400px, 100%);
+    z-index: 1100;
+    box-shadow: var(--pop-shadow);
+  }
+
+  .body:not([data-selected]) .detail {
+    display: none;
+  }
+}
+
+/* 스마트폰 (767px 이하): 위 지도, 아래 목록. 고르면 목록 자리에 상세 (바텀 시트는 M3) */
+@media (max-width: 767px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 38dvh minmax(0, 1fr);
+    grid-template-areas:
+      'map'
+      'list';
+  }
+
+  .detail {
+    grid-area: list;
+    justify-self: stretch;
+    width: auto;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    box-shadow: none;
   }
 }

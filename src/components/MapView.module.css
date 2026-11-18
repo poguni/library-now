@@ -1,0 +1,94 @@
+.map {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--map-bg);
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* Leaflet 컨트롤(z-index 1000)과 같은 층 */
+.ctrls {
+  position: absolute;
+  z-index: 1000;
+  right: 16px;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.group button {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  display: grid;
+  place-items: center;
+}
+
+.group button + button {
+  border-top: 1px solid var(--line);
+}
+
+.group button:focus-visible {
+  outline-offset: -3px;
+}
+
+.legend {
+  position: absolute;
+  z-index: 1000;
+  left: 16px;
+  bottom: 16px;
+  margin: 0;
+  padding: 8px 12px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 12px;
+  box-shadow: var(--shadow);
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--b-fg);
+}
+
+/* 스마트폰은 지도가 작아 범례를 숨깁니다. 상태는 마커 기호와 목록 배지로 확인 */
+@media (max-width: 767px) {
+  .legend {
+    display: none;
+  }
+
+  .ctrls {
+    right: 12px;
+    top: 12px;
+  }
+}

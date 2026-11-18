@@ -44,7 +44,8 @@ function inSeason(from: string, to: string, date: DateKey): boolean {
   return from <= to ? from <= md && md <= to : md >= from || md <= to;
 }
 
-function hoursFor(room: Room, date: DateKey): WeekHours | null {
+/** 그날 적용되는 주간 운영시간 (계절 구간 반영) */
+export function hoursFor(room: Room, date: DateKey): WeekHours | null {
   const season = room.seasons?.find((s) => inSeason(s.from, s.to, date));
   return season ? season.hours : room.hours;
 }
