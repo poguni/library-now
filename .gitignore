@@ -1,0 +1,33 @@
+# 의존성·빌드 결과
+node_modules/
+dist/
+*.tsbuildinfo
+
+# 테스트 결과
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# 환경 변수 (카카오 키 등)
+.env
+.env.*
+!.env.example
+
+# 로그
+*.log
+npm-debug.log*
+
+# 에디터·OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Code·oh-my-claudecode 개인 설정과 작업 상태
+.claude/settings.local.json
+.omc/
+
+# 문서 묶음 압축본 (docs/, design/, CLAUDE.md와 내용이 같음)
+docs/library-now-starter.zip
