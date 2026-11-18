@@ -31,10 +31,10 @@ npm run build        # 타입 검사 + 프로덕션 빌드 (dist/)
 npm run test         # Vitest 단위 테스트
 npm run lint         # ESLint + Prettier 검사
 npm run format       # Prettier로 서식 정리
+npm run data:build   # data/raw + data/overrides + data/holidays → public/data/*.json (검증 실패 시 중단)
 ```
 
 아직 없는 스크립트 (해당 단계에서 추가):
-- `npm run data:build`: data/raw + data/overrides → public/data/*.json (M0 데이터 빌드 스크립트)
 - `npm run test:e2e`: Playwright 화면 테스트, `--trace off` 기본 (M1 이후)
 
 ## 폴더 구조
@@ -44,6 +44,7 @@ docs/          PRD (기획)
 design/        디자인 가이드와 시안 HTML (수정은 사용자 요청이 있을 때만)
 data/raw/      공공데이터 원본 CSV (내려받은 그대로, 수정 금지)
 data/overrides/ 도서관별 수기 입력(자료실·열람실 시간, 휴관 규칙 검수값)
+data/holidays/ 연도별 공휴일 수기 정리 (YYYY.json)
 scripts/       데이터 빌드 스크립트
 public/data/   앱이 읽는 JSON (스크립트가 생성, 직접 수정 금지)
 src/domain/    시간 계산·휴관 판정·거리 계산 (순수 함수 + 테스트)

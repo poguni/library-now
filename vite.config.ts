@@ -6,6 +6,6 @@ export default defineConfig({
   base: '/library-now/',
   plugins: [react()],
   test: {
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
   },
 });
