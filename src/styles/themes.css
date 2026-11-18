@@ -1,0 +1,200 @@
+/*
+ * 테마 토큰 (원본: design/design-*.html의 .th-library / .th-pastel / .th-mono 블록)
+ * 컴포넌트 CSS는 이 변수만 참조합니다. 테마별 장식은 이 파일 아래쪽 [data-theme] 범위에 추가합니다.
+ */
+
+/* ===== 서재 (Stacks), 기본 ===== */
+:root,
+[data-theme='library'] {
+  --font-head: 'Gowun Batang', 'AppleMyungjo', 'Batang', serif;
+  --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-num: 'Gowun Batang', 'AppleMyungjo', 'Batang', serif;
+  --bg: #f4eee2;
+  --surface: #fbf7ee;
+  --surface-2: #f1e9d8;
+  --card: #fffdf7;
+  --field: #fffdf7;
+  --line: #dccfb5;
+  --text: #2a2118;
+  --muted: #6a5c49;
+  --accent: #2e5240;
+  --accent-ink: #fbf7ee;
+  --accent-soft: #dfe8dc;
+  --accent-strong: #22402f;
+  --accent-ring: rgba(46, 82, 64, 0.22);
+  --star: #a8701a;
+  --top-bg: #22392d;
+  --top-text: #f3ebdb;
+  --top-muted: #c9bc9f;
+  --top-line: #3e5a4a;
+  --top-chip: #2b4637;
+  --top-on: #d9b26a;
+  --top-on-ink: #22392d;
+  --logo-bg: #d9b26a;
+  --logo-ink: #22392d;
+  --hero-bg: #22392d;
+  --hero-text: #f7f0e1;
+  --hero-muted: #c9bc9f;
+  --hero-track: #3a5546;
+  --hero-accent: #d9b26a;
+  --hero-num: #e7c987;
+  --open: #2f6b3f;
+  --open-bg: #e1ebd9;
+  --soon: #9a4a12;
+  --soon-bg: #f6e3cc;
+  --opening: #2f5b86;
+  --opening-bg: #dce6ef;
+  --ended: #5e574c;
+  --ended-bg: #e8e1d3;
+  --closed: #8e2c22;
+  --closed-bg: #f2dcd6;
+  --map-bg: #ede4cf;
+  --map-grid: rgba(156, 138, 107, 0.16);
+  --map-road: #fbf6ea;
+  --map-river: #afc6c4;
+  --map-park: #d3dbbe;
+  --map-line: #9c8a6b;
+  --map-label: #86755a;
+  --marker-ring: #fffdf7;
+  --radius: 6px;
+  --radius-sm: 4px;
+  --pill: 4px;
+  --shadow: 0 1px 0 #dccfb5;
+  --pop-shadow: 0 10px 24px rgba(42, 33, 24, 0.18);
+  --sheet-r: 10px;
+  --tile-filter: sepia(0.25) saturate(0.85) brightness(1.02);
+}
+
+/* ===== 말랑 (Soft) ===== */
+[data-theme='pastel'] {
+  --font-head: 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-num: 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --bg: #fbf6ff;
+  --surface: #ffffff;
+  --surface-2: #f6f0fd;
+  --card: #ffffff;
+  --field: #fbf8ff;
+  --line: #e9def6;
+  --text: #3a3254;
+  --muted: #6b6386;
+  --accent: #6e52c9;
+  --accent-ink: #ffffff;
+  --accent-soft: #eee7ff;
+  --accent-strong: #553bae;
+  --accent-ring: rgba(110, 82, 201, 0.2);
+  --star: #c46f12;
+  --top-bg: #ffffff;
+  --top-text: #3a3254;
+  --top-muted: #6b6386;
+  --top-line: #eadff6;
+  --top-chip: #f7f2fe;
+  --top-on: #6e52c9;
+  --top-on-ink: #ffffff;
+  --logo-bg: #ffd6e5;
+  --logo-ink: #ae3558;
+  --hero-bg: #efe8ff;
+  --hero-text: #3a3254;
+  --hero-muted: #6b6386;
+  --hero-track: #ffffff;
+  --hero-accent: #9b84f0;
+  --hero-num: #553bae;
+  --open: #24704f;
+  --open-bg: #ddf5e9;
+  --soon: #a2500e;
+  --soon-bg: #ffe9d6;
+  --opening: #2f5ca3;
+  --opening-bg: #e2ecff;
+  --ended: #615b72;
+  --ended-bg: #eeebf4;
+  --closed: #ae3558;
+  --closed-bg: #ffe3ec;
+  --map-bg: #f5f0fb;
+  --map-grid: rgba(180, 160, 220, 0.18);
+  --map-road: #ffffff;
+  --map-river: #cde5f7;
+  --map-park: #d9f1e1;
+  --map-line: #bba7e3;
+  --map-label: #8e7fb6;
+  --marker-ring: #ffffff;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --pill: 999px;
+  --shadow: 0 4px 14px rgba(110, 82, 201, 0.08);
+  --pop-shadow: 0 12px 28px rgba(110, 82, 201, 0.18);
+  --sheet-r: 24px;
+  --tile-filter: saturate(0.75) brightness(1.04) hue-rotate(-8deg);
+}
+
+/* ===== 모노 (Mono) ===== */
+[data-theme='mono'] {
+  --font-head: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-body: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-num: 'Space Grotesk', 'IBM Plex Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  --bg: #f2f3f5;
+  --surface: #ffffff;
+  --surface-2: #f5f6f8;
+  --card: #ffffff;
+  --field: #f5f6f8;
+  --line: #e1e3e8;
+  --text: #0e1116;
+  --muted: #596070;
+  --accent: #2445e8;
+  --accent-ink: #ffffff;
+  --accent-soft: #e8edff;
+  --accent-strong: #1a34c0;
+  --accent-ring: rgba(36, 69, 232, 0.18);
+  --star: #c2410c;
+  --top-bg: #0e1116;
+  --top-text: #f4f5f7;
+  --top-muted: #a2a9b6;
+  --top-line: #262b34;
+  --top-chip: #171b22;
+  --top-on: #ffffff;
+  --top-on-ink: #0e1116;
+  --logo-bg: #2445e8;
+  --logo-ink: #ffffff;
+  --hero-bg: #0e1116;
+  --hero-text: #f4f5f7;
+  --hero-muted: #a2a9b6;
+  --hero-track: #262b34;
+  --hero-accent: #5b7bff;
+  --hero-num: #ffffff;
+  --open: #0f7a4a;
+  --open-bg: #e1f4ea;
+  --soon: #b04a06;
+  --soon-bg: #fdebdc;
+  --opening: #2445e8;
+  --opening-bg: #e8edff;
+  --ended: #596070;
+  --ended-bg: #eceef1;
+  --closed: #b42318;
+  --closed-bg: #fde5e2;
+  --map-bg: #e8eaee;
+  --map-grid: rgba(120, 128, 145, 0.12);
+  --map-road: #ffffff;
+  --map-river: #c7d2e4;
+  --map-park: #dae4da;
+  --map-line: #8e96a5;
+  --map-label: #737b8b;
+  --marker-ring: #ffffff;
+  --radius: 10px;
+  --radius-sm: 8px;
+  --pill: 8px;
+  --shadow: 0 1px 2px rgba(14, 17, 22, 0.06);
+  --pop-shadow: 0 12px 30px rgba(14, 17, 22, 0.16);
+  --sheet-r: 16px;
+  --tile-filter: grayscale(0.85) contrast(1.05);
+}
+
+/* ===== 테마별 공통 보정 ===== */
+/* 말랑 테마 글꼴은 굵기가 하나뿐이라 가짜 굵게를 막습니다 (DESIGN 3.1) */
+[data-theme='pastel'] h1,
+[data-theme='pastel'] h2,
+[data-theme='pastel'] h3,
+[data-theme='pastel'] b,
+[data-theme='pastel'] strong {
+  font-weight: 400;
+}
+
+/* ===== 테마 장식 (컴포넌트를 만들 때 이 아래에 추가) ===== */

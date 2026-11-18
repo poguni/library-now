@@ -24,17 +24,18 @@
 - 배포: GitHub Actions → GitHub Pages
 
 ## 명령어
-(M0에서 `package.json`을 만든 뒤 실제 스크립트와 맞는지 확인하고 이 목록을 갱신합니다.)
-
 ```bash
 npm install
-npm run dev          # 개발 서버 (http://localhost:5173)
-npm run build        # 타입 검사 + 프로덕션 빌드
+npm run dev          # 개발 서버 (http://localhost:5173/library-now/)
+npm run build        # 타입 검사 + 프로덕션 빌드 (dist/)
 npm run test         # Vitest 단위 테스트
-npm run test:e2e     # Playwright 화면 테스트 (--trace off 기본)
 npm run lint         # ESLint + Prettier 검사
-npm run data:build   # data/raw + data/overrides → public/data/*.json
+npm run format       # Prettier로 서식 정리
 ```
+
+아직 없는 스크립트 (해당 단계에서 추가):
+- `npm run data:build`: data/raw + data/overrides → public/data/*.json (M0 데이터 빌드 스크립트)
+- `npm run test:e2e`: Playwright 화면 테스트, `--trace off` 기본 (M1 이후)
 
 ## 폴더 구조
 ```

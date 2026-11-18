@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko" data-theme="library">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="지금 문 연 도서관과 지금 가면 몇 시간 이용할 수 있는지를 지도로 보여 줍니다."
+    />
+    <title>지금 열린 도서관</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>
+      // 첫 화면 전에 저장된 테마를 적용합니다 (src/state/theme.ts와 같은 규칙)
+      (function () {
+        var fonts = {
+          library:
+            'https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap',
+          pastel: 'https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap',
+          mono: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap',
+        };
+        var theme = 'library';
+        try {
+          var saved = JSON.parse(localStorage.getItem('ln.settings') || '{}').theme;
+          if (fonts[saved]) theme = saved;
+        } catch (e) {}
+        document.documentElement.setAttribute('data-theme', theme);
+        var link = document.createElement('link');
+        link.id = 'font-' + theme;
+        link.rel = 'stylesheet';
+        link.href = fonts[theme];
+        document.head.appendChild(link);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
