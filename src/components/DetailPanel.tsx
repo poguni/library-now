@@ -1,23 +1,27 @@
 // 오른쪽 패널 (DESIGN 5.8): 고른 도서관의 기본 정보·운영시간·휴관 규칙, 고르지 않았으면 오늘 요약 (PRD 8.2)
-// 길찾기(M2)와 휴관 달력(M3)은 다음 단계에서 추가합니다.
-import { Ban, Link as LinkIcon, X } from 'lucide-react';
+// 휴관 달력(M3)은 다음 단계에서 추가합니다.
+import { Ban, X } from 'lucide-react';
+import type { Place } from '../domain/directions';
+import type { LibraryRow } from '../domain/list';
 import { formatDate, ROOM_NAME, type StatusView } from '../domain/present';
 import { hoursFor } from '../domain/schedule';
 import { type DateKey, toSeoul, weekdayOf } from '../domain/time';
 import type { Library, Room, RoomKey, TimeRange, WeekHours } from '../domain/types';
 import styles from './DetailPanel.module.css';
-import type { LibraryRow } from './types';
+import { ArrivalBox } from './ArrivalBox';
+import { DirectionsBar } from './DirectionsBar';
 
 interface Props {
   row: LibraryRow | null;
   rows: readonly LibraryRow[];
   mode: RoomKey;
   now: Date;
+  origin: Place | null;
   onClose(): void;
   className?: string;
 }
 
-export function DetailPanel({ row, rows, mode, now, onClose, className }: Props) {
+export function DetailPanel({ row, rows, mode, now, origin, onClose, className }: Props) {
   const today = toSeoul(now).date;
   return (
     <aside
@@ -26,7 +30,7 @@ export function DetailPanel({ row, rows, mode, now, onClose, className }: Props)
       data-open={row ? '' : undefined}
     >
       {row ? (
-        <LibraryDetail row={row} mode={mode} today={today} onClose={onClose} />
+        <LibraryDetail row={row} mode={mode} now={now} origin={origin} onClose={onClose} />
       ) : (
         <Summary rows={rows} mode={mode} today={today} />
       )}
@@ -87,14 +91,17 @@ function otherText(view: StatusView, room: RoomKey): string {
 function LibraryDetail({
   row,
   mode,
-  today,
+  now,
+  origin,
   onClose,
 }: {
   row: LibraryRow;
   mode: RoomKey;
-  today: DateKey;
+  now: Date;
+  origin: Place | null;
   onClose(): void;
 }) {
+  const today = toSeoul(now).date;
   const { lib, view, other, ruleText } = row;
   const memos = [
     ...(['lending', 'reading'] as const).flatMap((k) => {
@@ -133,14 +140,11 @@ function LibraryDetail({
         </button>
       </div>
 
-      <p className={styles.address}>{lib.address}</p>
+      <ArrivalBox row={row} mode={mode} now={now} originName={origin?.name ?? null} />
 
-      {lib.homepage && (
-        <a className={styles.btn} href={lib.homepage} target="_blank" rel="noopener noreferrer">
-          <LinkIcon size={18} strokeWidth={1.8} aria-hidden="true" />
-          홈페이지에서 임시 휴관 공지 확인
-        </a>
-      )}
+      <DirectionsBar lib={lib} origin={origin} />
+
+      <p className={styles.address}>{lib.address}</p>
 
       <section className={styles.sec}>
         <h3 className={`${styles.secTitle} ln-sec-title`}>운영시간</h3>

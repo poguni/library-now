@@ -1,7 +1,7 @@
 // 계산 결과를 화면 문구로 바꿉니다 (PRD F4·F5·F10, DESIGN 5.4·5.5)
 import { SHORT_USE_MINUTES } from './config';
 import type { ClosedReason } from './schedule';
-import type { NextOpen, Status } from './status';
+import type { NextOpen, Status, Usable } from './status';
 import { type DateKey, formatTime, weekdayOf } from './time';
 import type { ClosedRule, RoomKey } from './types';
 
@@ -170,6 +170,41 @@ export function presentStatus(status: Status, room: RoomKey): StatusView {
         off: true,
       };
   }
+}
+
+/**
+ * 출발지가 있을 때: 도착 예정 시각 기준 이용 가능 시간으로 바꿉니다 (F5, 5.5).
+ * 출발지가 없으면 presentStatus 결과("지금부터 마감까지")를 그대로 씁니다.
+ */
+export function applyUsable(view: StatusView, status: Status, usable: Usable): StatusView {
+  if (usable.kind === 'notToday') return view;
+
+  if (usable.kind === 'closedOnArrival') {
+    const next = usable.next ? describeNextOpen(usable.next) : null;
+    const nextText = next ? `${next.day} ${next.time} 개관` : '다음 개관 정보 없음';
+    return {
+      ...view,
+      big: '도착 시 마감',
+      bigLabel: nextText,
+      warn: false,
+      tag: '도착 시 마감',
+      summary: `도착하면 마감 · ${nextText}`,
+      off: true,
+    };
+  }
+
+  const dur = formatDuration(usable.minutes);
+  if (status.kind === 'opening' && usable.waitsForOpen) {
+    return { ...view, summary: `${formatTime(status.open)} 개관 후 ${dur} 이용 가능` };
+  }
+  return {
+    ...view,
+    big: dur,
+    bigLabel: status.kind === 'soon' ? '도착 후 이용' : '이용 가능',
+    warn: usable.minutes < SHORT_USE_MINUTES,
+    tag: dur,
+    summary: `지금 가면 ${dur} 이용 가능`,
+  };
 }
 
 /** 목록 기본 순서: 이용 가능한 곳 먼저 (출발지가 생기면 M2에서 거리순으로 바뀜) */

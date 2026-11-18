@@ -63,7 +63,8 @@ export function getStatus(lib: Library, room: RoomKey, now: Date, ctx: ScheduleC
 export type Usable =
   /** from: 이용을 시작하는 시각(분). 도착 시각 또는 개관 시각 */
   | { kind: 'usable'; minutes: number; from: number; close: number; waitsForOpen: boolean }
-  | { kind: 'closedOnArrival' }
+  /** 도착하면 이미 마감. next: 다음 개관 */
+  | { kind: 'closedOnArrival'; next: NextOpen | null }
   | { kind: 'notToday' };
 
 /**
@@ -83,7 +84,9 @@ export function getUsable(
   if (day.kind !== 'open') return { kind: 'notToday' };
 
   const arrival = minutes + travelMinutes;
-  if (arrival >= day.close) return { kind: 'closedOnArrival' };
+  if (arrival >= day.close) {
+    return { kind: 'closedOnArrival', next: findNextOpen(lib, room, date, ctx) };
+  }
   const from = Math.max(arrival, day.open);
   return {
     kind: 'usable',

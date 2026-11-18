@@ -1,4 +1,5 @@
 // ln.settings 저장소 (PRD 6.4). 읽기·쓰기는 모두 예외 없이 동작합니다.
+import type { FilterKey, SortKey } from '../domain/list';
 import type { RoomKey } from '../domain/types';
 
 export const SETTINGS_KEY = 'ln.settings';
@@ -47,4 +48,35 @@ export function readMode(storage: StorageLike | null): RoomKey {
 
 export function saveMode(storage: StorageLike | null, mode: RoomKey): boolean {
   return saveSettings(storage, { mode });
+}
+
+/** 출발지 선택 (F6) */
+export type OriginChoice = 'current' | 'home' | 'work';
+
+export interface ListPrefs {
+  origin: OriginChoice;
+  sort: SortKey;
+  filters: FilterKey[];
+}
+
+const ORIGINS: readonly OriginChoice[] = ['current', 'home', 'work'];
+const SORTS: readonly SortKey[] = ['distance', 'time', 'name'];
+const FILTERS: readonly FilterKey[] = ['openNow', 'late'];
+
+const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
+  allowed.includes(value as T) ? (value as T) : fallback;
+
+export function readPrefs(storage: StorageLike | null): ListPrefs {
+  const s = readSettings(storage);
+  return {
+    origin: pick(s.origin, ORIGINS, 'current'),
+    sort: pick(s.sort, SORTS, 'distance'),
+    filters: Array.isArray(s.filters)
+      ? FILTERS.filter((f) => (s.filters as unknown[]).includes(f))
+      : [],
+  };
+}
+
+export function savePrefs(storage: StorageLike | null, patch: Partial<ListPrefs>): boolean {
+  return saveSettings(storage, patch);
 }

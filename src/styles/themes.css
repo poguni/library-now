@@ -296,3 +296,15 @@
   font-size: 11.5px;
   letter-spacing: 0.08em;
 }
+
+/* --- "지금 가면" 상자 (DESIGN 2.4) --- */
+[data-theme='library'] .ln-hero {
+  background-image: repeating-linear-gradient(90deg, var(--hero-track) 0 2px, transparent 2px 6px);
+}
+[data-theme='pastel'] .ln-hero {
+  border: 2px dashed var(--hero-accent);
+}
+[data-theme='mono'] .ln-hero .ln-num {
+  font-size: 36px;
+  letter-spacing: -0.03em;
+}

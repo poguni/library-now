@@ -1,8 +1,10 @@
 // 상단 바 (DESIGN 5.1): 지역 칩(F2), 이용 모드(F3), 기준 시각 표시
-import { BookOpen, Pencil } from 'lucide-react';
+import { BookOpen, ChevronDown, Pencil } from 'lucide-react';
 import { formatDate, ROOM_NAME } from '../domain/present';
 import { formatTime, toSeoul } from '../domain/time';
 import type { RoomKey } from '../domain/types';
+import { PLACE_LABEL, type PlaceKind, type Places } from '../state/places';
+import type { OriginChoice } from '../state/settings';
 import styles from './TopBar.module.css';
 
 interface Props {
@@ -12,6 +14,11 @@ interface Props {
   mode: RoomKey;
   onMode(mode: RoomKey): void;
   now: Date;
+  originChoice: OriginChoice;
+  places: Places;
+  onOriginChoice(choice: OriginChoice): void;
+  /** 지도에서 집·직장 위치 지정 시작 */
+  onPickPlace(kind: PlaceKind): void;
 }
 
 const MODES: { key: RoomKey; label: string; Icon: typeof BookOpen }[] = [
@@ -19,8 +26,17 @@ const MODES: { key: RoomKey; label: string; Icon: typeof BookOpen }[] = [
   { key: 'reading', label: '공부하기', Icon: Pencil },
 ];
 
-export function TopBar({ districts, offDistricts, onToggleDistrict, mode, onMode, now }: Props) {
+export function TopBar(props: Props) {
+  const { districts, offDistricts, onToggleDistrict, mode, onMode, now, places } = props;
   const seoul = toSeoul(now);
+
+  const onOriginChange = (value: string) => {
+    if (value === 'pick-home' || value === 'pick-work') {
+      props.onPickPlace(value === 'pick-home' ? 'home' : 'work');
+    } else {
+      props.onOriginChoice(value as OriginChoice);
+    }
+  };
   return (
     <header className={`${styles.top} ln-top`}>
       <div className={styles.brand}>
@@ -68,6 +84,26 @@ export function TopBar({ districts, offDistricts, onToggleDistrict, mode, onMode
       </div>
 
       <span className={styles.spacer} />
+
+      <label className={styles.origin}>
+        <span className={styles.label}>출발</span>
+        <select value={props.originChoice} onChange={(e) => onOriginChange(e.target.value)}>
+          <option value="current">현재 위치</option>
+          {(['home', 'work'] as const).map((kind) =>
+            places[kind] ? (
+              <option key={kind} value={kind}>
+                {places[kind].name}
+              </option>
+            ) : null,
+          )}
+          {(['home', 'work'] as const).map((kind) => (
+            <option key={`pick-${kind}`} value={`pick-${kind}`}>
+              {PLACE_LABEL[kind]} {places[kind] ? '다시 지정' : '지정'}…
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={16} strokeWidth={1.8} aria-hidden="true" />
+      </label>
 
       <span className={styles.now}>
         <span className={styles.label}>기준</span>

@@ -15,6 +15,13 @@ export interface MapMarker {
   summary: string;
 }
 
+export interface MapOrigin {
+  lat: number;
+  lng: number;
+  name: string;
+  kind: 'current' | 'home' | 'work';
+}
+
 export interface MapHandle {
   /** 마커 목록을 통째로 바꿉니다 (바뀐 것만 다시 그림) */
   setMarkers(markers: readonly MapMarker[]): void;
@@ -22,6 +29,11 @@ export interface MapHandle {
   select(id: string | null): void;
   /** 목록에서 마우스를 올린 마커 강조 */
   hover(id: string | null): void;
+  /** 출발지 마커. 선택한 도서관이 있으면 둘 사이에 점선(방향 표시)을 그립니다 */
+  setOrigin(origin: MapOrigin | null): void;
+  /** 지도를 한 번 눌러 위치를 고르게 합니다. 돌려준 함수를 부르면 취소 */
+  startPick(onPick: (point: { lat: number; lng: number }) => void): () => void;
+  panTo(point: { lat: number; lng: number }): void;
   zoomIn(): void;
   zoomOut(): void;
   /** 지금 보이는 마커가 모두 들어오게 */

@@ -416,9 +416,10 @@ describe('getUsable', () => {
     });
   });
 
-  it('도착하면 이미 마감', () => {
+  it('도착하면 이미 마감, 다음 개관 안내', () => {
     expect(getUsable(lib, 'lending', seoul('2026-11-18 21:40'), 25, ctx)).toEqual({
       kind: 'closedOnArrival',
+      next: { date: '2026-11-19', daysAhead: 1, open: 540 },
     });
   });
 

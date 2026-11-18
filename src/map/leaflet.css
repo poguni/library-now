@@ -172,3 +172,62 @@
     transition: none;
   }
 }
+
+/* ---- 출발지 마커와 방향 점선 (DESIGN 5.6) ---- */
+.ln-origin {
+  display: grid;
+  place-items: center;
+}
+
+.ln-odot {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  background: var(--text);
+  color: var(--surface);
+  border: 3px solid var(--marker-ring);
+  box-shadow: var(--pop-shadow);
+}
+
+.ln-odot svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ln-otag {
+  position: absolute;
+  left: calc(50% + 19px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 2px 8px;
+  border-radius: var(--pill);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.leaflet-container .ln-route {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3.5;
+  stroke-dasharray: 2 8;
+  stroke-linecap: round;
+  stroke-opacity: 1;
+}
+
+/* 지도에서 위치 고르기 */
+.leaflet-container.ln-picking,
+.leaflet-container.ln-picking .leaflet-interactive {
+  cursor: crosshair;
+}

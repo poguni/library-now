@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  applyUsable,
   describeClosedRule,
   describeNextOpen,
   describeReason,
@@ -119,5 +120,55 @@ describe('상태 → 화면 문구 (F4)', () => {
       badge: '열람실 없음',
       off: true,
     });
+  });
+});
+
+describe('도착 기준 이용 가능 시간 (F5)', () => {
+  const open = { kind: 'open', close: 1320, minutesLeft: 175 } as const;
+  const usable = (minutes: number, waitsForOpen = false) =>
+    ({ kind: 'usable', minutes, from: 0, close: 1320, waitsForOpen }) as const;
+
+  it('운영 중: 도착 후 남는 시간', () => {
+    const v = applyUsable(presentStatus(open, 'reading'), open, usable(158));
+    expect(v).toMatchObject({
+      big: '2시간 38분',
+      bigLabel: '이용 가능',
+      summary: '지금 가면 2시간 38분 이용 가능',
+      warn: false,
+    });
+  });
+
+  it('곧 닫힘: 30분 미만이면 경고', () => {
+    const soon = { kind: 'soon', close: 1200, minutesLeft: 55 } as const;
+    expect(applyUsable(presentStatus(soon, 'lending'), soon, usable(29))).toMatchObject({
+      big: '29분',
+      bigLabel: '도착 후 이용',
+      warn: true,
+    });
+  });
+
+  it('개관 전 도착: 개관 시각은 그대로, 요약에 이용 시간', () => {
+    const opening = { kind: 'opening', open: 540, close: 1320 } as const;
+    const v = applyUsable(presentStatus(opening, 'lending'), opening, usable(780, true));
+    expect(v).toMatchObject({ big: '09:00', summary: '09:00 개관 후 13시간 이용 가능' });
+  });
+
+  it('도착 시 마감: 흐리게, 다음 개관 안내', () => {
+    const v = applyUsable(presentStatus(open, 'lending'), open, {
+      kind: 'closedOnArrival',
+      next: { date: '2026-11-19', daysAhead: 1, open: 540 },
+    });
+    expect(v).toMatchObject({
+      big: '도착 시 마감',
+      bigLabel: '내일 09:00 개관',
+      off: true,
+      badge: '운영 중',
+    });
+  });
+
+  it('오늘 운영하지 않으면 바꾸지 않음', () => {
+    const closed = { kind: 'closed', reason: { type: 'weekly', weekday: 1 }, next: null } as const;
+    const base = presentStatus(closed, 'lending');
+    expect(applyUsable(base, closed, { kind: 'notToday' })).toBe(base);
   });
 });

@@ -92,3 +92,34 @@
     top: 12px;
   }
 }
+
+/* 지도에서 위치 고르기 안내 */
+.pick {
+  position: absolute;
+  z-index: 1000;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 96px);
+  padding: 6px 6px 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--surface);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--pop-shadow);
+}
+
+.pick button {
+  flex: none;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 700;
+}

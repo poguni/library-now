@@ -71,21 +71,6 @@
   font-size: 13px;
 }
 
-.btn {
-  height: 44px;
-  padding: 0 14px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--text);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
 .sec {
   display: flex;
   flex-direction: column;
