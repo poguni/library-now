@@ -28,6 +28,7 @@ Thumbs.db
 # Claude Code·oh-my-claudecode 개인 설정과 작업 상태
 .claude/settings.local.json
 .omc/
+.playwright-mcp/
 
 # 문서 묶음 압축본 (docs/, design/, CLAUDE.md와 내용이 같음)
 docs/library-now-starter.zip
