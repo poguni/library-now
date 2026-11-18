@@ -1,0 +1,2158 @@
+{
+  "version": 1,
+  "checkedAt": "2026-11-18",
+  "rules": {
+    "matching": "match.standard / match.seoul 이름으로 원본 행을 찾고, 이 파일의 값이 항상 우선",
+    "coordinates": "lat/lng가 있으면 사용, 없으면 표준데이터, 표준에 없으면 서울 데이터",
+    "holiday": "모든 도서관 'closed'. 공휴일 JSON에는 이름 있는 공휴일만 넣으므로 '일요일을 제외한 법정공휴일(겹치면 휴관)'과 같음",
+    "reading": "null = 열람실 없음(공부하기 모드에서 제외). hours가 null = 열람실은 있으나 시간 확인 필요"
+  },
+  "exclude": [
+    {
+      "standard": "개봉어린이도서관",
+      "reason": "구로구 통합도서관 목록에 없음. 운영 여부 확인 전까지 제외"
+    },
+    {
+      "standard": "오류도서관",
+      "reason": "구로구 통합도서관 목록에 없음. 운영 여부 확인 전까지 제외"
+    }
+  ],
+  "libraries": [
+    {
+      "id": "ydp-001",
+      "name": "신길도서관",
+      "district": "영등포구",
+      "operator": "구립",
+      "match": {
+        "standard": "신길책마루문화센터",
+        "seoul": null
+      },
+      "homepage": "https://www.ydplib.or.kr/sclib/index.do",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "3층 어린이자료실 평일 09:00~18:00"
+        },
+        "reading": {
+          "label": "스터디실",
+          "hours": null,
+          "seasons": null,
+          "memo": "5층 스터디실 52석"
+        }
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 다른 법정공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "스터디실 운영시간이 홈페이지에 없음 (화면에 '운영시간 확인 필요'로 표시됨)"
+      ]
+    },
+    {
+      "id": "ydp-002",
+      "name": "여의도브라이튼도서관",
+      "district": "영등포구",
+      "operator": "구립",
+      "match": {
+        "standard": "여의도브라이튼도서관",
+        "seoul": null
+      },
+      "homepage": "https://www.ydplib.or.kr/brlib/index.do",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료실 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 다른 법정공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [
+        "설 연휴 전날, 추석 연휴 전날, 12월 31일이 평일이면 18:00까지 운영"
+      ],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "홈페이지에 '월요일을 제외한 법정공휴일'이라는 문장이 함께 있음 (오타로 보고 다른 영등포 도서관과 같게 처리)"
+      ]
+    },
+    {
+      "id": "ydp-003",
+      "name": "대림도서관",
+      "district": "영등포구",
+      "operator": "구립",
+      "match": {
+        "standard": "대림도서관",
+        "seoul": "대림도서관"
+      },
+      "homepage": "https://www.ydplib.or.kr/drlib/index.do",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이·유아자료 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 다른 법정공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "ydp-004",
+      "name": "문래도서관",
+      "district": "영등포구",
+      "operator": "구립",
+      "match": {
+        "standard": "문래도서관",
+        "seoul": "문래도서관"
+      },
+      "homepage": "https://www.ydplib.or.kr/mllib/index.do",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이·유아열람실 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 다른 법정공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "ydp-005",
+      "name": "선유도서관",
+      "district": "영등포구",
+      "operator": "구립",
+      "match": {
+        "standard": "선유도서관",
+        "seoul": "선유도서관"
+      },
+      "homepage": "https://www.ydplib.or.kr/sylib/index.do",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료실 평일 09:00~18:00, 사이로 평일 09:00~20:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 다른 법정공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "ydp-006",
+      "name": "여의샛강도서관",
+      "district": "영등포구",
+      "operator": "구립",
+      "match": {
+        "standard": "여의샛강도서관",
+        "seoul": "여의샛강도서관"
+      },
+      "homepage": "https://www.ydplib.or.kr/yulib/index.do",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "북카페 평일 09:00~17:00, 주말 휴무"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 다른 법정공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "ydp-007",
+      "name": "영등포생각공장도서관",
+      "district": "영등포구",
+      "operator": "구립",
+      "match": {
+        "standard": "영등포생각공장도서관",
+        "seoul": "영등포생각공장도서관"
+      },
+      "homepage": "https://www.ydplib.or.kr/sglib/index.do",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 다른 법정공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "ydp-008",
+      "name": "원지공원도서관",
+      "district": "영등포구",
+      "operator": "구립",
+      "match": {
+        "standard": "원지공원도서관",
+        "seoul": null
+      },
+      "homepage": "https://www.ydplib.or.kr/wjlib/index.do",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 다른 법정공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "ydp-009",
+      "name": "서울특별시교육청 영등포평생학습관",
+      "district": "영등포구",
+      "operator": "교육청",
+      "match": {
+        "standard": null,
+        "seoul": "서울특별시교육청영등포평생학습관"
+      },
+      "homepage": "https://ydpllc.sen.go.kr",
+      "rooms": {
+        "lending": {
+          "label": "문헌정보실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이실·디지털간행물실 평일 09:00~18:00"
+        },
+        "reading": {
+          "label": "자율·노트북학습실",
+          "hours": {
+            "weekday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "sunday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "holiday": null
+          },
+          "seasons": [
+            {
+              "from": "03-01",
+              "to": "10-31",
+              "hours": {
+                "weekday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "saturday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "sunday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "holiday": null
+              }
+            }
+          ],
+          "memo": "11~2월 08:00, 3~10월 07:00 개관"
+        }
+      },
+      "closed": {
+        "weekly": [],
+        "monthly": [
+          {
+            "nth": [
+              2,
+              4
+            ],
+            "weekday": 1
+          }
+        ],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매월 둘째·넷째 월요일, 법정공휴일 (일요일은 개관하되 일요일과 다른 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "yc-001",
+      "name": "양천중앙도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "양천중앙도서관",
+        "seoul": "양천중앙도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/yclib/",
+      "rooms": {
+        "lending": {
+          "label": "일반자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "유아자료실·디지털자료실 평일 09:00~18:00, 어린이청소년자료실 평일 09:00~22:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          5
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 금요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-002",
+      "name": "갈산도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "갈산도서관",
+        "seoul": "갈산도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/libgalsan/",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료실 평일 09:00~18:00"
+        },
+        "reading": {
+          "label": "열람실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        }
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-003",
+      "name": "개울건강도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "개울건강도서관",
+        "seoul": "개울건강도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/libgaeul/",
+      "rooms": {
+        "lending": {
+          "label": "자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": null,
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          0
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 일요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-004",
+      "name": "목마교육도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "목마교육도서관",
+        "seoul": "목마교육도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/libmokma/",
+      "rooms": {
+        "lending": {
+          "label": "일반자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": null,
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료실 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          0
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 일요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-005",
+      "name": "미감도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "미감도서관",
+        "seoul": "미감도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/libmigam/",
+      "rooms": {
+        "lending": {
+          "label": "일반자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": null,
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료실 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          0
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 일요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-006",
+      "name": "방아다리문학도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "방아다리문학도서관",
+        "seoul": "방아다리문학도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/libbanga/",
+      "rooms": {
+        "lending": {
+          "label": "자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": null,
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          0
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 일요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-007",
+      "name": "신월음악도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "신월음악도서관",
+        "seoul": "신월음악도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/libsin/",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "음악자료실 평일 09:00~22:00, 어린이자료실·정보검색실 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-008",
+      "name": "영어특성화도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "영어특성화도서관",
+        "seoul": "영어특성화도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/libeng/",
+      "rooms": {
+        "lending": {
+          "label": "자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": null,
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          0
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 일요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-009",
+      "name": "해맞이역사도서관",
+      "district": "양천구",
+      "operator": "구립",
+      "match": {
+        "standard": "해맞이역사도서관",
+        "seoul": "해맞이역사도서관"
+      },
+      "homepage": "https://lib.yangcheon.or.kr/libsun/",
+      "rooms": {
+        "lending": {
+          "label": "자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "18:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 법정공휴일",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "yc-010",
+      "name": "서울특별시교육청 양천도서관",
+      "district": "양천구",
+      "operator": "교육청",
+      "match": {
+        "standard": null,
+        "seoul": "서울특별시교육청양천도서관"
+      },
+      "homepage": "https://yclib.sen.go.kr",
+      "rooms": {
+        "lending": {
+          "label": "책누리실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "꿈동산실·정보마당실 평일 09:00~18:00, 주말 09:00~17:00"
+        },
+        "reading": {
+          "label": "열린학습실",
+          "hours": {
+            "weekday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "sunday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "holiday": null
+          },
+          "seasons": [
+            {
+              "from": "03-01",
+              "to": "10-31",
+              "hours": {
+                "weekday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "saturday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "sunday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "holiday": null
+              }
+            }
+          ],
+          "memo": "11~2월 08:00, 3~10월 07:00 개관"
+        }
+      },
+      "closed": {
+        "weekly": [],
+        "monthly": [
+          {
+            "nth": [
+              1,
+              3
+            ],
+            "weekday": 4
+          }
+        ],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매월 첫째·셋째 목요일, 일요일을 제외한 법정공휴일 (일요일과 법정공휴일이 겹칠 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "열린학습실의 토·일 칸이 비어 있어 평일과 같다고 봄"
+      ]
+    },
+    {
+      "id": "gr-001",
+      "name": "구로문화누리도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": null,
+        "seoul": null
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/mainlib/mainlib01",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실(지혜누리)",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이열람실(꿈누리)·멀티미디어실(온누리) 평일 09:00~18:00. 개방형 좌석 450석"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "두 공공데이터에 없는 도서관 (홈페이지 정보만 사용)",
+        "좌표는 OpenStreetMap에 등록된 도서관 위치",
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ],
+      "address": "서울특별시 구로구 개봉로20길 123",
+      "phone": "02-860-5480",
+      "lat": 37.4927531,
+      "lng": 126.8615313
+    },
+    {
+      "id": "gr-002",
+      "name": "꿈나무어린이도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "꿈나무도서관",
+        "seoul": "구로꿈나무도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib01",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "10:00",
+              "close": "19:00"
+            },
+            "saturday": {
+              "open": "10:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "10:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "유아열람실도 같은 시간"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          2
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 화요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [],
+      "phone": "02-830-1623"
+    },
+    {
+      "id": "gr-003",
+      "name": "꿈마을도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "꿈마을도서관",
+        "seoul": "꿈마을도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib02",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "유아자료실 평일 09:00~18:00, 주말 09:00~17:00"
+        },
+        "reading": {
+          "label": "자유열람실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        }
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "gr-004",
+      "name": "온누리도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "구로구립온누리도서관",
+        "seoul": "구로구립온누리도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib03",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "유아열람실 평일·주말 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          2
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 화요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "gr-005",
+      "name": "하늘도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "하늘도서관",
+        "seoul": "하늘도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib05",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "북카페 평일 09:00~19:00, 어린이자료실 평일 09:00~18:00"
+        },
+        "reading": {
+          "label": "자유열람실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        }
+      },
+      "closed": {
+        "weekly": [
+          2
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 화요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "두 공공데이터는 평일 22:00까지라고 함. 홈페이지 표에서 종합자료실이 자유열람실(20:00) 칸과 합쳐져 있음",
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ]
+    },
+    {
+      "id": "gr-006",
+      "name": "개봉도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "개봉도서관",
+        "seoul": "개봉도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib06",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이열람실 평일 09:00~18:00, 주말 09:00~17:00"
+        },
+        "reading": {
+          "label": "자료열람실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        }
+      },
+      "closed": {
+        "weekly": [
+          2
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 화요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "gr-007",
+      "name": "글마루한옥어린이도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "글마루한옥어린이도서관",
+        "seoul": "글마루한옥어린이도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib07",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "10:00",
+              "close": "19:00"
+            },
+            "saturday": {
+              "open": "10:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "10:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": null
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          2
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 화요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "gr-008",
+      "name": "궁동어린이도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "궁동어린이도서관",
+        "seoul": "궁동어린이도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib08",
+      "rooms": {
+        "lending": {
+          "label": "유아·어린이청소년자료실",
+          "hours": {
+            "weekday": {
+              "open": "10:00",
+              "close": "19:00"
+            },
+            "saturday": {
+              "open": "10:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "10:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "1층 유아자료실, 2층 어린이·청소년자료실 같은 시간"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          2
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 화요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "gr-009",
+      "name": "구로기적의도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "구로기적의도서관",
+        "seoul": "구로기적의도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib09",
+      "rooms": {
+        "lending": {
+          "label": "청소년·가족자료실",
+          "hours": {
+            "weekday": {
+              "open": "10:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "10:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "10:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료실 평일 10:00~19:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "gr-010",
+      "name": "항동푸른도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "항동푸른도서관",
+        "seoul": "항동푸른도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib11",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "21:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이·영유아자료실, 멀티미디어실 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "gr-011",
+      "name": "고척열린도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "고척열린도서관",
+        "seoul": "고척열린도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib12",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료실 평일 09:00~18:00, 주말 09:00~17:00. 열람석 3층 72석, 4층 150석"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "두 공공데이터는 평일 20:00까지라고 함 → 홈페이지는 22:00",
+        "전화번호가 표준(02-2615-2007)과 서울(02-2615-2006)이 다름"
+      ],
+      "lat": 37.4992525,
+      "lng": 126.8575171
+    },
+    {
+      "id": "gr-012",
+      "name": "구로미래도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": "구로미래도서관",
+        "seoul": "구로미래도서관"
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib13",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "열린자료실·디지털자료실 같은 시간, 유아동자료실 평일 09:00~18:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          2
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 화요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ],
+      "phone": "02-854-7466"
+    },
+    {
+      "id": "gr-013",
+      "name": "구로천왕도서관",
+      "district": "구로구",
+      "operator": "구립",
+      "match": {
+        "standard": null,
+        "seoul": null
+      },
+      "homepage": "https://lib.guro.go.kr/#/about/gulib/lib14",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "21:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "어린이자료실 평일 09:00~18:00, 주말 09:00~17:00"
+        },
+        "reading": null
+      },
+      "closed": {
+        "weekly": [
+          1
+        ],
+        "monthly": [],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매주 월요일, 일요일을 제외한 법정공휴일 (일요일과 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": [
+        "두 공공데이터에 없는 도서관 (홈페이지 정보만 사용)",
+        "좌표는 OpenStreetMap의 주소(오리로 1165) 건물 위치. 도서관동 위치와 다를 수 있음",
+        "주말 시간은 홈페이지 표의 합쳐진 칸을 모든 실에 같게 적용함"
+      ],
+      "address": "서울특별시 구로구 오리로 1165 도서관동 1·2층",
+      "phone": "02-2060-2043",
+      "lat": 37.4878418,
+      "lng": 126.837553
+    },
+    {
+      "id": "gr-014",
+      "name": "서울특별시교육청 고척도서관",
+      "district": "구로구",
+      "operator": "교육청",
+      "match": {
+        "standard": null,
+        "seoul": "서울특별시교육청고척도서관"
+      },
+      "homepage": "https://gclib.sen.go.kr",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "유스그라운드·리틀그라운드 09:00~18:00"
+        },
+        "reading": {
+          "label": "자율학습실",
+          "hours": {
+            "weekday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "sunday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "holiday": null
+          },
+          "seasons": [
+            {
+              "from": "03-01",
+              "to": "10-31",
+              "hours": {
+                "weekday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "saturday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "sunday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "holiday": null
+              }
+            }
+          ],
+          "memo": "디지털실·노트북실 같은 시간. 11~2월 08:00, 3~10월 07:00 개관"
+        }
+      },
+      "closed": {
+        "weekly": [],
+        "monthly": [
+          {
+            "nth": [
+              2,
+              4
+            ],
+            "weekday": 3
+          }
+        ],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매월 둘째·넷째 수요일, 법정공휴일 (일요일을 제외한 관공서의 공휴일. 일요일과 다른 공휴일이 겹치는 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    },
+    {
+      "id": "gr-015",
+      "name": "서울특별시교육청 구로도서관",
+      "district": "구로구",
+      "operator": "교육청",
+      "match": {
+        "standard": null,
+        "seoul": "서울특별시교육청구로도서관"
+      },
+      "homepage": "https://grlib.sen.go.kr",
+      "rooms": {
+        "lending": {
+          "label": "종합자료실",
+          "hours": {
+            "weekday": {
+              "open": "09:00",
+              "close": "20:00"
+            },
+            "saturday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "sunday": {
+              "open": "09:00",
+              "close": "17:00"
+            },
+            "holiday": null
+          },
+          "seasons": null,
+          "memo": "디지털자료실·간행물실·어린이자료실 09:00~18:00"
+        },
+        "reading": {
+          "label": "일반열람실",
+          "hours": {
+            "weekday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "saturday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "sunday": {
+              "open": "08:00",
+              "close": "22:00"
+            },
+            "holiday": null
+          },
+          "seasons": [
+            {
+              "from": "03-01",
+              "to": "10-31",
+              "hours": {
+                "weekday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "saturday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "sunday": {
+                  "open": "07:00",
+                  "close": "22:00"
+                },
+                "holiday": null
+              }
+            }
+          ],
+          "memo": "11~2월 08:00, 3~10월 07:00 개관"
+        }
+      },
+      "closed": {
+        "weekly": [],
+        "monthly": [
+          {
+            "nth": [
+              1,
+              3
+            ],
+            "weekday": 3
+          }
+        ],
+        "holiday": "closed",
+        "appliesTo": [
+          "lending",
+          "reading"
+        ]
+      },
+      "closedRaw": "매월 첫째·셋째 수요일, 일요일을 제외한 법정공휴일 (일요일과 겹칠 경우 휴관)",
+      "closures": [],
+      "notes": [],
+      "source": {
+        "verifiedBy": "homepage",
+        "checkedAt": "2026-11-18",
+        "verifiedAt": null
+      },
+      "review": []
+    }
+  ]
+}
