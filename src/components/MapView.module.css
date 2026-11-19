@@ -123,3 +123,8 @@
   color: var(--text);
   font-weight: 700;
 }
+
+/* 버튼 없는 안내 (오프라인) */
+.pick:not(:has(button)) {
+  padding-right: 14px;
+}

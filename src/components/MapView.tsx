@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { DEFAULT_CENTER, DEFAULT_ZOOM } from '../map/config';
 import { createLeafletMap } from '../map/leaflet';
 import type { MapHandle, MapMarker, MapOrigin } from '../map/types';
+import { useOnline } from '../state/useOnline';
 import styles from './MapView.module.css';
 
 interface Props {
@@ -32,6 +33,7 @@ const LEGEND = [
 
 export function MapView(props: Props) {
   const { markers, selectedId, hoverId, onSelect, origin, pickLabel, onPick, focus } = props;
+  const online = useOnline();
   const canvas = useRef<HTMLDivElement>(null);
   const handle = useRef<MapHandle | null>(null);
   const onSelectRef = useRef(onSelect);
@@ -70,6 +72,12 @@ export function MapView(props: Props) {
   return (
     <section className={`${styles.map} ${props.className ?? ''}`} aria-label="도서관 지도">
       <div ref={canvas} className={styles.canvas} />
+
+      {!online && !pickLabel && (
+        <div className={styles.pick} role="status">
+          <span>오프라인입니다. 지도 배경은 연결되면 보입니다.</span>
+        </div>
+      )}
 
       {pickLabel && (
         <div className={styles.pick} role="status">

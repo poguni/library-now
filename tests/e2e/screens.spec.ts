@@ -185,3 +185,13 @@ test('내 메모·임시 휴관은 저장되어 상태에 반영되고 파일로
   await page.getByRole('button', { name: '꿈마을도서관', exact: true }).click();
   await expect(panel.getByLabel('메모')).toHaveValue('3층 창가 자리 좋음');
 });
+
+test('오프라인이면 지도에 안내를 보여 주고 목록은 그대로 (F15)', async ({ page, context }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page);
+  await context.setOffline(true);
+  await expect(page.getByText('오프라인입니다. 지도 배경은 연결되면 보입니다.')).toBeVisible();
+  await expect(page.locator('.ln-card').first()).toBeVisible();
+  await context.setOffline(false);
+  await expect(page.getByText('오프라인입니다.', { exact: false })).toBeHidden();
+});
