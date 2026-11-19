@@ -27,6 +27,9 @@ jobs:
       - run: npm run lint
       - run: npm run test
       - run: npm run build
+        env:
+          # 저장소 Settings > Secrets and variables > Actions > Variables (없으면 카카오맵 선택지 숨김)
+          VITE_KAKAO_JS_KEY: ${{ vars.VITE_KAKAO_JS_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
