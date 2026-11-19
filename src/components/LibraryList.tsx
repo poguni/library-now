@@ -37,7 +37,6 @@ interface Props {
 
 const FILTERS: { key: FilterKey; label: string }[] = [
   { key: 'openNow', label: '지금 열린 곳만' },
-  { key: 'late', label: '21시 이후' },
   { key: 'favorites', label: '즐겨찾기' },
   { key: 'reviewed', label: '검수된 곳만' },
 ];

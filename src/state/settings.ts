@@ -63,7 +63,8 @@ export interface ListPrefs {
 
 const ORIGINS: readonly OriginChoice[] = ['current', 'home', 'work'];
 const SORTS: readonly SortKey[] = ['distance', 'time', 'name'];
-const FILTERS: readonly FilterKey[] = ['openNow', 'late', 'favorites', 'reviewed'];
+// 예전에 저장된 'late'(21시 이후)는 없앤 필터라 읽을 때 버립니다
+const FILTERS: readonly FilterKey[] = ['openNow', 'favorites', 'reviewed'];
 
 const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
   allowed.includes(value as T) ? (value as T) : fallback;

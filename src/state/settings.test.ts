@@ -62,27 +62,27 @@ describe('목록 설정과 출발지 선택 (F6·F7·F9)', () => {
     savePrefs(s, {
       origin: 'home',
       sort: 'time',
-      filters: ['late', 'reviewed'],
+      filters: ['openNow', 'reviewed'],
       offDistricts: ['강남구'],
     });
     expect(readPrefs(s)).toEqual({
       origin: 'home',
       sort: 'time',
-      filters: ['late', 'reviewed'],
+      filters: ['openNow', 'reviewed'],
       offDistricts: ['강남구'],
     });
     const bad = memoryStorage({
       [SETTINGS_KEY]: JSON.stringify({
         origin: 'moon',
         sort: 'x',
-        filters: ['late', 'fav'],
+        filters: ['favorites', 'fav', 'late'],
         offDistricts: ['중구', 3],
       }),
     });
     expect(readPrefs(bad)).toEqual({
       origin: 'current',
       sort: 'distance',
-      filters: ['late'],
+      filters: ['favorites'],
       offDistricts: ['중구'],
     });
   });

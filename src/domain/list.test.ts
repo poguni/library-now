@@ -116,15 +116,11 @@ describe('정렬', () => {
 describe('필터 (F9)', () => {
   const none = new Set<string>();
 
-  it('지금 열린 곳만, 21시 이후까지 운영', () => {
+  it('지금 열린 곳만', () => {
     const list = rows('19:05');
     expect(
       names(filterRows(list, { offDistricts: none, query: '', filters: ['openNow'] })),
     ).toEqual(['가까운도서관', '나중도서관', '다른구도서관']);
-    expect(names(filterRows(list, { offDistricts: none, query: '', filters: ['late'] }))).toEqual([
-      '나중도서관',
-      '다른구도서관',
-    ]);
   });
 
   it('즐겨찾기만', () => {

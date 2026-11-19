@@ -43,15 +43,22 @@
   color: var(--muted);
 }
 
+/* 필터는 한 줄. 폭이 모자라면(태블릿 등) 가로로 밀어서 봅니다 */
 .filters {
   display: flex;
   gap: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filters > * {
+  flex: none;
 }
 
 .fchip {
   height: 32px;
-  padding: 0 12px;
+  padding: 0 10px;
   border-radius: var(--pill);
   border: 1px solid var(--line);
   background: var(--surface);
