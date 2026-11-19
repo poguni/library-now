@@ -57,11 +57,13 @@ export interface ListPrefs {
   origin: OriginChoice;
   sort: SortKey;
   filters: FilterKey[];
+  /** 지역 선택에서 끈 구 (M5). 새로 생긴 구는 켜진 채로 나옵니다 */
+  offDistricts: string[];
 }
 
 const ORIGINS: readonly OriginChoice[] = ['current', 'home', 'work'];
 const SORTS: readonly SortKey[] = ['distance', 'time', 'name'];
-const FILTERS: readonly FilterKey[] = ['openNow', 'late', 'favorites'];
+const FILTERS: readonly FilterKey[] = ['openNow', 'late', 'favorites', 'reviewed'];
 
 const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
   allowed.includes(value as T) ? (value as T) : fallback;
@@ -73,6 +75,9 @@ export function readPrefs(storage: StorageLike | null): ListPrefs {
     sort: pick(s.sort, SORTS, 'distance'),
     filters: Array.isArray(s.filters)
       ? FILTERS.filter((f) => (s.filters as unknown[]).includes(f))
+      : [],
+    offDistricts: Array.isArray(s.offDistricts)
+      ? (s.offDistricts as unknown[]).filter((d): d is string => typeof d === 'string')
       : [],
   };
 }

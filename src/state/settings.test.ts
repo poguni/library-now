@@ -53,17 +53,38 @@ describe('목록 설정과 출발지 선택 (F6·F7·F9)', () => {
       origin: 'current',
       sort: 'distance',
       filters: [],
+      offDistricts: [],
     });
   });
 
   it('저장하고 다시 읽음, 모르는 값은 버림', () => {
     const s = memoryStorage();
-    savePrefs(s, { origin: 'home', sort: 'time', filters: ['late'] });
-    expect(readPrefs(s)).toEqual({ origin: 'home', sort: 'time', filters: ['late'] });
-    const bad = memoryStorage({
-      [SETTINGS_KEY]: JSON.stringify({ origin: 'moon', sort: 'x', filters: ['late', 'fav'] }),
+    savePrefs(s, {
+      origin: 'home',
+      sort: 'time',
+      filters: ['late', 'reviewed'],
+      offDistricts: ['강남구'],
     });
-    expect(readPrefs(bad)).toEqual({ origin: 'current', sort: 'distance', filters: ['late'] });
+    expect(readPrefs(s)).toEqual({
+      origin: 'home',
+      sort: 'time',
+      filters: ['late', 'reviewed'],
+      offDistricts: ['강남구'],
+    });
+    const bad = memoryStorage({
+      [SETTINGS_KEY]: JSON.stringify({
+        origin: 'moon',
+        sort: 'x',
+        filters: ['late', 'fav'],
+        offDistricts: ['중구', 3],
+      }),
+    });
+    expect(readPrefs(bad)).toEqual({
+      origin: 'current',
+      sort: 'distance',
+      filters: ['late'],
+      offDistricts: ['중구'],
+    });
   });
 });
 

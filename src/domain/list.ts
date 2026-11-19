@@ -1,7 +1,8 @@
 // 목록 한 줄 만들기, 필터, 정렬 (PRD F5·F7·F9)
 import {
   applyUsable,
-  describeClosedRule,
+  isUnreviewed,
+  describeLibraryClosed,
   describeNextOpen,
   presentStatus,
   type StatusView,
@@ -52,15 +53,15 @@ export function buildRows(
       view: travel ? applyUsable(base, status, usable, customTime) : base,
       other: presentStatus(getStatus(lib, OTHER[mode], now, ctx), OTHER[mode]),
       travel,
-      ruleText: describeClosedRule(lib.closed),
+      ruleText: describeLibraryClosed(lib),
     };
   });
 }
 
 /** 목록 정렬 (F7): 거리순 / 남은 이용 시간순 / 이름순 */
 export type SortKey = 'distance' | 'time' | 'name';
-/** 목록 필터 (F9): 지금 열린 곳만 / 21시 이후까지 운영 / 즐겨찾기만 */
-export type FilterKey = 'openNow' | 'late' | 'favorites';
+/** 목록 필터 (F9): 지금 열린 곳만 / 21시 이후까지 운영 / 즐겨찾기만 / 홈페이지와 대조한 곳만(M5) */
+export type FilterKey = 'openNow' | 'late' | 'favorites' | 'reviewed';
 
 /** "21시 이후까지 운영" 기준 시각(분) */
 export const LATE_CLOSE_MINUTES = 21 * 60;
@@ -85,7 +86,8 @@ export function filterRows(
       r.lib.name.replace(/\s+/g, '').includes(q) &&
       (!opts.filters.includes('openNow') || isOpenNow(r.status)) &&
       (!opts.filters.includes('late') || closesLate(r.status)) &&
-      (!opts.filters.includes('favorites') || (opts.favorites ?? []).includes(r.lib.id)),
+      (!opts.filters.includes('favorites') || (opts.favorites ?? []).includes(r.lib.id)) &&
+      (!opts.filters.includes('reviewed') || !isUnreviewed(r.lib)),
   );
 }
 

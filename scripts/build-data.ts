@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import Papa from 'papaparse';
 import type { HolidaysFile, LibrariesFile } from '../src/domain/types';
+import { buildAutoLibraries, reviewMarkdown } from './auto';
 import { mergeLibraries, type CsvRow, type OverridesFile } from './merge';
 import { validateHolidays, validateLibraries } from './validate';
 
@@ -36,11 +37,9 @@ function writeJson(name: string, data: unknown) {
 
 function main() {
   const overrides = readJson<OverridesFile>(join(ROOT, 'data/overrides/libraries.json'));
-  const { libraries, problems } = mergeLibraries({
-    standardRows: readCsv(FILES.standard),
-    seoulRows: readCsv(FILES.seoul),
-    overrides,
-  });
+  const standardRows = readCsv(FILES.standard);
+  const seoulRows = readCsv(FILES.seoul);
+  const merged = mergeLibraries({ standardRows, seoulRows, overrides });
 
   const holidayFiles = readdirSync(join(ROOT, 'data/holidays'))
     .filter((f) => /^\d{4}\.json$/.test(f))
@@ -50,6 +49,17 @@ function main() {
         join(ROOT, 'data/holidays', f),
       ),
     );
+
+  // 검수하지 않은 구는 원본만으로 자동 변환 (M5, 미검수)
+  const auto = buildAutoLibraries({
+    standardRows,
+    seoulRows,
+    skipDistricts: new Set(overrides.libraries.map((l) => l.district)),
+    exclude: overrides.exclude,
+    years: holidayFiles.map((h) => h.year),
+  });
+  const libraries = [...merged.libraries, ...auto.libraries];
+  const problems = [...merged.problems, ...auto.problems];
 
   problems.push(...validateLibraries(libraries), ...holidayFiles.flatMap(validateHolidays));
   if (problems.length) {
@@ -95,7 +105,13 @@ function main() {
     ],
   });
 
+  writeFileSync(join(ROOT, 'data/auto-review.md'), reviewMarkdown(auto.review, generatedAt));
+
   const verified = libraries.filter((l) => l.source.verifiedAt).length;
+  const autoOk = auto.review.filter((r) => r.ok).length;
+  console.log(
+    `자동 변환(미검수) ${auto.libraries.length}곳: 운영시간 계산 가능 ${autoOk}곳, 확인 필요 ${auto.libraries.length - autoOk}곳 → data/auto-review.md`,
+  );
   console.log(
     `도서관 ${libraries.length}곳 (${(size / 1024).toFixed(1)}KB), 공휴일 ${holidayFiles.map((h) => h.year).join('·')}`,
   );

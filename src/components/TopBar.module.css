@@ -43,30 +43,6 @@
   color: var(--top-muted);
 }
 
-.chips {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.chip {
-  flex: none;
-  height: 36px;
-  padding: 0 14px;
-  border-radius: var(--pill);
-  border: 1px solid var(--top-line);
-  background: var(--top-chip);
-  color: var(--top-text);
-  font-size: 13px;
-}
-
-.chip[aria-pressed='true'] {
-  background: var(--top-on);
-  border-color: var(--top-on);
-  color: var(--top-on-ink);
-  font-weight: 700;
-}
-
 .vline {
   width: 1px;
   height: 28px;
@@ -259,18 +235,6 @@
 
   .origin {
     order: 3;
-    height: 34px;
-  }
-
-  .chips {
-    order: 4;
-    flex: 1;
-    min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .chip {
     height: 34px;
   }
 

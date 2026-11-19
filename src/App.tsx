@@ -85,7 +85,6 @@ export default function App() {
   const [mode, setMode] = useState<RoomKey>(() => shared.mode ?? readMode(getStorage()));
   const [prefs, setPrefs] = useState<ListPrefs>(() => readPrefs(getStorage()));
   const [theme, setTheme] = useState<Theme>(() => readTheme(getStorage()));
-  const [offDistricts, setOffDistricts] = useState<ReadonlySet<string>>(() => new Set());
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(shared.lib);
   const [hoverId, setHoverId] = useState<string | null>(null);
@@ -116,12 +115,11 @@ export default function App() {
     saveTheme(getStorage(), next);
   };
 
-  const toggleDistrict = (district: string) =>
-    setOffDistricts((prev) => {
-      const next = new Set(prev);
-      if (!next.delete(district)) next.add(district);
-      return next;
-    });
+  // 지역 선택 (F2): 끈 구만 저장합니다
+  const offDistricts = useMemo<ReadonlySet<string>>(
+    () => new Set(prefs.offDistricts),
+    [prefs.offDistricts],
+  );
 
   const startPick = (kind: PlaceKind) => {
     setSettingsOpen(false);
@@ -379,7 +377,7 @@ export default function App() {
       <TopBar
         districts={ready?.districts ?? []}
         offDistricts={offDistricts}
-        onToggleDistrict={toggleDistrict}
+        onDistricts={(off) => changePrefs({ offDistricts: off })}
         mode={mode}
         onMode={changeMode}
         now={now}

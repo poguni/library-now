@@ -1,6 +1,8 @@
 // MapProvider의 Leaflet + OpenStreetMap 구현 (PRD F1, 7.1, DESIGN 5.6·5.7)
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
 import './leaflet.css';
 import { TILE_ATTRIBUTION, TILE_MAX_ZOOM, TILE_URL } from './config';
 import type { CreateMap, MapMarker, MapOrigin } from './types';
@@ -58,6 +60,17 @@ function popupContent(m: MapMarker): HTMLElement {
   return box;
 }
 
+/** 가까운 마커를 숫자 원 하나로 묶습니다 (M5, 서울 전체 250여 곳) */
+function clusterIcon(cluster: L.MarkerCluster): L.DivIcon {
+  const n = cluster.getChildCount();
+  return L.divIcon({
+    className: 'ln-cluster',
+    html: `<span class="ln-cnum">${n}</span>`,
+    iconSize: [44, 44],
+    iconAnchor: [22, 22],
+  });
+}
+
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export const createLeafletMap: CreateMap = (container, { center, zoom, onSelect }) => {
@@ -72,6 +85,25 @@ export const createLeafletMap: CreateMap = (container, { center, zoom, onSelect 
   const updateZoomClass = () => container.classList.toggle('ln-far', map.getZoom() < TAG_MIN_ZOOM);
   map.on('zoomend', updateZoomClass);
   updateZoomClass();
+
+  const cluster = L.markerClusterGroup({
+    iconCreateFunction: clusterIcon,
+    showCoverageOnHover: false,
+    // 가까이 확대하면 덜 묶어서 꼬리표가 보이게
+    maxClusterRadius: (z) => (z >= TAG_MIN_ZOOM ? 24 : 56),
+    spiderLegPolylineOptions: { className: 'ln-spider', weight: 1.5, opacity: 1 },
+    animate: !reducedMotion(),
+  }).addTo(map);
+  // 묶음 원도 버튼처럼 읽히게
+  cluster.on('animationend', labelClusters);
+  map.on('zoomend moveend', labelClusters);
+  function labelClusters() {
+    for (const el of container.querySelectorAll<HTMLElement>('.ln-cluster')) {
+      const n = el.textContent ?? '';
+      el.setAttribute('role', 'button');
+      el.setAttribute('aria-label', `도서관 ${n}곳 묶음, 눌러서 확대`);
+    }
+  }
 
   const resize = new ResizeObserver(() => map.invalidateSize());
   resize.observe(container);
@@ -126,7 +158,7 @@ export const createLeafletMap: CreateMap = (container, { center, zoom, onSelect 
       const ids = new Set(markers.map((m) => m.id));
       for (const [id, entry] of entries) {
         if (ids.has(id)) continue;
-        entry.marker.remove();
+        cluster.removeLayer(entry.marker);
         entries.delete(id);
         if (id === selected) {
           selected = null;
@@ -134,22 +166,31 @@ export const createLeafletMap: CreateMap = (container, { center, zoom, onSelect 
           drawRoute();
         }
       }
+      const added: L.Marker[] = [];
       for (const m of markers) {
         const key = `${m.tone}|${m.tag}|${m.lat}|${m.lng}`;
         const entry = entries.get(m.id);
         if (!entry) {
-          const marker = L.marker([m.lat, m.lng], { icon: icon(m), keyboard: true }).addTo(map);
+          const marker = L.marker([m.lat, m.lng], { icon: icon(m), keyboard: true });
           marker.on('click', () => onSelect(m.id));
+          // 묶음에서 풀려 화면에 나올 때마다 상태 표시를 다시 붙임
+          marker.on('add', () => decorate(m.id));
           entries.set(m.id, { marker, data: m, key });
+          added.push(marker);
         } else {
           entry.data = m;
           if (entry.key !== key) {
+            const moved = !entry.marker.getLatLng().equals([m.lat, m.lng]);
+            if (moved) cluster.removeLayer(entry.marker);
             entry.marker.setLatLng([m.lat, m.lng]).setIcon(icon(m));
+            if (moved) cluster.addLayer(entry.marker);
             entry.key = key;
           }
+          decorate(m.id);
         }
-        decorate(m.id);
       }
+      cluster.addLayers(added);
+      labelClusters();
       if (selected && map.hasLayer(popup)) openPopup(selected);
     },
 
@@ -162,10 +203,15 @@ export const createLeafletMap: CreateMap = (container, { center, zoom, onSelect 
         map.closePopup(popup);
         return;
       }
-      decorate(selected);
-      const latLng = entries.get(selected)!.marker.getLatLng();
-      map.panTo(latLng, { animate: !reducedMotion(), duration: 0.3 });
-      openPopup(selected);
+      const id2 = selected;
+      const marker = entries.get(id2)!.marker;
+      // 묶음 안에 있으면 풀릴 때까지 확대한 뒤 팝업
+      cluster.zoomToShowLayer(marker, () => {
+        if (selected !== id2) return;
+        decorate(id2);
+        map.panTo(marker.getLatLng(), { animate: !reducedMotion(), duration: 0.3 });
+        openPopup(id2);
+      });
     },
 
     hover(id) {

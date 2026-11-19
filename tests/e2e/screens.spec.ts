@@ -27,7 +27,9 @@ async function open(
     [settings, extra] as const,
   );
   await page.goto('./');
-  await expect(page.locator('.ln-mk')).toHaveCount(34);
+  await expect(page.locator('.ln-card').first()).toBeVisible();
+  // 서울 25개 구 250여 곳: 가까운 마커는 묶음으로 (M5)
+  await expect(page.locator('.ln-mk, .ln-cluster').first()).toBeVisible();
 }
 
 async function noHorizontalScroll(page: Page) {
@@ -210,6 +212,77 @@ test('공유 링크로 열면 그 도서관과 모드를 보여 주고, 링크�
   await expect(panel.getByText('링크를 복사했습니다.')).toBeVisible();
   const copied = await page.evaluate(() => navigator.clipboard.readText());
   expect(new URL(copied).search).toBe('?lib=gr-003&mode=reading');
+});
+
+test('지역 선택: 구를 골라 목록을 좁히고 새로고침 후에도 유지 (F2, M5)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page);
+  const trigger = page.getByRole('button', { name: /^지역/ });
+  await expect(trigger).toContainText('전체 25개 구');
+  await trigger.click();
+  await page.getByRole('button', { name: '전체 해제' }).click();
+  await page
+    .getByRole('group', { name: '지역 선택' })
+    .getByRole('button', { name: '구로구' })
+    .click();
+  await page.keyboard.press('Escape');
+  await expect(trigger).toContainText('구로구');
+  await expect(trigger).toBeFocused();
+
+  const districts = await page
+    .locator('.ln-card')
+    .evaluateAll((cards) => cards.map((c) => c.textContent ?? ''));
+  expect(districts.length).toBeGreaterThan(0);
+  expect(districts.every((t) => t.includes('구로구'))).toBe(true);
+
+  await page.reload();
+  await expect(page.getByRole('button', { name: /^지역/ })).toContainText('구로구');
+});
+
+test('검수된 곳만: 자동 변환(미검수) 도서관을 빼고, 미검수는 카드와 상세에 표시 (M5)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page);
+  await expect(page.locator('.ln-card', { hasText: '미검수' }).first()).toBeVisible();
+
+  await page.getByRole('button', { name: '검수된 곳만' }).click();
+  await expect(page.locator('.ln-card').first()).toBeVisible();
+  await expect(page.locator('.ln-card', { hasText: '미검수' })).toHaveCount(0);
+  await expect(page.getByRole('region', { name: '도서관 목록' })).toContainText('/ 34곳');
+
+  // 자동 변환 도서관 상세: 휴관일 원문과 출처
+  await page.getByRole('button', { name: '검수된 곳만' }).click();
+  await page.getByRole('searchbox').fill('청담도서관');
+  await page.locator('.ln-card h3 button', { hasText: '청담도서관' }).click();
+  const panel = page.getByRole('tabpanel');
+  await expect(panel).toContainText('원문: 화요일+일요일을 제외한 법정공휴일');
+  await expect(panel).toContainText('공공데이터 자동 변환 · 홈페이지 미확인');
+});
+
+test('지도 마커 묶음을 누르면 확대되어 풀림 (M5)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page);
+  const before = await page.locator('.ln-mk').count();
+  // 화면 밖에 미리 그려 둔 묶음도 있으므로 지도 안에 보이는 것을 누름
+  const point = await page.evaluate(() => {
+    const map = document.querySelector('[aria-label="도서관 지도"]')!.getBoundingClientRect();
+    for (const el of document.querySelectorAll('.ln-cluster')) {
+      const r = el.getBoundingClientRect();
+      const x = r.left + r.width / 2;
+      const y = r.top + r.height / 2;
+      if (x > map.left + 60 && x < map.right - 80 && y > map.top + 40 && y < map.bottom - 80)
+        return { x, y };
+    }
+    return null;
+  });
+  expect(point).not.toBeNull();
+  await page.mouse.click(point!.x, point!.y);
+  await expect.poll(() => page.locator('.ln-mk').count()).not.toBe(before);
+  await expect(page.locator('.ln-cluster').first()).toHaveAttribute(
+    'aria-label',
+    /도서관 \d+곳 묶음/,
+  );
 });
 
 test('오프라인이면 지도에 안내를 보여 주고 목록은 그대로 (F15)', async ({ page, context }) => {

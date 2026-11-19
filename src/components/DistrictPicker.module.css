@@ -1,0 +1,121 @@
+.wrap {
+  position: relative;
+  flex: none;
+}
+
+/* 상단 바 안의 버튼: 출발지 선택과 같은 칩 모양 */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 10px 0 12px;
+  border-radius: var(--pill);
+  border: 1px solid var(--top-line);
+  background: var(--top-chip);
+  color: var(--top-text);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.trigger[aria-expanded='true'] {
+  border-color: var(--top-on);
+  box-shadow: inset 0 0 0 1px var(--top-on);
+}
+
+.label {
+  font-size: 11px;
+  color: var(--top-muted);
+}
+
+/* 펼친 패널: 지도(Leaflet 창 400~1000), 바텀 시트·탭 바(1100) 위에 */
+.panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 1200;
+  width: 440px;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--pop-shadow);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.actions p {
+  flex: 1;
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.actions p b {
+  color: var(--text);
+}
+
+.actions button {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font-size: 12.5px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: var(--pill);
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+/* 스마트폰: 화면 폭에 맞춘 패널 */
+@media (max-width: 767px) {
+  .wrap {
+    order: 4;
+  }
+
+  .trigger {
+    height: 34px;
+  }
+
+  .panel {
+    position: fixed;
+    top: auto;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-top: 8px;
+  }
+}

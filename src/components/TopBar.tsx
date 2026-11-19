@@ -1,16 +1,17 @@
-// 상단 바 (DESIGN 5.1): 지역 칩(F2), 이용 모드(F3), 기준 시각 표시
+// 상단 바 (DESIGN 5.1): 지역 선택(F2), 이용 모드(F3), 기준 시각 표시
 import { BookOpen, ChevronDown, Clock, Pencil, SlidersHorizontal } from 'lucide-react';
 import { formatDate, ROOM_NAME } from '../domain/present';
 import { formatTime, toSeoul } from '../domain/time';
 import type { RoomKey } from '../domain/types';
 import { PLACE_LABEL, type PlaceKind, type Places } from '../state/places';
 import type { OriginChoice } from '../state/settings';
+import { DistrictPicker } from './DistrictPicker';
 import styles from './TopBar.module.css';
 
 interface Props {
   districts: readonly string[];
   offDistricts: ReadonlySet<string>;
-  onToggleDistrict(district: string): void;
+  onDistricts(off: string[]): void;
   mode: RoomKey;
   onMode(mode: RoomKey): void;
   now: Date;
@@ -31,7 +32,7 @@ const MODES: { key: RoomKey; label: string; Icon: typeof BookOpen }[] = [
 ];
 
 export function TopBar(props: Props) {
-  const { districts, offDistricts, onToggleDistrict, mode, onMode, now, places } = props;
+  const { districts, offDistricts, mode, onMode, now, places } = props;
   const seoul = toSeoul(now);
   const timeText = `${props.customTime ? '직접' : '지금'} · ${formatDate(seoul.date)} ${formatTime(seoul.minutes)}`;
 
@@ -54,22 +55,11 @@ export function TopBar(props: Props) {
         </span>
       </div>
 
-      <div className={styles.chips} role="group" aria-label="지역 선택">
-        {districts.map((d) => {
-          const on = !offDistricts.has(d);
-          return (
-            <button
-              key={d}
-              type="button"
-              className={styles.chip}
-              aria-pressed={on}
-              onClick={() => onToggleDistrict(d)}
-            >
-              {d}
-            </button>
-          );
-        })}
-      </div>
+      <DistrictPicker
+        districts={districts}
+        offDistricts={offDistricts}
+        onChange={props.onDistricts}
+      />
 
       <span className={styles.vline} aria-hidden="true" />
 

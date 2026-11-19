@@ -142,6 +142,18 @@ describe('필터 (F9)', () => {
     expect(filterRows(list, { offDistricts: none, query: '', filters: ['favorites'] })).toEqual([]);
   });
 
+  it('검수된 곳만: 자동 변환(미검수) 도서관은 뺌 (M5)', () => {
+    const auto = lib('y9', '자동변환도서관', km(1), week('09:00', '22:00'));
+    auto.source.verifiedBy = 'auto';
+    const list = buildRows([...LIBS, auto], { mode: 'lending', now: at('19:05'), ctx, origin });
+    expect(names(filterRows(list, { offDistricts: none, query: '', filters: [] }))).toContain(
+      '자동변환도서관',
+    );
+    expect(
+      names(filterRows(list, { offDistricts: none, query: '', filters: ['reviewed'] })),
+    ).not.toContain('자동변환도서관');
+  });
+
   it('구 선택과 이름 검색(띄어쓰기 무시)', () => {
     const list = rows('19:05');
     expect(

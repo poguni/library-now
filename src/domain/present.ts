@@ -3,7 +3,7 @@ import { SHORT_USE_MINUTES } from './config';
 import type { ClosedReason } from './schedule';
 import type { NextOpen, Status, Usable } from './status';
 import { type DateKey, formatTime, weekdayOf } from './time';
-import type { ClosedRule, RoomKey } from './types';
+import type { ClosedRule, Library, RoomKey } from './types';
 
 export type Tone = 'open' | 'soon' | 'opening' | 'ended' | 'closed' | 'unknown' | 'none';
 
@@ -55,6 +55,15 @@ export function describeNextOpen(next: NextOpen): { day: string; time: string; l
 }
 
 /** 정기 휴관 규칙 문장 (F10): "매주 월요일, 법정공휴일" */
+/** 공공데이터를 자동 변환만 하고 홈페이지와 대조하지 않은 도서관 (M5) */
+export const isUnreviewed = (lib: Library) => lib.source.verifiedBy === 'auto';
+
+/** 정기 휴관 문장. 자동 변환에서 휴관일을 해석하지 못한 곳은 "확인 필요" */
+export function describeLibraryClosed(lib: Library): string {
+  if (isUnreviewed(lib) && !lib.rooms.lending.hours) return '확인 필요';
+  return describeClosedRule(lib.closed);
+}
+
 export function describeClosedRule(rule: ClosedRule): string {
   const parts: string[] = [];
   if (rule.weekly.length > 0) {

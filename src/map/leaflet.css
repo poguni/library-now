@@ -231,3 +231,45 @@
 .leaflet-container.ln-picking .leaflet-interactive {
   cursor: crosshair;
 }
+
+/* ---- 마커 묶음 (M5): 누르면 확대. 누르는 영역 44×44 ---- */
+.ln-cluster {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.ln-cluster:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+.ln-cnum {
+  min-width: 38px;
+  height: 38px;
+  padding: 0 6px;
+  border-radius: var(--pill);
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 3px solid var(--marker-ring);
+  box-shadow:
+    0 0 0 5px var(--accent-ring),
+    var(--pop-shadow);
+  font-family: var(--font-num);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.leaflet-container .ln-spider {
+  stroke: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaflet-cluster-anim .leaflet-marker-icon,
+  .leaflet-cluster-spider-leg {
+    transition: none;
+  }
+}

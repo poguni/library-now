@@ -81,8 +81,10 @@ export interface Library {
   source: {
     dataset: string;
     baseDate: string | null;
-    checkedAt: string;
+    /** 홈페이지와 대조한 날. null = 공공데이터 자동 변환(미검수) */
+    checkedAt: string | null;
     verifiedAt: string | null;
+    /** "homepage" = 홈페이지 대조, "auto" = 공공데이터 자동 변환(미검수) */
     verifiedBy: string;
   };
 }

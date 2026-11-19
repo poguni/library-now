@@ -2,7 +2,7 @@
 import { ChevronDown, Search } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import type { FilterKey, LibraryRow, SortKey } from '../domain/list';
-import { ROOM_NAME } from '../domain/present';
+import { isUnreviewed, ROOM_NAME } from '../domain/present';
 import { formatKm, formatTravel } from '../domain/travel';
 import type { RoomKey } from '../domain/types';
 import styles from './LibraryList.module.css';
@@ -39,6 +39,7 @@ const FILTERS: { key: FilterKey; label: string }[] = [
   { key: 'openNow', label: '지금 열린 곳만' },
   { key: 'late', label: '21시 이후' },
   { key: 'favorites', label: '즐겨찾기' },
+  { key: 'reviewed', label: '검수된 곳만' },
 ];
 
 export function LibraryList(props: Props) {
@@ -203,6 +204,7 @@ function LibraryCard(props: CardProps) {
         </h3>
         <span className={styles.sub}>
           {lib.district}
+          {isUnreviewed(lib) && ' · 미검수'}
           {travel && ` · ${formatKm(travel.straightKm)} · ${formatTravel(travel)}`}
         </span>
         <span className={styles.sub}>휴관 {ruleText}</span>

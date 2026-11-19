@@ -2,7 +2,7 @@
 import { Ban, BookOpen, CalendarDays, PanelRightClose, X } from 'lucide-react';
 import type { Place } from '../domain/directions';
 import type { LibraryRow } from '../domain/list';
-import { formatDate, ROOM_NAME, type StatusView } from '../domain/present';
+import { formatDate, isUnreviewed, ROOM_NAME, type StatusView } from '../domain/present';
 import { type ScheduleContext, hoursFor } from '../domain/schedule';
 import { type DateKey, formatTime, toSeoul, weekdayOf } from '../domain/time';
 import type { Library, Room, RoomKey, TimeRange, WeekHours } from '../domain/types';
@@ -267,7 +267,8 @@ function LibraryDetail({
         <div className={styles.grow}>
           <h2 className={`${styles.title} ln-detail-title`}>{lib.name}</h2>
           <span className={styles.sub}>
-            {lib.district} · {lib.operator}
+            {lib.district}
+            {lib.operator && ` · ${lib.operator}`}
             {lib.phone && (
               <>
                 {' · '}
@@ -317,6 +318,12 @@ function LibraryDetail({
           <Ban size={16} strokeWidth={1.8} aria-hidden="true" />
           <span>
             <b>정기 휴관</b> · {ruleText}
+            {isUnreviewed(lib) && (
+              <>
+                <br />
+                원문: {lib.closedRaw || '정보 없음'}
+              </>
+            )}
           </span>
         </p>
       </section>
@@ -336,7 +343,11 @@ function LibraryDetail({
 
       <p className={styles.src}>
         <span>데이터 기준 {lib.source.baseDate ?? '–'}</span>
-        <span>홈페이지 확인 {lib.source.checkedAt}</span>
+        <span>
+          {lib.source.checkedAt
+            ? `홈페이지 확인 ${lib.source.checkedAt}`
+            : '공공데이터 자동 변환 · 홈페이지 미확인'}
+        </span>
       </p>
     </>
   );
