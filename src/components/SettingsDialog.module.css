@@ -221,8 +221,49 @@
   padding-left: 16px;
 }
 
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.error {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--closed);
+}
+
+.ok {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--open);
+}
+
+/* 기준 시각처럼 짧은 창 */
+.small {
+  width: min(420px, calc(100% - 32px));
+}
+
 @media (max-width: 767px) {
-  .dialog {
+  .dialog:not(.small) {
     width: 100%;
     max-width: none;
     height: 100dvh;

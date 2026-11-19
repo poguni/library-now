@@ -6,11 +6,13 @@ import { formatDate, ROOM_NAME, type StatusView } from '../domain/present';
 import { type ScheduleContext, hoursFor } from '../domain/schedule';
 import { type DateKey, formatTime, toSeoul, weekdayOf } from '../domain/time';
 import type { Library, Room, RoomKey, TimeRange, WeekHours } from '../domain/types';
+import type { NotesApi } from '../state/notes';
 import { ArrivalBox } from './ArrivalBox';
 import { ClosureCalendar } from './ClosureCalendar';
 import styles from './DetailPanel.module.css';
 import { DirectionsBar } from './DirectionsBar';
 import { MiniCalendar } from './MiniCalendar';
+import { MyNotes } from './MyNotes';
 import { StarButton } from './StarButton';
 
 export type DetailTab = 'detail' | 'calendar';
@@ -23,8 +25,11 @@ interface Props {
   libraries: readonly Library[];
   mode: RoomKey;
   now: Date;
+  /** 기준 시각을 직접 고른 상태 (F13) */
+  customTime: boolean;
   origin: Place | null;
   ctx: ScheduleContext;
+  notes: NotesApi;
   holidayYears: readonly number[];
   favorites: readonly string[];
   onToggleFavorite(id: string): void;
@@ -106,8 +111,10 @@ export function DetailPanel(props: Props) {
             row={row}
             mode={mode}
             now={now}
+            customTime={props.customTime}
             origin={props.origin}
             ctx={props.ctx}
+            notes={props.notes}
             favorite={favorites.includes(row.lib.id)}
             onToggleFavorite={() => props.onToggleFavorite(row.lib.id)}
             onClose={props.onClose}
@@ -222,8 +229,10 @@ function LibraryDetail({
   row,
   mode,
   now,
+  customTime,
   origin,
   ctx,
+  notes,
   favorite,
   onToggleFavorite,
   onClose,
@@ -231,8 +240,10 @@ function LibraryDetail({
   row: LibraryRow;
   mode: RoomKey;
   now: Date;
+  customTime: boolean;
   origin: Place | null;
   ctx: ScheduleContext;
+  notes: NotesApi;
   favorite: boolean;
   onToggleFavorite(): void;
   onClose(): void;
@@ -277,7 +288,13 @@ function LibraryDetail({
         </button>
       </div>
 
-      <ArrivalBox row={row} mode={mode} now={now} originName={origin?.name ?? null} />
+      <ArrivalBox
+        row={row}
+        mode={mode}
+        now={now}
+        customTime={customTime}
+        originName={origin?.name ?? null}
+      />
 
       <div className={styles.acts}>
         <DirectionsBar lib={lib} origin={origin} />
@@ -305,6 +322,17 @@ function LibraryDetail({
       </section>
 
       <MiniCalendar lib={lib} room={mode} today={today} ctx={ctx} />
+
+      <MyNotes
+        key={lib.id}
+        lib={lib}
+        today={today}
+        memo={notes.notes.memos[lib.id] ?? ''}
+        closures={notes.notes.closures[lib.id] ?? []}
+        onMemo={(text) => notes.setMemo(lib.id, text)}
+        onAddClosure={(c) => notes.addClosure(lib.id, c)}
+        onRemoveClosure={(i) => notes.removeClosure(lib.id, i)}
+      />
 
       <p className={styles.src}>
         <span>데이터 기준 {lib.source.baseDate ?? '–'}</span>

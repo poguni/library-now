@@ -24,8 +24,8 @@ export type DaySchedule =
 
 export interface ScheduleContext {
   holidays: HolidayMap;
-  /** 사용자가 직접 입력한 임시 휴관 (F14) */
-  userClosures?: readonly Closure[];
+  /** 사용자가 직접 입력한 임시 휴관 (F14). 도서관 ID → 휴관 기간 */
+  userClosures?: ReadonlyMap<string, readonly Closure[]>;
 }
 
 /** 그 달의 몇째 주 요일인지 (1~5)와 마지막 주인지 */
@@ -64,7 +64,7 @@ export function getDaySchedule(
   if (!room) return { kind: 'noRoom' };
 
   // 1. 임시 휴관
-  const closure = [...lib.closures, ...(ctx.userClosures ?? [])].find((c) =>
+  const closure = [...lib.closures, ...(ctx.userClosures?.get(lib.id) ?? [])].find((c) =>
     inClosure(c, date, roomKey),
   );
   if (closure) return { kind: 'closed', reason: { type: 'closure', reason: closure.reason } };

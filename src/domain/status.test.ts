@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { getDaySchedule, type HolidayMap } from './schedule';
 import { getStatus, getUsable } from './status';
-import { addDays, formatTime, toSeoul, weekdayOf } from './time';
+import { addDays, formatTime, fromSeoul, toSeoul, weekdayOf } from './time';
 import type { Library, WeekHours } from './types';
 
 // ---------- 테스트 도우미 ----------
@@ -72,6 +72,17 @@ describe('time', () => {
       weekday: 4,
       minutes: 30,
     });
+  });
+
+  it('서울 날짜·시각 → 시각 (기준 시각 바꾸기, F13)', () => {
+    expect(fromSeoul('2026-11-21', 15 * 60).toISOString()).toBe('2026-11-21T06:00:00.000Z');
+    expect(toSeoul(fromSeoul('2026-11-21', 15 * 60))).toEqual({
+      date: '2026-11-21',
+      weekday: 6,
+      minutes: 900,
+    });
+    // 서울 00:30 = UTC 전날 15:30
+    expect(fromSeoul('2027-01-01', 30).toISOString()).toBe('2026-12-31T15:30:00.000Z');
   });
 
   it('요일, 날짜 더하기, 시각 표기', () => {
@@ -242,12 +253,22 @@ describe('getDaySchedule: 임시 휴관, 계절, 데이터 없음', () => {
   });
 
   it('사용자가 입력한 임시 휴관도 반영 (F14)', () => {
-    const userClosures = [
-      { from: '2026-11-18', to: '2026-11-18', reason: '내 메모', rooms: ['lending' as const] },
-    ];
-    expect(
-      getDaySchedule(makeLib(), 'lending', '2026-11-18', { holidays: HOLIDAYS, userClosures }).kind,
-    ).toBe('closed');
+    const userClosures = new Map([
+      [
+        't-001',
+        [{ from: '2026-11-18', to: '2026-11-18', reason: '내 메모', rooms: ['lending' as const] }],
+      ],
+    ]);
+    const ctx = { holidays: HOLIDAYS, userClosures };
+    expect(getDaySchedule(makeLib(), 'lending', '2026-11-18', ctx)).toEqual({
+      kind: 'closed',
+      reason: { type: 'closure', reason: '내 메모' },
+    });
+    // 다른 도서관과 다른 날, 지정하지 않은 실에는 영향 없음
+    expect(getDaySchedule(makeLib({ id: 't-002' }), 'lending', '2026-11-18', ctx).kind).toBe(
+      'open',
+    );
+    expect(getDaySchedule(makeLib(), 'lending', '2026-11-19', ctx).kind).toBe('open');
   });
 
   it('하절기·동절기 경계일 (3월 1일, 10월 31일 / 11월 1일)', () => {

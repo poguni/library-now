@@ -64,3 +64,8 @@ export function formatTime(minutes: number): string {
   const m = ((minutes % 1440) + 1440) % 1440;
   return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 }
+
+/** 서울 날짜·시각(자정부터의 분) → 시각. 서울은 일광 절약 시간이 없어 +09:00 고정입니다 (F13) */
+export function fromSeoul(date: DateKey, minutes: number): Date {
+  return new Date(`${date}T${formatTime(minutes)}:00+09:00`);
+}

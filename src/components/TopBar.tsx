@@ -1,5 +1,5 @@
 // 상단 바 (DESIGN 5.1): 지역 칩(F2), 이용 모드(F3), 기준 시각 표시
-import { BookOpen, ChevronDown, Pencil, SlidersHorizontal } from 'lucide-react';
+import { BookOpen, ChevronDown, Clock, Pencil, SlidersHorizontal } from 'lucide-react';
 import { formatDate, ROOM_NAME } from '../domain/present';
 import { formatTime, toSeoul } from '../domain/time';
 import type { RoomKey } from '../domain/types';
@@ -14,6 +14,9 @@ interface Props {
   mode: RoomKey;
   onMode(mode: RoomKey): void;
   now: Date;
+  /** 기준 시각을 직접 고른 상태 (F13) */
+  customTime: boolean;
+  onBaseTime(): void;
   originChoice: OriginChoice;
   places: Places;
   onOriginChoice(choice: OriginChoice): void;
@@ -30,6 +33,7 @@ const MODES: { key: RoomKey; label: string; Icon: typeof BookOpen }[] = [
 export function TopBar(props: Props) {
   const { districts, offDistricts, onToggleDistrict, mode, onMode, now, places } = props;
   const seoul = toSeoul(now);
+  const timeText = `${props.customTime ? '직접' : '지금'} · ${formatDate(seoul.date)} ${formatTime(seoul.minutes)}`;
 
   const onOriginChange = (value: string) => {
     if (value === 'pick-home' || value === 'pick-work') {
@@ -106,12 +110,17 @@ export function TopBar(props: Props) {
         <ChevronDown size={16} strokeWidth={1.8} aria-hidden="true" />
       </label>
 
-      <span className={styles.now}>
+      <button
+        type="button"
+        className={styles.now}
+        data-custom={props.customTime || undefined}
+        aria-label={`기준 시각 바꾸기 (${timeText})`}
+        onClick={props.onBaseTime}
+      >
+        <Clock size={16} strokeWidth={1.8} aria-hidden="true" />
         <span className={styles.label}>기준</span>
-        <span>
-          지금 · {formatDate(seoul.date)} {formatTime(seoul.minutes)}
-        </span>
-      </span>
+        <span className={styles.nowText}>{timeText}</span>
+      </button>
 
       <button
         type="button"

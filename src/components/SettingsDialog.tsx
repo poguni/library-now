@@ -1,6 +1,6 @@
-// 설정 화면 (PRD 8.5, F6·F16): 테마, 출발지 관리, 데이터 정보, 초기화
-import { MapPin, Trash2, X } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+// 설정 화면 (PRD 8.5, F6·F14·F16): 테마, 출발지 관리, 데이터 정보, 내 데이터 내보내기·가져오기, 초기화
+import { Download, MapPin, Trash2, Upload, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { PLACE_LABEL, type PlaceKind, type Places } from '../state/places';
 import { THEMES, THEME_LABEL, type Theme } from '../state/theme';
 import type { MetaFile } from '../state/useLibraryData';
@@ -18,11 +18,23 @@ interface Props {
   meta: MetaFile | null;
   libraryCount: number;
   onReset(): void;
+  onExport(): void;
+  /** 실패하면 안내 문구, 성공하면 null (새로고침) */
+  onImport(file: File): Promise<string | null>;
 }
 
 export function SettingsDialog(props: Props) {
   const { open, onClose, theme, places, meta } = props;
   const ref = useRef<HTMLDialogElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [importError, setImportError] = useState<string | null>(null);
+
+  const onFile = async (file: File | undefined) => {
+    if (!file) return;
+    if (!window.confirm('파일의 내용으로 지금 저장된 설정·출발지·즐겨찾기·메모를 바꿀까요?'))
+      return;
+    setImportError(await props.onImport(file));
+  };
 
   useEffect(() => {
     const dialog = ref.current;
@@ -160,9 +172,43 @@ export function SettingsDialog(props: Props) {
         </section>
 
         <section className={styles.sec}>
+          <h3 className="ln-sec-title">내 데이터</h3>
+          <p className={styles.hint}>
+            설정·출발지·즐겨찾기·메모를 JSON 파일로 내려받아 다른 기기에서 가져올 수 있습니다.
+            파일에는 집·직장 좌표가 들어 있으니 보관에 유의해 주세요.
+          </p>
+          <div className={styles.row}>
+            <button type="button" className={styles.btn} onClick={props.onExport}>
+              <Download size={16} strokeWidth={1.8} aria-hidden="true" />
+              내보내기
+            </button>
+            <button type="button" className={styles.btn} onClick={() => fileRef.current?.click()}>
+              <Upload size={16} strokeWidth={1.8} aria-hidden="true" />
+              가져오기
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="application/json,.json"
+              hidden
+              aria-label="가져올 파일"
+              onChange={(e) => {
+                void onFile(e.target.files?.[0]);
+                e.target.value = '';
+              }}
+            />
+          </div>
+          {importError && (
+            <p className={styles.error} role="alert">
+              {importError}
+            </p>
+          )}
+        </section>
+
+        <section className={styles.sec}>
           <h3 className="ln-sec-title">초기화</h3>
           <button type="button" className={styles.btn} onClick={props.onReset}>
-            저장된 설정·출발지·즐겨찾기 모두 지우기
+            저장된 설정·출발지·즐겨찾기·메모 모두 지우기
           </button>
         </section>
       </div>

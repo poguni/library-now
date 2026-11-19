@@ -112,6 +112,27 @@
   font-size: 12.5px;
 }
 
+.timeNotice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block: 0;
+  background: var(--opening-bg);
+  color: var(--opening);
+}
+
+.timeNotice button {
+  flex: none;
+  min-height: 40px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
 .meta b {
   color: var(--text);
 }

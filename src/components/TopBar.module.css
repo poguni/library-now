@@ -118,6 +118,14 @@
   font-size: 13px;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  color: var(--top-text);
+}
+
+/* 기준 시각을 직접 고르면 강조 (F13) */
+.now[data-custom] {
+  border-color: var(--top-on);
+  box-shadow: inset 0 0 0 1px var(--top-on);
+  font-weight: 700;
 }
 
 .label {
@@ -184,13 +192,20 @@
   white-space: nowrap;
 }
 
-/* 태블릿: 폭이 모자라 기준 시각 칩을 숨깁니다 (기준 시각 바꾸기는 M4) */
+/* 태블릿: 폭이 모자라 기준 시각은 시계 아이콘만 보입니다 (aria-label에 시각 포함) */
 @media (min-width: 768px) and (max-width: 1199px) {
   .top {
     gap: 10px;
   }
 
   .now {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .now .label,
+  .now .nowText {
     display: none;
   }
 }
@@ -212,14 +227,23 @@
     font-size: 18px;
   }
 
+  /* 보이는 크기는 작게, 누르는 영역은 44px */
+  .now::before {
+    content: '';
+    position: absolute;
+    inset: -6px -2px;
+  }
+
   .now {
+    position: relative;
     margin-left: auto;
     height: 32px;
     padding: 0 10px;
     font-size: 12px;
   }
 
-  .now .label {
+  .now .label,
+  .now svg {
     display: none;
   }
 

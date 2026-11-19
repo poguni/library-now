@@ -22,6 +22,8 @@ interface Props {
   hasOrigin: boolean;
   /** 출발지 상태 안내 한 줄 */
   notice: string | null;
+  /** 기준 시각을 직접 고른 경우 안내와 되돌리기 (F13) */
+  baseTime: { text: string; onReset(): void } | null;
   /** 결과가 없을 때 제안 */
   suggestion: { id: string; text: string } | null;
   selectedId: string | null;
@@ -98,6 +100,14 @@ export function LibraryList(props: Props) {
           </label>
         </div>
 
+        {props.baseTime && (
+          <p className={`${styles.notice} ${styles.timeNotice}`} role="status">
+            <span>{props.baseTime.text} 기준으로 계산 중입니다.</span>
+            <button type="button" onClick={props.baseTime.onReset}>
+              지금으로
+            </button>
+          </p>
+        )}
         {props.notice && (
           <p className={styles.notice} role="status">
             {props.notice}

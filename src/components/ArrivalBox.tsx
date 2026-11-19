@@ -11,6 +11,8 @@ interface Props {
   row: LibraryRow;
   mode: RoomKey;
   now: Date;
+  /** 기준 시각을 직접 고른 상태 (F13) */
+  customTime: boolean;
   /** 출발지 이름. 없으면 null */
   originName: string | null;
 }
@@ -21,12 +23,13 @@ const nextText = (next: NextOpen | null) => {
   return `다음 개관 ${d.day} ${d.time}`;
 };
 
-export function ArrivalBox({ row, mode, now, originName }: Props) {
+export function ArrivalBox({ row, mode, now, customTime, originName }: Props) {
   const { status, usable, travel } = row;
   if (status.kind === 'unknown' || status.kind === 'noRoom') return null;
 
   const nowMin = toSeoul(now).minutes;
-  const lead = originName ? `${originName}에서 지금 출발하면` : '지금 가면';
+  const when = customTime ? '그 시각에' : '지금';
+  const lead = originName ? `${originName}에서 ${when} 출발하면` : `${when} 가면`;
 
   if (usable.kind !== 'usable') {
     const next =
@@ -75,7 +78,8 @@ export function ArrivalBox({ row, mode, now, originName }: Props) {
 
       <div className={styles.ticks}>
         <span>
-          <b>{formatTime(nowMin)}</b>지금
+          <b>{formatTime(nowMin)}</b>
+          {customTime ? '출발' : '지금'}
         </span>
         {travel && (
           <span>

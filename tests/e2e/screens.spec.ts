@@ -1,4 +1,5 @@
 // 화면 확인: 크기 2종 × 테마 3종, 주요 동작
+import { readFile } from 'node:fs/promises';
 import { type Page, expect, test } from '@playwright/test';
 
 const THEMES = ['library', 'pastel', 'mono'] as const;
@@ -118,4 +119,69 @@ test('스마트폰: 탭 바로 지도·목록·달력 전환', async ({ page }) 
   await expect(page.getByRole('region', { name: '휴관일 달력' })).toBeVisible();
   await page.getByRole('button', { name: '목록', exact: true }).click();
   await expect(page.locator('.ln-card').first()).toBeVisible();
+});
+
+test('기준 시각 바꾸기: 고른 시각으로 다시 계산하고 지금으로 돌아옴 (F13)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page);
+  await page.getByRole('button', { name: /^기준 시각 바꾸기/ }).click();
+  const dialog = page.getByRole('dialog', { name: '기준 시각' });
+  // 2026-11-23(월) 15:00: 꿈마을도서관은 월요일 휴관
+  await dialog.getByLabel('날짜').fill('2026-11-23');
+  await dialog.getByLabel('시각').fill('15:00');
+  await dialog.getByRole('button', { name: '이 시각으로 보기' }).click();
+
+  await expect(page.getByRole('button', { name: /^기준 시각 바꾸기/ })).toContainText(
+    '직접 · 11월 23일(월) 15:00',
+  );
+  await expect(page.getByText('11월 23일(월) 15:00 기준으로 계산 중입니다.')).toBeVisible();
+  await page.getByRole('button', { name: '꿈마을도서관', exact: true }).click();
+  const panel = page.getByRole('tabpanel');
+  await expect(panel.locator('.ln-badge').first()).toContainText('오늘 휴관');
+
+  await page.getByRole('button', { name: '지금으로', exact: true }).click();
+  await expect(page.getByRole('button', { name: /^기준 시각 바꾸기/ })).toContainText(
+    '지금 · 11월 18일(수) 19:05',
+  );
+  await expect(panel.locator('.ln-badge').first()).not.toContainText('오늘 휴관');
+});
+
+test('내 메모·임시 휴관은 저장되어 상태에 반영되고 파일로 내보냄 (F14)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page);
+  await page.getByRole('button', { name: '꿈마을도서관', exact: true }).click();
+  const panel = page.getByRole('tabpanel');
+  await panel.getByLabel('메모').fill('3층 창가 자리 좋음');
+  await panel.getByLabel('사유 (선택)').fill('시설 공사');
+  await panel.getByRole('button', { name: '휴관 추가' }).click();
+  await expect(panel.locator('.ln-badge').first()).toContainText('오늘 휴관');
+  await expect(panel.getByText('시설 공사').first()).toBeVisible();
+
+  await page.reload();
+  await page.getByRole('button', { name: '꿈마을도서관', exact: true }).click();
+  await expect(panel.getByLabel('메모')).toHaveValue('3층 창가 자리 좋음');
+  await expect(panel.locator('.ln-badge').first()).toContainText('오늘 휴관');
+
+  await page.getByRole('button', { name: '설정', exact: true }).click();
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.getByRole('button', { name: '내보내기' }).click(),
+  ]);
+  expect(download.suggestedFilename()).toBe('library-now-2026-11-18.json');
+  const file = JSON.parse(await readFile(await download.path(), 'utf8'));
+  expect(file.app).toBe('library-now');
+  expect(Object.values(file.data['ln.notes'].memos)).toEqual(['3층 창가 자리 좋음']);
+
+  // 지운 뒤 가져오면 되돌아옴
+  await page.evaluate(() => localStorage.removeItem('ln.notes'));
+  page.once('dialog', (d) => void d.accept());
+  await page.locator('input[type=file]').setInputFiles({
+    name: 'backup.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(file)),
+  });
+  // 가져오면 새로고침되어 설정 창이 닫히고, 메모가 다시 보임
+  await expect(page.getByRole('dialog', { name: '설정' })).toBeHidden();
+  await page.getByRole('button', { name: '꿈마을도서관', exact: true }).click();
+  await expect(panel.getByLabel('메모')).toHaveValue('3층 창가 자리 좋음');
 });

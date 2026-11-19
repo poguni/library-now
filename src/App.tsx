@@ -4,6 +4,7 @@
 import { CalendarDays, PanelRightOpen } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import styles from './App.module.css';
+import { BaseTimeDialog } from './components/BaseTimeDialog';
 import { BottomSheet, type SheetSnap } from './components/BottomSheet';
 import { DetailPanel, type DetailTab } from './components/DetailPanel';
 import { LibraryList } from './components/LibraryList';
@@ -20,15 +21,17 @@ import {
   soonestOpening,
   sortRows,
 } from './domain/list';
-import { ROOM_NAME } from './domain/present';
+import { formatDate, ROOM_NAME } from './domain/present';
+import { formatTime, toSeoul } from './domain/time';
 import { formatKm } from './domain/travel';
 import type { RoomKey } from './domain/types';
 import type { MapMarker, MapOrigin } from './map/types';
-import { FAVORITES_KEY, useFavorites } from './state/favorites';
-import { PLACES_KEY, PLACE_LABEL, type PlaceKind } from './state/places';
+import { BACKUP_KEYS, exportData, importData } from './state/backup';
+import { useFavorites } from './state/favorites';
+import { useNotes } from './state/notes';
+import { PLACE_LABEL, type PlaceKind } from './state/places';
 import {
   type ListPrefs,
-  SETTINGS_KEY,
   getStorage,
   readMode,
   readPrefs,
@@ -60,7 +63,11 @@ function originNotice(choice: ListPrefs['origin'], o: OriginState): string | nul
 
 export default function App() {
   const data = useLibraryData();
-  const now = useNow();
+  const live = useNow();
+  // 기준 시각 (F13): null이면 지금. 저장하지 않으므로 새로고침하면 지금으로 돌아옵니다
+  const [baseTime, setBaseTime] = useState<Date | null>(null);
+  const now = baseTime ?? live;
+  const [baseTimeOpen, setBaseTimeOpen] = useState(false);
   const isPhone = useMediaQuery(PHONE_QUERY);
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
   const [mode, setMode] = useState<RoomKey>(() => readMode(getStorage()));
@@ -79,6 +86,7 @@ export default function App() {
   const originState = useOrigin(prefs.origin);
   const { origin, places, setPlace } = originState;
   const favorites = useFavorites();
+  const notes = useNotes();
 
   const changeMode = (next: RoomKey) => {
     setMode(next);
@@ -131,15 +139,33 @@ export default function App() {
   };
 
   const resetAll = () => {
-    if (!window.confirm('저장된 설정, 출발지, 즐겨찾기를 모두 지울까요?')) return;
+    if (!window.confirm('저장된 설정, 출발지, 즐겨찾기, 메모를 모두 지울까요?')) return;
     try {
-      for (const key of [SETTINGS_KEY, PLACES_KEY, FAVORITES_KEY, 'ln.notes']) {
+      for (const key of BACKUP_KEYS) {
         window.localStorage.removeItem(key);
       }
     } catch {
       // 저장소가 막혀 있으면 지울 것도 없습니다
     }
     window.location.reload();
+  };
+
+  // 내보내기·가져오기 (F14): 파일은 이 기기에 내려받기만 합니다
+  const exportFile = () => {
+    const blob = new Blob([exportData(getStorage(), live)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `library-now-${toSeoul(live).date}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const importFile = async (file: File): Promise<string | null> => {
+    const result = importData(getStorage(), await file.text());
+    if (!result.ok) return result.error;
+    window.location.reload();
+    return null;
   };
 
   const onLocate = async () => {
@@ -150,7 +176,14 @@ export default function App() {
   };
 
   const ready = data.kind === 'ready' ? data : null;
-  const ctx = useMemo(() => ({ holidays: ready?.holidays ?? new Map<string, string>() }), [ready]);
+  const ctx = useMemo(
+    () => ({
+      holidays: ready?.holidays ?? new Map<string, string>(),
+      userClosures: notes.userClosures,
+    }),
+    [ready, notes.userClosures],
+  );
+  const holidayYears = ready?.meta.holidayYears ?? [toYear(live)];
 
   const allRows = useMemo(
     () => (ready ? buildRows(ready.libraries, { mode, now, ctx, origin }) : []),
@@ -232,6 +265,12 @@ export default function App() {
       onSort={(sort: SortKey) => changePrefs({ sort })}
       hasOrigin={Boolean(origin)}
       notice={originNotice(prefs.origin, originState)}
+      baseTime={
+        baseTime && {
+          text: `${formatDate(toSeoul(baseTime).date)} ${formatTime(toSeoul(baseTime).minutes)}`,
+          onReset: () => setBaseTime(null),
+        }
+      }
       suggestion={suggestion}
       selectedId={selected?.lib.id ?? null}
       onSelect={select}
@@ -250,9 +289,11 @@ export default function App() {
       libraries={districtLibs}
       mode={mode}
       now={now}
+      customTime={Boolean(baseTime)}
       origin={origin}
       ctx={ctx}
-      holidayYears={ready?.meta.holidayYears ?? [toYear(now)]}
+      notes={notes}
+      holidayYears={holidayYears}
       favorites={favorites.ids}
       onToggleFavorite={favorites.toggle}
       onSelect={select}
@@ -327,6 +368,8 @@ export default function App() {
         mode={mode}
         onMode={changeMode}
         now={now}
+        customTime={Boolean(baseTime)}
+        onBaseTime={() => setBaseTimeOpen(true)}
         originChoice={prefs.origin}
         places={places}
         onOriginChoice={(choice) => changePrefs({ origin: choice })}
@@ -391,6 +434,17 @@ export default function App() {
         meta={ready?.meta ?? null}
         libraryCount={ready?.libraries.length ?? 0}
         onReset={resetAll}
+        onExport={exportFile}
+        onImport={importFile}
+      />
+
+      <BaseTimeDialog
+        open={baseTimeOpen}
+        onClose={() => setBaseTimeOpen(false)}
+        live={live}
+        base={baseTime}
+        years={holidayYears}
+        onApply={setBaseTime}
       />
     </div>
   );
