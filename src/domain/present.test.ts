@@ -138,6 +138,11 @@ describe('도착 기준 이용 가능 시간 (F5)', () => {
     });
   });
 
+  it('기준 시각을 직접 고르면 "그 시각에 가면" (F13)', () => {
+    const v = applyUsable(presentStatus(open, 'reading'), open, usable(158), true);
+    expect(v.summary).toBe('그 시각에 가면 2시간 38분 이용 가능');
+  });
+
   it('곧 닫힘: 30분 미만이면 경고', () => {
     const soon = { kind: 'soon', close: 1200, minutesLeft: 55 } as const;
     expect(applyUsable(presentStatus(soon, 'lending'), soon, usable(29))).toMatchObject({

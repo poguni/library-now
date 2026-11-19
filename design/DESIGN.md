@@ -65,6 +65,8 @@
 | `--open` `--soon` `--opening` `--ended` `--closed` (+ 각 `-bg`) | 상태 색(글자/바탕) |
 | `--map-bg` `--map-grid` `--map-road` `--map-river` `--map-park` `--map-line` `--map-label` | 시안 지도 그림 색(실제 앱에서는 2.5 참고) |
 | `--marker-ring` | 마커 흰 테두리 |
+| `--tile-filter` | 실제 지도 타일(`.leaflet-tile-pane`)에만 거는 CSS 필터 (2.5) |
+| `--fav-1` ~ `--fav-5` | 휴관 달력에서 즐겨찾기 도서관을 구분하는 색 5가지 (점·범례, 글자 대비 4.5:1 이상) |
 | `--radius` / `--radius-sm` / `--pill` | 카드·상자 / 버튼·입력 / 칩·배지 모서리 |
 | `--shadow` / `--pop-shadow` | 카드 그림자 / 팝업·떠 있는 버튼 그림자 |
 | `--sheet-r` | 스마트폰 바텀 시트 위쪽 모서리 |

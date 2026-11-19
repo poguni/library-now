@@ -175,8 +175,14 @@ export function presentStatus(status: Status, room: RoomKey): StatusView {
 /**
  * 출발지가 있을 때: 도착 예정 시각 기준 이용 가능 시간으로 바꿉니다 (F5, 5.5).
  * 출발지가 없으면 presentStatus 결과("지금부터 마감까지")를 그대로 씁니다.
+ * customTime이면 기준 시각을 직접 고른 상태라 "그 시각에 가면"으로 씁니다 (F13).
  */
-export function applyUsable(view: StatusView, status: Status, usable: Usable): StatusView {
+export function applyUsable(
+  view: StatusView,
+  status: Status,
+  usable: Usable,
+  customTime = false,
+): StatusView {
   if (usable.kind === 'notToday') return view;
 
   if (usable.kind === 'closedOnArrival') {
@@ -203,7 +209,7 @@ export function applyUsable(view: StatusView, status: Status, usable: Usable): S
     bigLabel: status.kind === 'soon' ? '도착 후 이용' : '이용 가능',
     warn: usable.minutes < SHORT_USE_MINUTES,
     tag: dur,
-    summary: `지금 가면 ${dur} 이용 가능`,
+    summary: `${customTime ? '그 시각에 가면' : '지금 가면'} ${dur} 이용 가능`,
   };
 }
 

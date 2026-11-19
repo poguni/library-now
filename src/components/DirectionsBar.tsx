@@ -1,5 +1,5 @@
 // 길찾기·주소 복사·홈페이지 버튼 (PRD F8, DESIGN 5.8 .acts)
-import { Copy, Link as LinkIcon, Navigation } from 'lucide-react';
+import { Copy, Link as LinkIcon, Navigation, Share2 } from 'lucide-react';
 import { useState } from 'react';
 import {
   type Place,
@@ -7,12 +7,14 @@ import {
   naverDirectionsUrl,
   naverWebUrl,
 } from '../domain/directions';
-import type { Library } from '../domain/types';
+import { shareUrl } from '../domain/shareLink';
+import type { Library, RoomKey } from '../domain/types';
 import styles from './DirectionsBar.module.css';
 
 interface Props {
   lib: Library;
   origin: Place | null;
+  mode: RoomKey;
 }
 
 /** 네이버 지도 앱 스킴은 스마트폰에서만 보여 줍니다 (F8) */
@@ -28,8 +30,8 @@ function openNaverWithFallback(webUrl: string) {
   document.addEventListener('visibilitychange', () => clearTimeout(timer), { once: true });
 }
 
-export function DirectionsBar({ lib, origin }: Props) {
-  const [copied, setCopied] = useState<'ok' | 'fail' | null>(null);
+export function DirectionsBar({ lib, origin, mode }: Props) {
+  const [copied, setCopied] = useState<'ok' | 'fail' | 'link' | 'linkFail' | null>(null);
   const to: Place = { name: lib.name, lat: lib.lat, lng: lib.lng };
 
   const copy = async () => {
@@ -38,6 +40,25 @@ export function DirectionsBar({ lib, origin }: Props) {
       setCopied('ok');
     } catch {
       setCopied('fail');
+    }
+  };
+
+  // 링크 공유 (F17): 스마트폰은 공유 창, 그 밖에는 주소 복사
+  const link = shareUrl(APP_URL(), lib.id, mode);
+  const share = async () => {
+    if (isPhone() && navigator.share) {
+      try {
+        await navigator.share({ title: lib.name, url: link });
+      } catch {
+        // 사용자가 공유 창을 닫음
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopied('link');
+    } catch {
+      setCopied('linkFail');
     }
   };
 
@@ -55,6 +76,14 @@ export function DirectionsBar({ lib, origin }: Props) {
         </a>
         <button type="button" className={styles.btn} aria-label="주소 복사" onClick={copy}>
           <Copy size={18} strokeWidth={1.8} aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          className={styles.btn}
+          aria-label="이 도서관 링크 공유"
+          onClick={share}
+        >
+          <Share2 size={18} strokeWidth={1.8} aria-hidden="true" />
         </button>
         {lib.homepage && (
           <a
@@ -80,6 +109,8 @@ export function DirectionsBar({ lib, origin }: Props) {
       <p className={styles.status} role="status">
         {copied === 'ok' && '주소를 복사했습니다.'}
         {copied === 'fail' && `복사하지 못했습니다. 주소: ${lib.address}`}
+        {copied === 'link' && '링크를 복사했습니다.'}
+        {copied === 'linkFail' && `복사하지 못했습니다. 링크: ${link}`}
       </p>
     </div>
   );

@@ -58,7 +58,9 @@ export function MapView(props: Props) {
   }, []);
 
   useEffect(() => handle.current?.setMarkers(markers), [markers]);
-  useEffect(() => handle.current?.select(selectedId), [selectedId]);
+  // 공유 링크처럼 데이터보다 선택이 먼저 오면, 마커가 생긴 뒤 다시 선택합니다
+  const hasMarkers = markers.length > 0;
+  useEffect(() => handle.current?.select(selectedId), [selectedId, hasMarkers]);
   useEffect(() => handle.current?.hover(hoverId), [hoverId]);
   useEffect(() => handle.current?.setOrigin(origin), [origin]);
   useEffect(() => {

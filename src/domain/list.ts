@@ -30,9 +30,16 @@ const OTHER: Record<RoomKey, RoomKey> = { lending: 'reading', reading: 'lending'
 
 export function buildRows(
   libraries: readonly Library[],
-  opts: { mode: RoomKey; now: Date; ctx: ScheduleContext; origin: LatLng | null },
+  opts: {
+    mode: RoomKey;
+    now: Date;
+    ctx: ScheduleContext;
+    origin: LatLng | null;
+    /** 기준 시각을 직접 고름 (F13) */
+    customTime?: boolean;
+  },
 ): LibraryRow[] {
-  const { mode, now, ctx, origin } = opts;
+  const { mode, now, ctx, origin, customTime } = opts;
   return libraries.map((lib) => {
     const status = getStatus(lib, mode, now, ctx);
     const travel = origin ? estimateTravel(origin, lib) : null;
@@ -42,7 +49,7 @@ export function buildRows(
       lib,
       status,
       usable,
-      view: travel ? applyUsable(base, status, usable) : base,
+      view: travel ? applyUsable(base, status, usable, customTime) : base,
       other: presentStatus(getStatus(lib, OTHER[mode], now, ctx), OTHER[mode]),
       travel,
       ruleText: describeClosedRule(lib.closed),

@@ -297,7 +297,7 @@ function LibraryDetail({
       />
 
       <div className={styles.acts}>
-        <DirectionsBar lib={lib} origin={origin} />
+        <DirectionsBar lib={lib} origin={origin} mode={mode} />
       </div>
 
       <p className={styles.address}>{lib.address}</p>

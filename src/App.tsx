@@ -22,6 +22,7 @@ import {
   sortRows,
 } from './domain/list';
 import { formatDate, ROOM_NAME } from './domain/present';
+import { parseShare } from './domain/shareLink';
 import { formatTime, toSeoul } from './domain/time';
 import { formatKm } from './domain/travel';
 import type { RoomKey } from './domain/types';
@@ -61,6 +62,17 @@ function originNotice(choice: ListPrefs['origin'], o: OriginState): string | nul
   return null;
 }
 
+/** 공유 링크로 열었을 때의 도서관·모드 (F17). 한 번 읽고 주소에서 지웁니다 */
+const shared = readSharedOnce();
+
+function readSharedOnce() {
+  const s = parseShare(window.location.search);
+  if (window.location.search) {
+    window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+  }
+  return s;
+}
+
 export default function App() {
   const data = useLibraryData();
   const live = useNow();
@@ -70,12 +82,12 @@ export default function App() {
   const [baseTimeOpen, setBaseTimeOpen] = useState(false);
   const isPhone = useMediaQuery(PHONE_QUERY);
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
-  const [mode, setMode] = useState<RoomKey>(() => readMode(getStorage()));
+  const [mode, setMode] = useState<RoomKey>(() => shared.mode ?? readMode(getStorage()));
   const [prefs, setPrefs] = useState<ListPrefs>(() => readPrefs(getStorage()));
   const [theme, setTheme] = useState<Theme>(() => readTheme(getStorage()));
   const [offDistricts, setOffDistricts] = useState<ReadonlySet<string>>(() => new Set());
   const [query, setQuery] = useState('');
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(shared.lib);
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [picking, setPicking] = useState<PlaceKind | null>(null);
   const [focus, setFocus] = useState<{ lat: number; lng: number } | null>(null);
@@ -186,8 +198,11 @@ export default function App() {
   const holidayYears = ready?.meta.holidayYears ?? [toYear(live)];
 
   const allRows = useMemo(
-    () => (ready ? buildRows(ready.libraries, { mode, now, ctx, origin }) : []),
-    [ready, mode, now, ctx, origin],
+    () =>
+      ready
+        ? buildRows(ready.libraries, { mode, now, ctx, origin, customTime: Boolean(baseTime) })
+        : [],
+    [ready, mode, now, ctx, origin, baseTime],
   );
   const districtRows = useMemo(
     () => filterRows(allRows, { offDistricts, query: '', filters: [] }),

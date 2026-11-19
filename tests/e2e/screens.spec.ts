@@ -186,6 +186,32 @@ test('내 메모·임시 휴관은 저장되어 상태에 반영되고 파일로
   await expect(panel.getByLabel('메모')).toHaveValue('3층 창가 자리 좋음');
 });
 
+test('공유 링크로 열면 그 도서관과 모드를 보여 주고, 링크를 복사함 (F17)', async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.route('**/tile.openstreetmap.org/**', (route) => route.abort());
+  await page.clock.install({ time: new Date('2026-11-18T19:05:00+09:00') });
+  await page.goto('./?lib=gr-003&mode=reading');
+
+  const panel = page.getByRole('tabpanel');
+  await expect(panel.getByRole('heading', { name: '꿈마을도서관' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '공부하기' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(page.locator('.ln-mk.is-sel')).toHaveCount(1);
+  // 한 번 읽은 뒤 주소는 깨끗하게
+  expect(new URL(page.url()).search).toBe('');
+
+  await panel.getByRole('button', { name: '이 도서관 링크 공유' }).click();
+  await expect(panel.getByText('링크를 복사했습니다.')).toBeVisible();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  expect(new URL(copied).search).toBe('?lib=gr-003&mode=reading');
+});
+
 test('오프라인이면 지도에 안내를 보여 주고 목록은 그대로 (F15)', async ({ page, context }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await open(page);
