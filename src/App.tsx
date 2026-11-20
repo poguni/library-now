@@ -26,6 +26,7 @@ import { parseShare } from './domain/shareLink';
 import { formatTime, toSeoul } from './domain/time';
 import { formatKm } from './domain/travel';
 import type { RoomKey } from './domain/types';
+import { KAKAO_JS_KEY } from './map/config';
 import type { MapMarker, MapOrigin } from './map/types';
 import { BACKUP_KEYS, exportData, importData } from './state/backup';
 import { useFavorites } from './state/favorites';
@@ -33,9 +34,12 @@ import { useNotes } from './state/notes';
 import { PLACE_LABEL, type PlaceKind } from './state/places';
 import {
   type ListPrefs,
+  type MapKind,
   getStorage,
+  readMapKind,
   readMode,
   readPrefs,
+  saveMapKind,
   saveMode,
   savePrefs,
 } from './state/settings';
@@ -85,6 +89,9 @@ export default function App() {
   const [mode, setMode] = useState<RoomKey>(() => shared.mode ?? readMode(getStorage()));
   const [prefs, setPrefs] = useState<ListPrefs>(() => readPrefs(getStorage()));
   const [theme, setTheme] = useState<Theme>(() => readTheme(getStorage()));
+  const [mapKind, setMapKind] = useState<MapKind>(() =>
+    readMapKind(getStorage(), KAKAO_JS_KEY !== null),
+  );
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(shared.lib);
   const [hoverId, setHoverId] = useState<string | null>(null);
@@ -113,6 +120,11 @@ export default function App() {
     setTheme(next);
     applyTheme(next);
     saveTheme(getStorage(), next);
+  };
+
+  const changeMapKind = (next: MapKind) => {
+    setMapKind(next);
+    saveMapKind(getStorage(), next);
   };
 
   // 지역 선택 (F2): 끈 구만 저장합니다
@@ -327,6 +339,7 @@ export default function App() {
 
   const map = (
     <MapView
+      kind={mapKind}
       className={styles.map}
       markers={markers}
       selectedId={selected?.lib.id ?? null}
@@ -440,6 +453,8 @@ export default function App() {
         onClose={() => setSettingsOpen(false)}
         theme={theme}
         onTheme={changeTheme}
+        mapKind={KAKAO_JS_KEY ? mapKind : null}
+        onMapKind={changeMapKind}
         places={places}
         onRenamePlace={renamePlace}
         onPickPlace={startPick}

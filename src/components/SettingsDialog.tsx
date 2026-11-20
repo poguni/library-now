@@ -2,6 +2,7 @@
 import { Download, MapPin, Trash2, Upload, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { PLACE_LABEL, type PlaceKind, type Places } from '../state/places';
+import type { MapKind } from '../state/settings';
 import { THEMES, THEME_LABEL, type Theme } from '../state/theme';
 import type { MetaFile } from '../state/useLibraryData';
 import styles from './SettingsDialog.module.css';
@@ -11,6 +12,9 @@ interface Props {
   onClose(): void;
   theme: Theme;
   onTheme(theme: Theme): void;
+  /** null = 카카오맵 키가 없어 지도 종류를 고를 수 없음 (선택지 숨김) */
+  mapKind: MapKind | null;
+  onMapKind(kind: MapKind): void;
   places: Places;
   onRenamePlace(kind: PlaceKind, name: string): void;
   onPickPlace(kind: PlaceKind): void;
@@ -22,6 +26,11 @@ interface Props {
   /** 실패하면 안내 문구, 성공하면 null (새로고침) */
   onImport(file: File): Promise<string | null>;
 }
+
+const MAP_KINDS: { kind: MapKind; name: string; desc: string }[] = [
+  { kind: 'osm', name: 'OpenStreetMap', desc: '기본 지도' },
+  { kind: 'kakao', name: '카카오맵', desc: '건물·지명 정보가 자세함' },
+];
 
 export function SettingsDialog(props: Props) {
   const { open, onClose, theme, places, meta } = props;
@@ -82,6 +91,27 @@ export function SettingsDialog(props: Props) {
             ))}
           </div>
         </fieldset>
+
+        {props.mapKind && (
+          <fieldset className={styles.sec}>
+            <legend className="ln-sec-title">지도</legend>
+            <div className={styles.maps}>
+              {MAP_KINDS.map(({ kind, name, desc }) => (
+                <label key={kind} className={styles.mapKind}>
+                  <input
+                    type="radio"
+                    name="map"
+                    value={kind}
+                    checked={props.mapKind === kind}
+                    onChange={() => props.onMapKind(kind)}
+                  />
+                  <span className={styles.themeName}>{name}</span>
+                  <span className={styles.themeDesc}>{desc}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        )}
 
         <section className={styles.sec}>
           <h3 className="ln-sec-title">출발지</h3>

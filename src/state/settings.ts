@@ -50,6 +50,17 @@ export function saveMode(storage: StorageLike | null, mode: RoomKey): boolean {
   return saveSettings(storage, { mode });
 }
 
+/** 지도 종류 (PRD 7.1, M5). 카카오맵은 키가 있을 때만 고를 수 있고, 기본은 OSM */
+export type MapKind = 'osm' | 'kakao';
+
+export function readMapKind(storage: StorageLike | null, hasKakaoKey: boolean): MapKind {
+  return hasKakaoKey && readSettings(storage).map === 'kakao' ? 'kakao' : 'osm';
+}
+
+export function saveMapKind(storage: StorageLike | null, map: MapKind): boolean {
+  return saveSettings(storage, { map });
+}
+
 /** 출발지 선택 (F6) */
 export type OriginChoice = 'current' | 'home' | 'work';
 

@@ -125,6 +125,42 @@
   font-size: 10px;
 }
 
+/* 지도 종류 (M5): 테마 카드와 같은 선택 표시 */
+.maps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mapKind {
+  position: relative;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.mapKind:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+.mapKind:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.mapKind input {
+  position: absolute;
+  opacity: 0;
+}
+
 .themeName {
   font-family: var(--font-head);
   font-weight: 700;

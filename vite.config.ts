@@ -37,7 +37,7 @@ export default defineConfig({
         // 앱 화면과 도서관·공휴일 JSON을 미리 저장합니다 (새 버전 배포 시 함께 바뀜)
         globPatterns: ['**/*.{js,css,html,svg,png,json,webmanifest}'],
         navigateFallback: 'index.html',
-        // 지도 타일(tile.openstreetmap.org)은 OSM 정책에 따라 저장하지 않습니다.
+        // 지도 타일(tile.openstreetmap.org)은 OSM 정책에 따라 저장하지 않습니다. 카카오맵 SDK·타일도 저장하지 않습니다.
         // 여기에 없는 주소는 서비스 워커가 손대지 않고 그대로 네트워크로 보냅니다.
         runtimeCaching: [
           {

@@ -1,0 +1,81 @@
+/* 카카오맵 위 요소 (M5). 마커·묶음·출발지 모양은 leaflet.css의 .ln-* 를 그대로 쓰고, 크기와 팝업만 여기서 정합니다. */
+
+/* 테마별 타일 필터는 지도 타일 그림에만 (DESIGN 2.5). 카카오 SDK의 타일 칸에는 정해진 클래스 이름이 없어 타일 주소로 고릅니다 */
+.ln-kakao img[src*='/api/v1/tile/'] {
+  filter: var(--tile-filter);
+}
+
+.ln-kmk,
+.ln-kcl {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+
+.ln-korigin {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  pointer-events: none;
+}
+
+.ln-picking .ln-kmk,
+.ln-picking .ln-kcl {
+  cursor: crosshair;
+}
+
+/* 팝업: 마커 위에 말풍선처럼 (Leaflet 팝업과 같은 토큰) */
+.ln-kpop {
+  position: relative;
+  min-width: 200px;
+  max-width: 260px;
+  margin-bottom: 30px;
+  padding: 12px 44px 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--pop-shadow);
+  font-family: var(--font-body);
+}
+
+.ln-kpop::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.ln-kpop > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.ln-kpop b {
+  font-family: var(--font-head);
+  font-size: 15px;
+}
+
+.ln-kpop-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: 20px/44px var(--font-body);
+}

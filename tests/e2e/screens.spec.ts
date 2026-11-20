@@ -15,6 +15,8 @@ async function open(
   extra: Record<string, string> = {},
 ) {
   await page.route('**/tile.openstreetmap.org/**', (route) => route.abort());
+  // 카카오맵 SDK·타일은 테스트에서 부르지 않습니다 (가짜 키, playwright.config.ts)
+  await page.route(/kakao(cdn)?\.(com|net)\//, (route) => route.abort());
   await page.clock.install({ time: new Date('2026-11-18T19:05:00+09:00') });
   await page.addInitScript(
     ([s, e]) => {
@@ -268,6 +270,28 @@ test('검수된 곳만: 자동 변환(미검수) 도서관을 빼고, 미검수�
     'href',
     /^https?:\/\/library\.gangnam\.go\.kr\//,
   );
+});
+
+test('지도 종류: 카카오맵을 고를 수 있고, 못 불러오면 기본 지도로 돌아감 (PRD 7.1, M5)', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page);
+  await page.getByRole('button', { name: '설정', exact: true }).click();
+  await expect(page.getByRole('radio', { name: /OpenStreetMap/ })).toBeChecked();
+  await page.getByRole('radio', { name: /카카오맵/ }).check({ force: true });
+  await page.getByRole('button', { name: '설정 닫기' }).click();
+
+  await expect(page.getByText('카카오맵을 불러오지 못해 기본 지도')).toBeVisible();
+  await expect(
+    page.locator('.leaflet-container .ln-mk, .leaflet-container .ln-cluster').first(),
+  ).toBeVisible();
+
+  // 고른 지도 종류는 저장됩니다
+  await page.reload();
+  await expect(page.getByText('카카오맵을 불러오지 못해 기본 지도')).toBeVisible();
+  await page.getByRole('button', { name: '닫기', exact: true }).click();
+  await expect(page.getByText('카카오맵을 불러오지 못해')).toHaveCount(0);
 });
 
 test('지도 마커 묶음을 누르면 확대되어 풀림 (M5)', async ({ page }) => {

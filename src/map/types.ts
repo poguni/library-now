@@ -45,6 +45,8 @@ export interface MapOptions {
   center: { lat: number; lng: number };
   zoom: number;
   onSelect(id: string): void;
+  /** 지도를 불러오지 못했을 때 (카카오맵 SDK 실패 등) */
+  onError?(): void;
 }
 
 export type CreateMap = (container: HTMLElement, options: MapOptions) => MapHandle;

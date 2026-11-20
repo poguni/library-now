@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { FAVORITES_KEY, readFavorites, saveFavorites } from './favorites';
 import { PLACES_KEY, readPlaces, savePlace } from './places';
-import { SETTINGS_KEY, readMode, readPrefs, saveMode, savePrefs } from './settings';
+import {
+  SETTINGS_KEY,
+  readMapKind,
+  readMode,
+  readPrefs,
+  saveMapKind,
+  saveMode,
+  savePrefs,
+} from './settings';
 
 function memoryStorage(initial: Record<string, string> = {}) {
   const data = { ...initial };
@@ -85,6 +93,18 @@ describe('목록 설정과 출발지 선택 (F6·F7·F9)', () => {
       filters: ['favorites'],
       offDistricts: ['중구'],
     });
+  });
+});
+
+describe('지도 종류 (PRD 7.1, M5)', () => {
+  it('기본은 OSM, 카카오맵은 키가 있을 때만', () => {
+    const s = memoryStorage();
+    expect(readMapKind(s, true)).toBe('osm');
+    expect(saveMapKind(s, 'kakao')).toBe(true);
+    expect(readMapKind(s, true)).toBe('kakao');
+    expect(readMapKind(s, false)).toBe('osm');
+    expect(readMapKind(memoryStorage({ [SETTINGS_KEY]: '{"map":"google"}' }), true)).toBe('osm');
+    expect(readMapKind(null, true)).toBe('osm');
   });
 });
 

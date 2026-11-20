@@ -1,13 +1,17 @@
 // 지도 패널 (PRD F1, DESIGN 5.6·5.7). 지도 구현은 MapProvider 뒤에 있습니다.
 import { LocateFixed, Maximize, Minus, Plus } from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import { DEFAULT_CENTER, DEFAULT_ZOOM } from '../map/config';
+import { useEffect, useRef, useState } from 'react';
+import { DEFAULT_CENTER, DEFAULT_ZOOM, KAKAO_JS_KEY } from '../map/config';
+import { createKakaoMap } from '../map/kakao';
 import { createLeafletMap } from '../map/leaflet';
 import type { MapHandle, MapMarker, MapOrigin } from '../map/types';
+import type { MapKind } from '../state/settings';
 import { useOnline } from '../state/useOnline';
 import styles from './MapView.module.css';
 
 interface Props {
+  /** 지도 종류 (PRD 7.1). 카카오맵을 못 불러오면 OSM으로 돌아갑니다 */
+  kind: MapKind;
   markers: readonly MapMarker[];
   selectedId: string | null;
   hoverId: string | null;
@@ -38,24 +42,37 @@ export function MapView(props: Props) {
   const handle = useRef<MapHandle | null>(null);
   const onSelectRef = useRef(onSelect);
   const onPickRef = useRef(onPick);
+  // 지도를 바꿔 새로 만들 때 지금 상태를 다시 넣으려고 최신 값을 기억합니다
+  const latest = useRef({ markers, selectedId, hoverId, origin });
+  const [kakaoFailed, setKakaoFailed] = useState(false);
+  const [noticeClosed, setNoticeClosed] = useState(false);
+  const kind = props.kind === 'kakao' && KAKAO_JS_KEY && !kakaoFailed ? 'kakao' : 'osm';
 
   useEffect(() => {
     onSelectRef.current = onSelect;
     onPickRef.current = onPick;
-  }, [onSelect, onPick]);
+    latest.current = { markers, selectedId, hoverId, origin };
+  });
 
   useEffect(() => {
-    const map = createLeafletMap(canvas.current!, {
+    const create = kind === 'kakao' ? createKakaoMap(KAKAO_JS_KEY!) : createLeafletMap;
+    const map = create(canvas.current!, {
       center: DEFAULT_CENTER,
       zoom: DEFAULT_ZOOM,
       onSelect: (id) => onSelectRef.current(id),
+      onError: () => setKakaoFailed(true),
     });
     handle.current = map;
+    const now = latest.current;
+    map.setMarkers(now.markers);
+    map.select(now.selectedId);
+    map.hover(now.hoverId);
+    map.setOrigin(now.origin);
     return () => {
       map.destroy();
       handle.current = null;
     };
-  }, []);
+  }, [kind]);
 
   useEffect(() => handle.current?.setMarkers(markers), [markers]);
   // 공유 링크처럼 데이터보다 선택이 먼저 오면, 마커가 생긴 뒤 다시 선택합니다
@@ -69,11 +86,21 @@ export function MapView(props: Props) {
   useEffect(() => {
     if (!pickLabel) return;
     return handle.current?.startPick((p) => onPickRef.current(p));
-  }, [pickLabel]);
+  }, [pickLabel, kind]);
 
   return (
     <section className={`${styles.map} ${props.className ?? ''}`} aria-label="도서관 지도">
-      <div ref={canvas} className={styles.canvas} />
+      {/* 지도 종류를 바꾸면 그릴 칸도 새로 만듭니다 (두 지도 라이브러리가 칸을 함께 쓰지 않게) */}
+      <div key={kind} ref={canvas} className={styles.canvas} />
+
+      {props.kind === 'kakao' && kakaoFailed && !noticeClosed && !pickLabel && (
+        <div className={styles.pick} role="status">
+          <span>카카오맵을 불러오지 못해 기본 지도(OpenStreetMap)로 보여 줍니다.</span>
+          <button type="button" onClick={() => setNoticeClosed(true)}>
+            닫기
+          </button>
+        </div>
+      )}
 
       {!online && !pickLabel && (
         <div className={styles.pick} role="status">

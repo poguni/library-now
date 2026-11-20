@@ -4,33 +4,14 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import './leaflet.css';
-import { TILE_ATTRIBUTION, TILE_MAX_ZOOM, TILE_URL } from './config';
+import { TAG_MIN_ZOOM, TILE_ATTRIBUTION, TILE_MAX_ZOOM, TILE_URL } from './config';
+import { clusterHtml, markerHtml, originHtml, popupContent } from './markup';
 import type { CreateMap, MapMarker, MapOrigin } from './types';
-
-const BOOK_SVG =
-  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3zM21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"/></svg>';
-
-const ORIGIN_SVG: Record<MapOrigin['kind'], string> = {
-  home: '<path d="M3 11 12 4l9 7M5 10v10h14V10"/>',
-  work: '<rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 20V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v15"/>',
-  current:
-    '<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22"/>',
-};
-
-/** 꼬리표를 보이기 시작하는 확대 수준 (그보다 멀면 마커가 겹침) */
-const TAG_MIN_ZOOM = 14;
-
-function escapeHtml(text: string): string {
-  return text.replace(
-    /[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
-  );
-}
 
 function icon(m: MapMarker): L.DivIcon {
   return L.divIcon({
     className: 'ln-mk',
-    html: `<span class="ln-dot">${BOOK_SVG}<span class="ln-sym" aria-hidden="true"></span></span><span class="ln-tag">${escapeHtml(m.tag)}</span>`,
+    html: markerHtml(m),
     iconSize: [44, 44],
     iconAnchor: [22, 22],
   });
@@ -39,25 +20,10 @@ function icon(m: MapMarker): L.DivIcon {
 function originIcon(o: MapOrigin): L.DivIcon {
   return L.divIcon({
     className: 'ln-origin',
-    html: `<span class="ln-odot"><svg viewBox="0 0 24 24" aria-hidden="true">${ORIGIN_SVG[o.kind]}</svg></span><span class="ln-otag">${escapeHtml(o.name)}</span>`,
+    html: originHtml(o),
     iconSize: [36, 36],
     iconAnchor: [18, 18],
   });
-}
-
-function popupContent(m: MapMarker): HTMLElement {
-  const box = document.createElement('div');
-  const name = document.createElement('b');
-  name.textContent = m.name;
-  const badge = document.createElement('span');
-  badge.className = 'ln-badge';
-  badge.dataset.tone = m.tone;
-  badge.textContent = m.badge;
-  const line = document.createElement('span');
-  line.className = 'ln-pop-line';
-  line.textContent = m.summary;
-  box.append(name, badge, line);
-  return box;
 }
 
 /** 가까운 마커를 숫자 원 하나로 묶습니다 (M5, 서울 전체 250여 곳) */
@@ -65,7 +31,7 @@ function clusterIcon(cluster: L.MarkerCluster): L.DivIcon {
   const n = cluster.getChildCount();
   return L.divIcon({
     className: 'ln-cluster',
-    html: `<span class="ln-cnum">${n}</span>`,
+    html: clusterHtml(n),
     iconSize: [44, 44],
     iconAnchor: [22, 22],
   });

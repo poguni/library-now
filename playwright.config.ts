@@ -20,5 +20,7 @@ export default defineConfig({
     command: `npx vite --port ${PORT} --strictPort`,
     url: `http://localhost:${PORT}/library-now/`,
     reuseExistingServer: !process.env.CI,
+    // 실제 키 대신 가짜 키: 카카오맵 선택지가 보이고, SDK 요청은 테스트에서 막습니다
+    env: { VITE_KAKAO_JS_KEY: 'e2e-fake-key' },
   },
 });
