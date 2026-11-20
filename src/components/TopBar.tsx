@@ -5,7 +5,9 @@ import { formatTime, toSeoul } from '../domain/time';
 import type { RoomKey } from '../domain/types';
 import { PLACE_LABEL, type PlaceKind, type Places } from '../state/places';
 import type { OriginChoice } from '../state/settings';
+import type { FontSize } from '../state/fontSize';
 import { DistrictPicker } from './DistrictPicker';
+import { FontSizePicker } from './FontSizePicker';
 import styles from './TopBar.module.css';
 
 interface Props {
@@ -24,6 +26,8 @@ interface Props {
   /** 지도에서 집·직장 위치 지정 시작 */
   onPickPlace(kind: PlaceKind): void;
   onSettings(): void;
+  fontSize: FontSize;
+  onFontSize(size: FontSize): void;
 }
 
 const MODES: { key: RoomKey; label: string; Icon: typeof BookOpen }[] = [
@@ -104,6 +108,7 @@ export function TopBar(props: Props) {
         type="button"
         className={styles.now}
         data-custom={props.customTime || undefined}
+        data-tip="기준 시각 바꾸기"
         aria-label={`기준 시각 바꾸기 (${timeText})`}
         onClick={props.onBaseTime}
       >
@@ -112,10 +117,14 @@ export function TopBar(props: Props) {
         <span className={styles.nowText}>{timeText}</span>
       </button>
 
+      <FontSizePicker value={props.fontSize} onChange={props.onFontSize} />
+
       <button
         type="button"
         className={styles.settings}
         aria-label="설정"
+        data-tip="설정"
+        data-tip-pos="end"
         onClick={props.onSettings}
       >
         <SlidersHorizontal size={18} strokeWidth={1.8} aria-hidden="true" />

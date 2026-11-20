@@ -24,11 +24,16 @@
           mono: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap',
         };
         var theme = 'library';
+        var size = 'normal';
         try {
-          var saved = JSON.parse(localStorage.getItem('ln.settings') || '{}').theme;
-          if (fonts[saved]) theme = saved;
+          var settings = JSON.parse(localStorage.getItem('ln.settings') || '{}');
+          if (fonts[settings.theme]) theme = settings.theme;
+          // 글자 크기도 첫 화면 전에 (src/state/fontSize.ts와 같은 값)
+          if (settings.fontSize === 'large' || settings.fontSize === 'xlarge')
+            size = settings.fontSize;
         } catch (e) {}
         document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-font-size', size);
         var link = document.createElement('link');
         link.id = 'font-' + theme;
         link.rel = 'stylesheet';

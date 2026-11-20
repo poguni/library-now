@@ -217,19 +217,24 @@
 
 /* --- 서재: 색인 카드, 도장 배지, 책등 마커, 명조 소제목 --- */
 [data-theme='library'] .ln-card {
-  background-image:
-    linear-gradient(var(--closed), var(--closed)),
-    repeating-linear-gradient(transparent 0 23px, var(--map-grid) 23px 24px);
-  background-size:
-    100% 1.5px,
-    100% 100%;
-  background-repeat: no-repeat, repeat;
-  background-position:
-    0 calc(100% - 42px),
-    0 0;
+  background-image: repeating-linear-gradient(transparent 0 23px, var(--map-grid) 23px 24px);
 }
+/* 붉은 선은 아래 줄 바로 위에 (글자 크기를 키워 줄이 늘어나도 따라감). 좌우 14px = 카드 안쪽 여백 */
 [data-theme='library'] .ln-card-foot {
+  position: relative;
   padding-top: 6px;
+}
+[data-theme='library'] .ln-card-foot::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -14px;
+  right: -14px;
+  height: 1.5px;
+  background: var(--closed);
+}
+[data-theme='library'] .ln-card[data-off] .ln-card-foot::before {
+  display: none;
 }
 [data-theme='library'] .ln-card[data-off] {
   background-image: none;
@@ -251,7 +256,7 @@
 }
 [data-theme='library'] .ln-sec-title {
   font-family: var(--font-head);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   color: var(--text);
   letter-spacing: 0;
   border-bottom: 1px solid var(--line);
@@ -309,7 +314,7 @@
 }
 [data-theme='mono'] .ln-sec-title {
   text-transform: uppercase;
-  font-size: 11.5px;
+  font-size: calc(11.5px * var(--font-scale));
   letter-spacing: 0.08em;
 }
 
@@ -321,7 +326,7 @@
   border: 2px dashed var(--hero-accent);
 }
 [data-theme='mono'] .ln-hero .ln-num {
-  font-size: 36px;
+  font-size: calc(36px * var(--font-scale));
   letter-spacing: -0.03em;
 }
 

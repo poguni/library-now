@@ -43,6 +43,7 @@ import {
   saveMode,
   savePrefs,
 } from './state/settings';
+import { type FontSize, applyFontSize, readFontSize, saveFontSize } from './state/fontSize';
 import { type Theme, applyTheme, readTheme, saveTheme } from './state/theme';
 import { useLibraryData } from './state/useLibraryData';
 import { DESKTOP_QUERY, PHONE_QUERY, useMediaQuery } from './state/useMediaQuery';
@@ -89,6 +90,7 @@ export default function App() {
   const [mode, setMode] = useState<RoomKey>(() => shared.mode ?? readMode(getStorage()));
   const [prefs, setPrefs] = useState<ListPrefs>(() => readPrefs(getStorage()));
   const [theme, setTheme] = useState<Theme>(() => readTheme(getStorage()));
+  const [fontSize, setFontSize] = useState<FontSize>(() => readFontSize(getStorage()));
   const [mapKind, setMapKind] = useState<MapKind>(() =>
     readMapKind(getStorage(), KAKAO_JS_KEY !== null),
   );
@@ -120,6 +122,12 @@ export default function App() {
     setTheme(next);
     applyTheme(next);
     saveTheme(getStorage(), next);
+  };
+
+  const changeFontSize = (next: FontSize) => {
+    setFontSize(next);
+    applyFontSize(next);
+    saveFontSize(getStorage(), next);
   };
 
   const changeMapKind = (next: MapKind) => {
@@ -401,6 +409,8 @@ export default function App() {
         onOriginChoice={(choice) => changePrefs({ origin: choice })}
         onPickPlace={startPick}
         onSettings={() => setSettingsOpen(true)}
+        fontSize={fontSize}
+        onFontSize={changeFontSize}
       />
 
       {data.kind === 'error' ? (

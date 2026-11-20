@@ -1,0 +1,95 @@
+.wrap {
+  position: relative;
+  flex: none;
+}
+
+/* 상단 바의 설정 버튼과 같은 모양 */
+.trigger {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--top-line);
+  background: var(--top-chip);
+  color: var(--top-text);
+  display: grid;
+  place-items: center;
+}
+
+.trigger[aria-expanded='true'] {
+  border-color: var(--top-on);
+  box-shadow: inset 0 0 0 1px var(--top-on);
+}
+
+/* 펼친 메뉴: 오른쪽 끝에 맞춰 아래로. 지도·바텀 시트(1100) 위에 */
+.panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1200;
+  width: 200px;
+  padding: 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--pop-shadow);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.title {
+  margin: 4px 8px 6px;
+  font-size: calc(12px * var(--font-scale));
+  color: var(--muted);
+}
+
+.option {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.option:hover {
+  background: var(--surface-2);
+}
+
+.option[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.sample {
+  width: 28px;
+  font-family: var(--font-head);
+  line-height: 1;
+  text-align: center;
+}
+
+.name {
+  flex: 1;
+}
+
+/* 스마트폰: 보이는 크기는 작게, 누르는 영역은 44px */
+@media (max-width: 767px) {
+  .trigger {
+    position: relative;
+    width: 34px;
+    height: 32px;
+  }
+
+  .trigger::before {
+    content: '';
+    position: absolute;
+    inset: -6px -5px;
+  }
+}

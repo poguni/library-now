@@ -58,7 +58,14 @@ export function SettingsDialog(props: Props) {
         <h2 id="settings-title" className="ln-detail-title">
           설정
         </h2>
-        <button type="button" className={styles.icon} aria-label="설정 닫기" onClick={onClose}>
+        <button
+          type="button"
+          className={styles.icon}
+          aria-label="설정 닫기"
+          data-tip="닫기"
+          data-tip-pos="end"
+          onClick={onClose}
+        >
           <X size={20} strokeWidth={1.8} aria-hidden="true" />
         </button>
       </div>
@@ -143,6 +150,8 @@ export function SettingsDialog(props: Props) {
                       type="button"
                       className={styles.icon}
                       aria-label={`${place.name} 지우기`}
+                      data-tip="지우기"
+                      data-tip-pos="end"
                       onClick={() => props.onDeletePlace(kind)}
                     >
                       <Trash2 size={18} strokeWidth={1.8} aria-hidden="true" />

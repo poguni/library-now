@@ -51,13 +51,27 @@ export function ClosureCalendar(props: Props) {
   return (
     <section className={styles.full} aria-label="휴관일 달력">
       <div className={styles.nav}>
-        <button type="button" aria-label="이전 달" disabled={!canPrev} onClick={() => go(-1)}>
+        <button
+          type="button"
+          aria-label="이전 달"
+          data-tip="이전 달"
+          data-tip-pos="start"
+          disabled={!canPrev}
+          onClick={() => go(-1)}
+        >
           <ChevronLeft size={18} strokeWidth={1.8} aria-hidden="true" />
         </button>
         <h3 className="ln-detail-title">
           {ym.year}년 {ym.month}월
         </h3>
-        <button type="button" aria-label="다음 달" disabled={!canNext} onClick={() => go(1)}>
+        <button
+          type="button"
+          aria-label="다음 달"
+          data-tip="다음 달"
+          data-tip-pos="end"
+          disabled={!canNext}
+          onClick={() => go(1)}
+        >
           <ChevronRight size={18} strokeWidth={1.8} aria-hidden="true" />
         </button>
       </div>

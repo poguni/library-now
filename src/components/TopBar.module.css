@@ -33,12 +33,13 @@
 }
 
 .brandText b {
+  white-space: nowrap;
   font-family: var(--font-head);
-  font-size: 19px;
+  font-size: calc(19px * var(--font-scale));
 }
 
 .brandText span {
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   letter-spacing: 0.14em;
   color: var(--top-muted);
 }
@@ -65,7 +66,7 @@
   border-radius: var(--pill);
   background: none;
   color: var(--top-muted);
-  font-size: 13px;
+  font-size: calc(13px * var(--font-scale));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +92,7 @@
   border-radius: var(--pill);
   border: 1px solid var(--top-line);
   background: var(--top-chip);
-  font-size: 13px;
+  font-size: calc(13px * var(--font-scale));
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
   color: var(--top-text);
@@ -105,7 +106,7 @@
 }
 
 .label {
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   color: var(--top-muted);
 }
 
@@ -121,7 +122,7 @@
   border-radius: var(--pill);
   border: 1px solid var(--top-line);
   background: var(--top-chip);
-  font-size: 13px;
+  font-size: calc(13px * var(--font-scale));
 }
 
 .origin:focus-within {
@@ -200,7 +201,7 @@
   }
 
   .brandText b {
-    font-size: 18px;
+    font-size: calc(18px * var(--font-scale));
   }
 
   /* 보이는 크기는 작게, 누르는 영역은 44px */
@@ -215,7 +216,7 @@
     margin-left: auto;
     height: 32px;
     padding: 0 10px;
-    font-size: 12px;
+    font-size: calc(12px * var(--font-scale));
   }
 
   .now .label,

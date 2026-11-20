@@ -62,7 +62,7 @@
   border-radius: var(--pill);
   border: 1px solid var(--line);
   background: var(--surface);
-  font-size: 12.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 
 .fchip[aria-pressed='true'] {
@@ -77,7 +77,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: calc(12.5px * var(--font-scale));
   color: var(--muted);
 }
 
@@ -100,7 +100,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   background: var(--surface);
-  font-size: 12.5px;
+  font-size: calc(12.5px * var(--font-scale));
   cursor: pointer;
 }
 
@@ -116,7 +116,7 @@
   border-radius: var(--radius-sm);
   background: var(--soon-bg);
   color: var(--soon);
-  font-size: 12.5px;
+  font-size: calc(12.5px * var(--font-scale));
 }
 
 .timeNotice {
@@ -214,8 +214,10 @@
 
 .name {
   margin: 0;
+  /* 띄어쓰기 없는 긴 이름(서울특별시교육청…)이 카드 밖으로 나가지 않게 */
+  overflow-wrap: anywhere;
   font-family: var(--font-head);
-  font-size: 16px;
+  font-size: calc(16px * var(--font-scale));
   line-height: 1.35;
 }
 
@@ -240,7 +242,7 @@
 }
 
 .sub {
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: var(--muted);
 }
 
@@ -252,7 +254,7 @@
 }
 
 .big {
-  font-size: 18px;
+  font-size: calc(18px * var(--font-scale));
   line-height: 1.25;
   white-space: nowrap;
 }
@@ -262,7 +264,7 @@
 }
 
 .right small {
-  font-size: 11.5px;
+  font-size: calc(11.5px * var(--font-scale));
   color: var(--muted);
   white-space: nowrap;
 }
@@ -272,7 +274,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: var(--muted);
 }
 

@@ -88,6 +88,8 @@ export function DetailPanel(props: Props) {
               type="button"
               className={styles.collapse}
               aria-label="오른쪽 패널 접기"
+              data-tip="패널 접기"
+              data-tip-pos="end"
               onClick={props.onCollapse}
             >
               <PanelRightClose size={18} strokeWidth={1.8} aria-hidden="true" />
@@ -292,7 +294,14 @@ function LibraryDetail({
           </div>
         </div>
         <StarButton on={favorite} name={lib.name} onToggle={onToggleFavorite} />
-        <button type="button" className={styles.close} aria-label="상세 닫기" onClick={onClose}>
+        <button
+          type="button"
+          className={styles.close}
+          aria-label="상세 닫기"
+          data-tip="닫기"
+          data-tip-pos="end"
+          onClick={onClose}
+        >
           <X size={20} strokeWidth={1.8} aria-hidden="true" />
         </button>
       </div>

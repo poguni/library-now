@@ -119,18 +119,42 @@ export function MapView(props: Props) {
 
       <div className={styles.ctrls}>
         <div className={styles.group}>
-          <button type="button" aria-label="확대" onClick={() => handle.current?.zoomIn()}>
+          <button
+            type="button"
+            aria-label="확대"
+            data-tip="확대"
+            data-tip-pos="left"
+            onClick={() => handle.current?.zoomIn()}
+          >
             <Plus size={18} strokeWidth={1.8} aria-hidden="true" />
           </button>
-          <button type="button" aria-label="축소" onClick={() => handle.current?.zoomOut()}>
+          <button
+            type="button"
+            aria-label="축소"
+            data-tip="축소"
+            data-tip-pos="left"
+            onClick={() => handle.current?.zoomOut()}
+          >
             <Minus size={18} strokeWidth={1.8} aria-hidden="true" />
           </button>
         </div>
         <div className={styles.group}>
-          <button type="button" aria-label="내 위치로 이동" onClick={props.onLocate}>
+          <button
+            type="button"
+            aria-label="내 위치로 이동"
+            data-tip="내 위치로 이동"
+            data-tip-pos="left"
+            onClick={props.onLocate}
+          >
             <LocateFixed size={18} strokeWidth={1.8} aria-hidden="true" />
           </button>
-          <button type="button" aria-label="전체 보기" onClick={() => handle.current?.fitAll()}>
+          <button
+            type="button"
+            aria-label="전체 보기"
+            data-tip="전체 보기"
+            data-tip-pos="left"
+            onClick={() => handle.current?.fitAll()}
+          >
             <Maximize size={18} strokeWidth={1.8} aria-hidden="true" />
           </button>
         </div>

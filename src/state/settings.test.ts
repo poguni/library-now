@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { FAVORITES_KEY, readFavorites, saveFavorites } from './favorites';
+import { readFontSize, saveFontSize } from './fontSize';
 import { PLACES_KEY, readPlaces, savePlace } from './places';
 import {
   SETTINGS_KEY,
@@ -105,6 +106,17 @@ describe('지도 종류 (PRD 7.1, M5)', () => {
     expect(readMapKind(s, false)).toBe('osm');
     expect(readMapKind(memoryStorage({ [SETTINGS_KEY]: '{"map":"google"}' }), true)).toBe('osm');
     expect(readMapKind(null, true)).toBe('osm');
+  });
+});
+
+describe('글자 크기 3단계', () => {
+  it('기본은 보통, 저장한 값은 다시 읽고 이상한 값은 보통', () => {
+    const s = memoryStorage();
+    expect(readFontSize(s)).toBe('normal');
+    expect(saveFontSize(s, 'xlarge')).toBe(true);
+    expect(readFontSize(s)).toBe('xlarge');
+    expect(readFontSize(memoryStorage({ [SETTINGS_KEY]: '{"fontSize":"huge"}' }))).toBe('normal');
+    expect(readFontSize(null)).toBe('normal');
   });
 });
 

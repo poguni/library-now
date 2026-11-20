@@ -70,6 +70,7 @@
 | `--radius` / `--radius-sm` / `--pill` | 카드·상자 / 버튼·입력 / 칩·배지 모서리 |
 | `--shadow` / `--pop-shadow` | 카드 그림자 / 팝업·떠 있는 버튼 그림자 |
 | `--sheet-r` | 스마트폰 바텀 시트 위쪽 모서리 |
+| `--font-scale` | 글자 크기 배율. 테마와 상관없이 `<html data-font-size>`로 정함: 보통 1 / 크게 1.15 / 아주 크게 1.3. 모든 `font-size`는 `calc(Npx * var(--font-scale))` |
 
 #### 주요 값 비교
 

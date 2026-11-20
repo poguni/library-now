@@ -16,6 +16,8 @@ export function StarButton({ on, name, onToggle, className }: Props) {
       className={`${styles.star} ${className ?? ''}`}
       aria-pressed={on}
       aria-label={on ? `${name} 즐겨찾기 해제` : `${name} 즐겨찾기 추가`}
+      data-tip={on ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+      data-tip-pos="end"
       onClick={onToggle}
     >
       <Star size={18} strokeWidth={1.8} fill={on ? 'currentColor' : 'none'} aria-hidden="true" />

@@ -294,6 +294,39 @@ test('지도 종류: 카카오맵을 고를 수 있고, 못 불러오면 기본 
   await expect(page.getByText('카카오맵을 불러오지 못해')).toHaveCount(0);
 });
 
+test('글자 크기: 상단 바 메뉴로 3단계를 고르고, 저장되며 화면이 넘치지 않음', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page);
+  const html = page.locator('html');
+  await expect(html).toHaveAttribute('data-font-size', 'normal');
+  const body = () => page.evaluate(() => parseFloat(getComputedStyle(document.body).fontSize));
+  expect(await body()).toBe(14);
+
+  await page.getByRole('button', { name: /^글자 크기/ }).click();
+  await page.getByRole('button', { name: /아주 크게/ }).click();
+  await expect(html).toHaveAttribute('data-font-size', 'xlarge');
+  expect(await body()).toBeCloseTo(18.2);
+  await noHorizontalScroll(page);
+
+  await page.reload();
+  await expect(html).toHaveAttribute('data-font-size', 'xlarge');
+  await expect(page.getByRole('button', { name: '글자 크기: 아주 크게' })).toBeVisible();
+});
+
+test('아이콘 버튼에 툴팁', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page);
+  await page.getByRole('button', { name: '꿈마을도서관', exact: true }).click();
+  const copy = page.getByRole('button', { name: '주소 복사' });
+  await copy.hover();
+  await expect
+    .poll(() => copy.evaluate((el) => getComputedStyle(el, '::after').content))
+    .toBe('"주소 복사"');
+  await expect
+    .poll(() => copy.evaluate((el) => getComputedStyle(el, '::after').display))
+    .toBe('block');
+});
+
 test('지도 마커 묶음을 누르면 확대되어 풀림 (M5)', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await open(page);

@@ -74,13 +74,21 @@ export function DirectionsBar({ lib, origin, mode }: Props) {
           <Navigation size={18} strokeWidth={1.8} aria-hidden="true" />
           카카오맵으로 길찾기
         </a>
-        <button type="button" className={styles.btn} aria-label="주소 복사" onClick={copy}>
+        <button
+          type="button"
+          className={styles.btn}
+          aria-label="주소 복사"
+          data-tip="주소 복사"
+          onClick={copy}
+        >
           <Copy size={18} strokeWidth={1.8} aria-hidden="true" />
         </button>
         <button
           type="button"
           className={styles.btn}
           aria-label="이 도서관 링크 공유"
+          data-tip="링크 공유"
+          data-tip-pos={lib.homepage ? undefined : 'end'}
           onClick={share}
         >
           <Share2 size={18} strokeWidth={1.8} aria-hidden="true" />
@@ -92,6 +100,8 @@ export function DirectionsBar({ lib, origin, mode }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="홈페이지 (임시 휴관 공지 확인)"
+            data-tip="홈페이지 (임시 휴관 공지)"
+            data-tip-pos="end"
           >
             <LinkIcon size={18} strokeWidth={1.8} aria-hidden="true" />
           </a>

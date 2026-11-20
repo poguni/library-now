@@ -38,7 +38,14 @@ export function BaseTimeDialog(props: Props) {
         <h2 id="basetime-title" className="ln-detail-title">
           기준 시각
         </h2>
-        <button type="button" className={styles.icon} aria-label="닫기" onClick={onClose}>
+        <button
+          type="button"
+          className={styles.icon}
+          aria-label="닫기"
+          data-tip="닫기"
+          data-tip-pos="end"
+          onClick={onClose}
+        >
           <X size={20} strokeWidth={1.8} aria-hidden="true" />
         </button>
       </div>

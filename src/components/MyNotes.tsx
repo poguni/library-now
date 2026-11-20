@@ -73,6 +73,8 @@ export function MyNotes({ lib, today, memo, closures, ...props }: Props) {
                   type="button"
                   className={styles.icon}
                   aria-label={`${formatDate(c.from)} 임시 휴관 지우기`}
+                  data-tip="지우기"
+                  data-tip-pos="end"
                   onClick={() => props.onRemoveClosure(i)}
                 >
                   <Trash2 size={16} strokeWidth={1.8} aria-hidden="true" />
