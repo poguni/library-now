@@ -323,14 +323,23 @@ function LibraryDetail({
       {/* 책 검색은 도서관 홈페이지로 보내는 링크만 (M5). 확인한 검색 페이지가 없으면 홈페이지 */}
       {(lib.searchUrl ?? lib.homepage) && (
         <a
-          className={styles.bookSearch}
+          className={`${styles.bookSearch} ln-book-search`}
           href={(lib.searchUrl ?? lib.homepage)!}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <BookSearch size={18} strokeWidth={1.8} aria-hidden="true" />
-          {lib.searchUrl ? '소장 도서 검색' : '홈페이지에서 소장 도서 검색'}
-          <ExternalLink size={14} strokeWidth={1.8} aria-hidden="true" />
+          <span className={`${styles.bsIcon} ln-book-search-icon`} aria-hidden="true">
+            <BookSearch size={20} strokeWidth={1.8} />
+          </span>
+          <span className={styles.bsText}>
+            <b className="ln-book-search-title">소장 도서 검색</b>
+            <span className={styles.bsDesc}>
+              {lib.searchUrl
+                ? '이 도서관에 찾는 책이 있는지 확인합니다'
+                : '홈페이지의 자료 검색 메뉴를 이용하세요'}
+            </span>
+          </span>
+          <ExternalLink className={styles.bsGo} size={16} strokeWidth={1.8} aria-hidden="true" />
           <span className="sr-only">(새 창)</span>
         </a>
       )}

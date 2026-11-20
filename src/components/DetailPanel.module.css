@@ -71,17 +71,61 @@
   font-size: calc(13px * var(--font-scale));
 }
 
+/* 소장 도서 검색: 한 줄 카드 링크 (아이콘 + 제목·설명 + 새 창 표시). 테마별 장식은 themes.css */
 .bookSearch {
-  align-self: flex-start;
-  display: inline-flex;
+  /* 세로 flex 패널 안에서 줄어들지 않게 (글자가 커지면 높이가 늘어남) */
+  flex: none;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  min-height: 44px;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.bookSearch:hover {
+  border-color: var(--accent);
+}
+
+.bsIcon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.bsText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bsText b {
+  font-size: calc(14px * var(--font-scale));
+  color: var(--accent-strong);
+}
+
+.bsDesc {
+  font-size: calc(12px * var(--font-scale));
+  color: var(--muted);
+}
+
+.bsGo {
+  flex: none;
+  color: var(--muted);
+}
+
+.bookSearch:hover .bsGo {
   color: var(--accent);
-  font-size: calc(13.5px * var(--font-scale));
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .sec {

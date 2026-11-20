@@ -266,10 +266,9 @@ test('검수된 곳만: 자동 변환(미검수) 도서관을 빼고, 미검수�
   await expect(panel).toContainText('원문: 화요일+일요일을 제외한 법정공휴일');
   await expect(panel).toContainText('공공데이터 자동 변환 · 홈페이지 미확인');
   // 검색 페이지를 확인하지 않은 곳은 홈페이지로 안내
-  await expect(panel.getByRole('link', { name: /^홈페이지에서 소장 도서 검색/ })).toHaveAttribute(
-    'href',
-    /^https?:\/\/library\.gangnam\.go\.kr\//,
-  );
+  await expect(
+    panel.getByRole('link', { name: /소장 도서 검색.*홈페이지의 자료 검색/ }),
+  ).toHaveAttribute('href', /^https?:\/\/library\.gangnam\.go\.kr\//);
 });
 
 test('지도 종류: 카카오맵을 고를 수 있고, 못 불러오면 기본 지도로 돌아감 (PRD 7.1, M5)', async ({
