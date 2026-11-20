@@ -35,6 +35,8 @@ export function validateLibrary(lib: Library): string[] {
   for (const key of ['id', 'name', 'district', 'address'] as const) {
     if (!lib[key]) out.push(at(key) + ': 값 없음');
   }
+  if (lib.searchUrl !== null && !lib.searchUrl.startsWith('https://'))
+    out.push(at('searchUrl') + ': https:// 주소만');
   const b = SEOUL_BOUNDS;
   if (!(lib.lat >= b.minLat && lib.lat <= b.maxLat && lib.lng >= b.minLng && lib.lng <= b.maxLng)) {
     out.push(at('lat/lng') + `: 서울 범위 밖 (${lib.lat}, ${lib.lng})`);

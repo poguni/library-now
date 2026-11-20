@@ -67,6 +67,8 @@ export interface Library {
   address: string;
   phone: string | null;
   homepage: string | null;
+  /** 확인한 자료(책) 검색 페이지. null = 확인 안 함 → 화면은 홈페이지로 안내 (M5) */
+  searchUrl: string | null;
   lat: number;
   lng: number;
   rooms: {

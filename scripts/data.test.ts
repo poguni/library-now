@@ -65,6 +65,7 @@ describe('mergeLibraries', () => {
     const lib = libraries[0]!;
     expect(lib.address).toBe('서울특별시 구로구 어딘가 1');
     expect(lib.phone).toBe('02-111-1111');
+    expect(lib.searchUrl).toBeNull();
     expect([lib.lat, lib.lng]).toEqual([37.5, 126.88]);
     expect(lib.source).toMatchObject({ dataset: '전국도서관표준데이터', baseDate: '2026-10-01' });
   });
@@ -129,6 +130,14 @@ describe('validateLibrary', () => {
     lib.lat = 35.1;
     lib.closed.weekly = [7];
     expect(validateLibrary(lib)).toHaveLength(2);
+  });
+
+  it('자료 검색 주소는 https만 (M5)', () => {
+    const lib = base();
+    lib.searchUrl = 'https://lib.example.kr/search';
+    expect(validateLibrary(lib)).toEqual([]);
+    lib.searchUrl = 'http://lib.example.kr/search';
+    expect(validateLibrary(lib)).toHaveLength(1);
   });
 });
 

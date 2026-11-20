@@ -24,6 +24,7 @@ function makeLib(patch: Partial<Library> = {}): Library {
     address: '서울',
     phone: null,
     homepage: null,
+    searchUrl: null,
     lat: 37.5,
     lng: 126.88,
     rooms: {

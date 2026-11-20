@@ -11,6 +11,7 @@ export interface OverrideLibrary {
   operator: string;
   match: { standard: string | null; seoul: string | null };
   homepage?: string | null;
+  searchUrl?: string | null;
   address?: string;
   phone?: string | null;
   lat?: number;
@@ -99,6 +100,7 @@ export function mergeLibraries({ standardRows, seoulRows, overrides }: MergeInpu
           ? o.phone
           : (normalizePhone(s?.['도서관전화번호']) ?? normalizePhone(g?.['전화번호'])),
       homepage: o.homepage ?? null,
+      searchUrl: o.searchUrl ?? null,
       lat: lat ?? NaN,
       lng: lng ?? NaN,
       rooms: o.rooms,

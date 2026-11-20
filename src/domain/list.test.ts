@@ -25,6 +25,7 @@ function lib(
     address: '서울',
     phone: null,
     homepage: null,
+    searchUrl: null,
     lat,
     lng: 126.9,
     rooms: { lending: { label: '자료실', hours, seasons: null, memo: null }, reading: null },

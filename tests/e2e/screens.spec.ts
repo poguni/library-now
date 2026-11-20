@@ -81,6 +81,11 @@ test('모드 전환과 상세: 공부하기는 열람실 기준', async ({ page 
   await expect(panel.getByRole('heading', { name: '꿈마을도서관' })).toBeVisible();
   await expect(panel.getByRole('table')).toContainText('09:00–22:00');
   await expect(panel.locator('p', { hasText: '정기 휴관' })).toContainText('매주 월요일');
+  // 책 검색 링크(M5): 확인한 구로구 통합검색 주소
+  await expect(panel.getByRole('link', { name: /^소장 도서 검색/ })).toHaveAttribute(
+    'href',
+    'https://lib.guro.go.kr/#/search/ex',
+  );
 });
 
 test('즐겨찾기는 새로고침 후에도 남고 달력에 표시', async ({ page }) => {
@@ -258,6 +263,11 @@ test('검수된 곳만: 자동 변환(미검수) 도서관을 빼고, 미검수�
   const panel = page.getByRole('tabpanel');
   await expect(panel).toContainText('원문: 화요일+일요일을 제외한 법정공휴일');
   await expect(panel).toContainText('공공데이터 자동 변환 · 홈페이지 미확인');
+  // 검색 페이지를 확인하지 않은 곳은 홈페이지로 안내
+  await expect(panel.getByRole('link', { name: /^홈페이지에서 소장 도서 검색/ })).toHaveAttribute(
+    'href',
+    /^https?:\/\/library\.gangnam\.go\.kr\//,
+  );
 });
 
 test('지도 마커 묶음을 누르면 확대되어 풀림 (M5)', async ({ page }) => {

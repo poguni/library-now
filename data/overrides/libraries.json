@@ -32,6 +32,7 @@
         "seoul": null
       },
       "homepage": "https://www.ydplib.or.kr/sclib/index.do",
+      "searchUrl": "https://www.ydplib.or.kr/sclib/menu/12286/program/30001/plusSearchSimple.do",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -93,6 +94,7 @@
         "seoul": null
       },
       "homepage": "https://www.ydplib.or.kr/brlib/index.do",
+      "searchUrl": "https://www.ydplib.or.kr/brlib/menu/12397/program/30001/plusSearchSimple.do",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -151,6 +153,7 @@
         "seoul": "대림도서관"
       },
       "homepage": "https://www.ydplib.or.kr/drlib/index.do",
+      "searchUrl": "https://www.ydplib.or.kr/drlib/menu/10076/program/30001/plusSearchSimple.do",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -205,6 +208,7 @@
         "seoul": "문래도서관"
       },
       "homepage": "https://www.ydplib.or.kr/mllib/index.do",
+      "searchUrl": "https://www.ydplib.or.kr/mllib/menu/10164/program/30001/plusSearchSimple.do",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -259,6 +263,7 @@
         "seoul": "선유도서관"
       },
       "homepage": "https://www.ydplib.or.kr/sylib/index.do",
+      "searchUrl": "https://www.ydplib.or.kr/sylib/menu/10256/program/30001/plusSearchSimple.do",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -313,6 +318,7 @@
         "seoul": "여의샛강도서관"
       },
       "homepage": "https://www.ydplib.or.kr/yulib/index.do",
+      "searchUrl": "https://www.ydplib.or.kr/yulib/menu/10349/program/30001/plusSearchSimple.do",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -367,6 +373,7 @@
         "seoul": "영등포생각공장도서관"
       },
       "homepage": "https://www.ydplib.or.kr/sglib/index.do",
+      "searchUrl": "https://www.ydplib.or.kr/sglib/menu/11702/program/30001/plusSearchSimple.do",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -421,6 +428,7 @@
         "seoul": null
       },
       "homepage": "https://www.ydplib.or.kr/wjlib/index.do",
+      "searchUrl": "https://www.ydplib.or.kr/wjlib/menu/12202/program/30001/plusSearchSimple.do",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -475,6 +483,7 @@
         "seoul": "서울특별시교육청영등포평생학습관"
       },
       "homepage": "https://ydpllc.sen.go.kr",
+      "searchUrl": "https://ydpllc.sen.go.kr/ydpllc/intro/search/index.do?menu_idx=4",
       "rooms": {
         "lending": {
           "label": "문헌정보실",
@@ -574,6 +583,7 @@
         "seoul": "양천중앙도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/yclib/",
+      "searchUrl": "https://lib.yangcheon.or.kr/yclib/site/search/bookSearch.do?manage_code=MH",
       "rooms": {
         "lending": {
           "label": "일반자료실",
@@ -630,6 +640,7 @@
         "seoul": "갈산도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/libgalsan/",
+      "searchUrl": "https://lib.yangcheon.or.kr/libgalsan/site/search/bookSearch.do?manage_code=MA",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -705,6 +716,7 @@
         "seoul": "개울건강도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/libgaeul/",
+      "searchUrl": "https://lib.yangcheon.or.kr/libgaeul/site/search/bookSearch.do?manage_code=MG",
       "rooms": {
         "lending": {
           "label": "자료실",
@@ -758,6 +770,7 @@
         "seoul": "목마교육도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/libmokma/",
+      "searchUrl": "https://lib.yangcheon.or.kr/libmokma/site/search/bookSearch.do?manage_code=MB",
       "rooms": {
         "lending": {
           "label": "일반자료실",
@@ -811,6 +824,7 @@
         "seoul": "미감도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/libmigam/",
+      "searchUrl": "https://lib.yangcheon.or.kr/libmigam/site/search/bookSearch.do?manage_code=SG",
       "rooms": {
         "lending": {
           "label": "일반자료실",
@@ -864,6 +878,7 @@
         "seoul": "방아다리문학도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/libbanga/",
+      "searchUrl": "https://lib.yangcheon.or.kr/libbanga/site/search/bookSearch.do?manage_code=MC",
       "rooms": {
         "lending": {
           "label": "자료실",
@@ -917,6 +932,7 @@
         "seoul": "신월음악도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/libsin/",
+      "searchUrl": "https://lib.yangcheon.or.kr/libsin/site/search/bookSearch.do?manage_code=MD",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -973,6 +989,7 @@
         "seoul": "영어특성화도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/libeng/",
+      "searchUrl": "https://lib.yangcheon.or.kr/libeng/site/search/bookSearch.do?manage_code=ME",
       "rooms": {
         "lending": {
           "label": "자료실",
@@ -1026,6 +1043,7 @@
         "seoul": "해맞이역사도서관"
       },
       "homepage": "https://lib.yangcheon.or.kr/libsun/",
+      "searchUrl": "https://lib.yangcheon.or.kr/libsun/site/search/bookSearch.do?manage_code=MF",
       "rooms": {
         "lending": {
           "label": "자료실",
@@ -1082,6 +1100,7 @@
         "seoul": "서울특별시교육청양천도서관"
       },
       "homepage": "https://yclib.sen.go.kr",
+      "searchUrl": "https://yclib.sen.go.kr/yclib/intro/search/index.do?menu_idx=4",
       "rooms": {
         "lending": {
           "label": "책누리실",
@@ -1183,6 +1202,7 @@
         "seoul": null
       },
       "homepage": "https://lib.guro.go.kr/#/about/mainlib/mainlib01",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실(지혜누리)",
@@ -1245,6 +1265,7 @@
         "seoul": "구로꿈나무도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib01",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1300,6 +1321,7 @@
         "seoul": "꿈마을도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib02",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1373,6 +1395,7 @@
         "seoul": "구로구립온누리도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib03",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1427,6 +1450,7 @@
         "seoul": "하늘도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib05",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1503,6 +1527,7 @@
         "seoul": "개봉도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib06",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1576,6 +1601,7 @@
         "seoul": "글마루한옥어린이도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib07",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1630,6 +1656,7 @@
         "seoul": "궁동어린이도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib08",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "유아·어린이청소년자료실",
@@ -1684,6 +1711,7 @@
         "seoul": "구로기적의도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib09",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "청소년·가족자료실",
@@ -1738,6 +1766,7 @@
         "seoul": "항동푸른도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib11",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1792,6 +1821,7 @@
         "seoul": "고척열린도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib12",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1851,6 +1881,7 @@
         "seoul": "구로미래도서관"
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib13",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1908,6 +1939,7 @@
         "seoul": null
       },
       "homepage": "https://lib.guro.go.kr/#/about/gulib/lib14",
+      "searchUrl": "https://lib.guro.go.kr/#/search/ex",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -1970,6 +2002,7 @@
         "seoul": "서울특별시교육청고척도서관"
       },
       "homepage": "https://gclib.sen.go.kr",
+      "searchUrl": "https://gclib.sen.go.kr/gclib/intro/search/index.do?menu_idx=4",
       "rooms": {
         "lending": {
           "label": "종합자료실",
@@ -2069,6 +2102,7 @@
         "seoul": "서울특별시교육청구로도서관"
       },
       "homepage": "https://grlib.sen.go.kr",
+      "searchUrl": "https://grlib.sen.go.kr/grlib/intro/search/index.do?menu_idx=4",
       "rooms": {
         "lending": {
           "label": "종합자료실",

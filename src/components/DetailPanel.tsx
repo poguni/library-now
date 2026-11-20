@@ -1,5 +1,13 @@
 // 오른쪽 패널 (DESIGN 5.8): 탭(상세 / 휴관 달력), 고른 도서관의 상세, 고르지 않았으면 오늘 요약 (PRD 8.2)
-import { Ban, BookOpen, CalendarDays, PanelRightClose, X } from 'lucide-react';
+import {
+  Ban,
+  BookOpen,
+  BookSearch,
+  CalendarDays,
+  ExternalLink,
+  PanelRightClose,
+  X,
+} from 'lucide-react';
 import type { Place } from '../domain/directions';
 import type { LibraryRow } from '../domain/list';
 import { formatDate, isUnreviewed, ROOM_NAME, type StatusView } from '../domain/present';
@@ -302,6 +310,21 @@ function LibraryDetail({
       </div>
 
       <p className={styles.address}>{lib.address}</p>
+
+      {/* 책 검색은 도서관 홈페이지로 보내는 링크만 (M5). 확인한 검색 페이지가 없으면 홈페이지 */}
+      {(lib.searchUrl ?? lib.homepage) && (
+        <a
+          className={styles.bookSearch}
+          href={(lib.searchUrl ?? lib.homepage)!}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <BookSearch size={18} strokeWidth={1.8} aria-hidden="true" />
+          {lib.searchUrl ? '소장 도서 검색' : '홈페이지에서 소장 도서 검색'}
+          <ExternalLink size={14} strokeWidth={1.8} aria-hidden="true" />
+          <span className="sr-only">(새 창)</span>
+        </a>
+      )}
 
       <section className={styles.sec}>
         <h3 className={`${styles.secTitle} ln-sec-title`}>운영시간</h3>

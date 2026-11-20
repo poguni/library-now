@@ -13,6 +13,7 @@ function lib(name: string, weekly: number[]): Library {
     address: '',
     phone: null,
     homepage: null,
+    searchUrl: null,
     lat: 37.5,
     lng: 126.9,
     rooms: {

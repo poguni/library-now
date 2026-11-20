@@ -422,6 +422,7 @@ export function buildAutoLibraries(input: AutoInput): {
       address: (s?.['소재지도로명주소'] || g?.['주소'] || '').trim(),
       phone: normalizePhone(s?.['도서관전화번호']) ?? normalizePhone(g?.['전화번호']),
       homepage: homepage && !/^https?:\/\//.test(homepage) ? `http://${homepage}` : homepage,
+      searchUrl: null,
       lat: lat ?? NaN,
       lng: lng ?? NaN,
       rooms: {
