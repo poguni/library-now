@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지금 열린 도서관 개발 보고서 (v1)</title>
+<style>
+  /* 말랑(cute) 테마 — Reading Diary 앱의 디자인 토큰에서 가져옴. 모든 개발 보고서가 같은 모양을 쓴다. */
+  :root {
+    --sidebar-w: 268px;
+    --bg: #FFF3EA; --surface: #FFFFFF; --surface-2: #FFF0F3;
+    --ink: #45303C; --ink-2: #86606F; --line: #F6D9E1;
+    --primary: #CF3D67; --primary-text: #C0365E; --focus: #C0365E;
+    --radius: 24px; --radius-sm: 16px;
+    --shadow: 0 4px 0 #F6DCCF;
+    --side-active-bg: #FFE3EA; --side-active-ink: #B8325A;
+    --brand-bg: #FFD3DE; --brand-ink: #B8325A;
+    --quote-bg: #E6F8F0; --quote-line: #BFEBD8; --quote-ink: #23453A;
+    --timer-bg: #FFE7A6; --timer-line: #F5D27A;
+    --font-display: "Gowun Dodum", "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --font-ui: "Pretendard Variable", "Pretendard", -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--font-ui); font-size: 15px; line-height: 1.7; color: var(--ink);
+    background-color: var(--bg);
+    background-image: radial-gradient(#F6D8C8 1.3px, transparent 1.6px); background-size: 22px 22px;
+    word-break: keep-all; overflow-wrap: anywhere;
+  }
+  .layout { display: flex; min-height: 100vh; }
+
+  /* 왼쪽 패널: 둥근 흰 카드 + 알약 모양 메뉴 */
+  nav.sidebar {
+    position: sticky; top: 16px; align-self: flex-start; width: var(--sidebar-w); flex-shrink: 0;
+    height: calc(100vh - 32px); overflow-y: auto; margin: 16px 0 16px 16px; padding: 22px 14px;
+    background: var(--surface); border: 2px solid #F8DCE4; border-radius: 28px; box-shadow: 0 5px 0 #F6DCCF;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px 4px; }
+  .brand-mark { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--brand-bg); color: var(--brand-ink); flex: none; }
+  .brand-mark svg { width: 22px; height: 22px; }
+  nav.sidebar h1 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 18px; line-height: 1.25; }
+  nav.sidebar h1 small { display: block; font-family: var(--font-ui); font-size: 11.5px; font-weight: 700; color: var(--ink-2); }
+  nav.sidebar .meta { margin: 10px 8px 14px; padding: 6px 12px; border-radius: 999px; background: var(--timer-bg); font-size: 12px; font-weight: 700; color: #6A4A12; display: inline-block; transform: rotate(-1.5deg); }
+  nav.sidebar .links { display: flex; flex-direction: column; gap: 2px; }
+  nav.sidebar a {
+    display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 7px 12px; border-radius: 999px;
+    font-size: 13.5px; font-weight: 600; color: var(--ink); text-decoration: none;
+  }
+  nav.sidebar a .num { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--surface-2); color: var(--ink-2); font-size: 11.5px; font-weight: 800; flex: none; }
+  nav.sidebar a:hover { background: var(--surface-2); }
+  nav.sidebar a.active { background: var(--side-active-bg); color: var(--side-active-ink); }
+  nav.sidebar a.active .num { background: var(--primary); color: #fff; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .nav-toggle { display: none; }
+
+  /* 본문 */
+  main { flex: 1; min-width: 0; padding: 32px 40px 80px; max-width: 980px; }
+  .hero { position: relative; margin: 8px 0 32px; padding: 30px 32px 26px; background: var(--surface); border: 2px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .hero::before { content: ""; position: absolute; top: -12px; left: 50%; width: 120px; height: 26px; margin-left: -60px; background: rgba(255,190,210,.75); transform: rotate(-4deg); border-radius: 3px; }
+  .hero h1 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 400; font-size: 30px; line-height: 1.3; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { padding: 4px 12px; border-radius: 999px; background: var(--quote-bg); border: 1.5px solid var(--quote-line); color: var(--quote-ink); font-size: 13px; font-weight: 700; }
+
+  main section.card { margin-bottom: 28px; padding: 26px 30px 22px; background: var(--surface); border: 2px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); scroll-margin-top: 24px; }
+  main h2 { margin: 0 0 14px; padding-bottom: 10px; font-family: var(--font-display); font-weight: 400; font-size: 23px; border-bottom: 2px dashed var(--line); }
+  main h3 { margin: 22px 0 8px; font-size: 16.5px; color: var(--primary-text); }
+  main p { margin: 10px 0; }
+  main ul, main ol { margin: 8px 0 12px; padding-left: 22px; }
+  main li { margin: 4px 0; }
+  main li::marker { color: var(--primary); }
+  main strong { color: var(--primary-text); }
+  .table-wrap { overflow-x: auto; margin: 12px 0; border: 2px solid var(--line); border-radius: var(--radius-sm); }
+  main table { border-collapse: collapse; width: 100%; }
+  main th, main td { padding: 9px 12px; font-size: 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  main th { background: var(--surface-2); font-weight: 700; white-space: nowrap; }
+  main tr:last-child td { border-bottom: 0; }
+  main td + td, main th + th { border-left: 1px solid var(--line); }
+  main code { background: var(--quote-bg); color: var(--quote-ink); padding: 1px 6px; border-radius: 6px; font-size: 0.88em; }
+  main pre { background: #FFF8E1; border: 2px solid var(--timer-line); color: var(--ink); padding: 16px 18px; border-radius: var(--radius-sm); overflow-x: auto; line-height: 1.55; box-shadow: 0 4px 0 #EFC765; }
+  main pre code { background: none; color: inherit; padding: 0; font-size: 13px; }
+  .foot { text-align: center; color: var(--ink-2); font-size: 12.5px; }
+
+  @media (max-width: 860px) {
+    .layout { flex-direction: column; }
+    nav.sidebar { position: sticky; top: 0; z-index: 5; align-self: stretch; width: auto; height: auto; max-height: 100vh; margin: 0; padding: 10px 16px; border-radius: 0 0 24px 24px; border-top: 0; }
+    .brand { padding: 0; }
+    nav.sidebar .meta { display: none; }
+    .nav-toggle { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; min-height: 44px; padding: 0 16px; border: 2px solid var(--line); border-radius: 999px; background: var(--surface-2); color: var(--ink); font: 700 13.5px var(--font-ui); cursor: pointer; }
+    nav.sidebar .links { display: none; margin-top: 10px; }
+    nav.sidebar.open .links { display: flex; }
+    main { padding: 20px 16px 60px; }
+    .hero { padding: 24px 20px 20px; }
+    .hero h1 { font-size: 24px; }
+    main section.card { padding: 20px 18px 16px; scroll-margin-top: 80px; }
+  }
+  @media print {
+    body { background: #fff; }
+    nav.sidebar { display: none; }
+    main { max-width: none; padding: 0; }
+    main section.card, .hero { box-shadow: none; break-inside: avoid-page; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="목차">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+      </span>
+      <h1>지금 열린 도서관<small>Library Now</small></h1>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">목차</button>
+    </div>
+    <div class="meta">개발 보고서 v1 · 2026-11-21</div>
+    <div class="links" id="navLinks">
+      <a href="#sec-1"><span class="num">1</span>개요</a>
+      <a href="#sec-2"><span class="num">2</span>목표 및 배경</a>
+      <a href="#sec-3"><span class="num">3</span>주요 기능</a>
+      <a href="#sec-4"><span class="num">4</span>기술 스택 및 아키텍처</a>
+      <a href="#sec-5"><span class="num">5</span>개발 과정 (타임라인)</a>
+      <a href="#sec-6"><span class="num">6</span>주요 의사결정과 이유</a>
+      <a href="#sec-7"><span class="num">7</span>문제 해결 기록</a>
+      <a href="#sec-8"><span class="num">8</span>보안/성능 고려사항</a>
+      <a href="#sec-9"><span class="num">9</span>테스트 및 검증</a>
+      <a href="#sec-10"><span class="num">10</span>배포</a>
+      <a href="#sec-11"><span class="num">11</span>알려진 한계</a>
+      <a href="#sec-12"><span class="num">12</span>향후 개선 아이디어 / 업데이트 계획</a>
+    </div>
+  </nav>
+  <main id="content">
+    <header class="hero">
+      <h1>지금 열린 도서관 개발 보고서 (v1)</h1>
+      <div class="chips"><span class="chip">작성일: 2026-11-21</span><span class="chip">버전: v1</span></div>
+    </header>
+    <section id="sec-1" class="card">
+      <h2>1. 개요</h2>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>내용</th></tr></thead><tbody><tr><td>앱 이름</td><td>지금 열린 도서관 (Library Now)</td></tr><tr><td>한 줄 소개</td><td>지금 문 연 서울 공공도서관과 "지금 가면 몇 시간 이용할 수 있는지"를 지도로 보여 주는 웹앱</td></tr><tr><td>형태</td><td>반응형 웹앱(데스크톱·태블릿·스마트폰), 홈 화면 설치(PWA), 로그인 없음</td></tr><tr><td>대상 사용자</td><td>개발자 본인(구로구 인근에서 책을 빌리거나 공부하러 도서관을 다니는 사람), 포트폴리오 방문자</td></tr><tr><td>배포 주소</td><td>https://poguni.github.io/library-now/</td></tr><tr><td>개발 기간</td><td>2026-11-18 ~ 2026-11-21 (4일, 커밋 24개)</td></tr><tr><td>데이터 범위</td><td>서울 25개 구 공공도서관 254곳 (구로구·영등포구·양천구 34곳은 홈페이지와 대조해 검수, 나머지 220곳은 공공데이터 자동 변환)</td></tr></tbody></table></div>
+    </section>
+    <section id="sec-2" class="card">
+      <h2>2. 목표 및 배경</h2>
+<p>도서관에 가려고 할 때 자주 겪는 불편에서 출발했습니다.</p>
+<ol><li><strong>헛걸음</strong>: 휴관일이 "매주 월요일", "매월 둘째·넷째 월요일", "법정공휴일"처럼 도서관마다 다르고, 공휴일이 끼면 더 헷갈립니다.</li><li><strong>자료실과 열람실의 시간 차이</strong>: 책을 빌리는 자료실은 18시에 닫아도 열람실은 22시까지 여는 곳이 많습니다. 목적에 따라 답이 달라집니다.</li><li><strong>흩어진 정보</strong>: 구립·시립·교육청 도서관마다 홈페이지가 달라 한눈에 비교하기 어렵습니다.</li><li><strong>구 경계</strong>: 경계 근처에 살면 다른 구의 도서관이 더 가까울 수 있습니다.</li></ol>
+<p>핵심 가치는 <strong>"앱을 열고 3초 안에 지금 갈 수 있는 도서관을 아는 것"</strong>입니다. 단순히 "운영 중"을 보여 주는 데서 그치지 않고, 출발지에서 도착할 시각을 추정해 <strong>"지금 가면 ○시간 ○분 이용 가능"</strong>을 계산하는 것이 이 앱만의 특징입니다. 비용은 0원으로 유지합니다(서버·DB·유료 API 없음).</p>
+    </section>
+    <section id="sec-3" class="card">
+      <h2>3. 주요 기능</h2>
+<h3>지도와 상태</h3>
+<ul><li>도서관 지도: 상태별 색·기호·글자를 함께 쓴 마커, 확대 단계에 따른 이름표, 가까운 마커 묶기(숫자 배지)</li><li>운영 상태 배지: 운영 중 ●, 곧 닫힘 ◔, 곧 열림 ◐, 운영 종료 ○, 휴관 ✕, 운영시간 확인 필요</li><li>이용 모드: 책 빌리기(자료실) / 공부하기(열람실)를 나눠 판단</li><li>지도 종류 선택: OpenStreetMap(기본) 또는 카카오맵(설정에서 선택, 불러오지 못하면 기본 지도로 전환)</li></ul>
+<h3>지금 가면 몇 시간</h3>
+<ul><li>출발지: 현재 위치, 집, 직장(지도에서 지정, 브라우저에만 저장)</li><li>거리와 이동 시간 추정(직선거리 × 우회 계수, 도보·대중교통 구분, "추정" 표기)</li><li>도착 시각 기준 남은 이용 시간, 도착하면 마감이면 다음 개관 안내</li><li>기준 시각 바꾸기: 다른 날짜·시각을 골라 그때 기준으로 다시 계산</li></ul>
+<h3>찾고 비교하기</h3>
+<ul><li>목록: 이름 검색(띄어쓰기 무시), 필터(전체·지금 열린 곳만·즐겨찾기·검수된 곳만), 정렬(거리·남은 시간·이름)</li><li>지역 선택: 25개 구를 패널에서 켜고 끄기</li><li>휴관일 달력: 즐겨찾기 도서관의 휴관일을 색 점으로 겹쳐 보기, 즐겨찾기가 없으면 날짜별 문 여는 곳 수</li><li>도서관 상세: 요일별 운영시간 표(자료실·열람실), 정기 휴관 규칙과 원문, 미니 달력, 데이터 출처·기준일</li></ul>
+<h3>이동과 공유</h3>
+<ul><li>길찾기: 카카오맵·네이버 지도로 넘기는 링크, 주소 복사</li><li>링크 공유: 선택한 도서관과 이용 모드를 주소에 담아 공유(위치·출발지는 담지 않음)</li><li>소장 도서 검색: 검수된 34곳은 확인한 자료 검색 페이지로, 나머지는 홈페이지로 연결하는 카드</li></ul>
+<h3>개인화와 편의</h3>
+<ul><li>즐겨찾기, 내 메모, 임시 휴관 직접 입력(상태·달력 계산에 반영)</li><li>화면 테마 3종: 서재(기본)·말랑·모노</li><li>글자 크기 3단계(보통·크게·아주 크게), 아이콘 버튼 툴팁</li><li>내 데이터 내보내기·가져오기(JSON), 초기화</li><li>홈 화면 설치와 오프라인 보기(도서관 데이터는 저장, 지도 타일은 정책상 저장하지 않음)</li></ul>
+    </section>
+    <section id="sec-4" class="card">
+      <h2>4. 기술 스택 및 아키텍처</h2>
+<h3>기술 스택</h3>
+<div class="table-wrap"><table><thead><tr><th>구분</th><th>사용 기술</th><th>선택 이유</th></tr></thead><tbody><tr><td>화면</td><td>Vite 8, React 19, TypeScript(strict)</td><td>빠른 개발 서버와 빌드, 타입으로 시간 계산 로직의 실수를 줄임</td></tr><tr><td>지도</td><td>Leaflet(직접 사용), leaflet.markercluster, 카카오맵 JavaScript SDK</td><td>OSM은 키 없이 무료. react-leaflet 없이 직접 써서 카카오맵과 같은 인터페이스(<code>MapProvider</code>) 뒤에 둠</td></tr><tr><td>스타일</td><td>CSS Modules + CSS 변수(디자인 토큰)</td><td>테마 3종을 토큰만 바꿔 적용. UI 라이브러리를 쓰지 않음</td></tr><tr><td>아이콘</td><td>lucide-react</td><td>가볍고 선 굵기를 맞추기 쉬움</td></tr><tr><td>데이터 처리</td><td>Node + TypeScript(tsx), papaparse</td><td>공공데이터 CSV를 빌드 때 JSON으로 변환</td></tr><tr><td>PWA</td><td>vite-plugin-pwa</td><td>홈 화면 설치와 데이터 오프라인 보기</td></tr><tr><td>테스트</td><td>Vitest(도메인 로직), Playwright(화면)</td><td>시간 계산은 단위 테스트로, 화면은 크기·테마별로 확인</td></tr><tr><td>배포</td><td>GitHub Actions → GitHub Pages</td><td>무료, 정적 파일만으로 동작</td></tr></tbody></table></div>
+<h3>구조</h3>
+<p>앱은 실행 중에 외부 API를 부르지 않는 <strong>정적 방식</strong>입니다. 데이터는 빌드할 때 한 번 만들고, 앱은 <code>public/data/*.json</code>만 읽습니다.</p>
+<pre><code>data/raw/        공공데이터 원본 CSV (수정 금지)
+data/overrides/  검수한 34곳의 자료실·열람실 시간과 휴관 규칙
+data/holidays/   연도별 공휴일 수기 정리 (2026, 2027)
+      │  npm run data:build  (auto.ts 자동 변환 → merge.ts 병합 → validate.ts 검증)
+      ▼
+public/data/     libraries.json (254곳, 약 270KB), meta.json, holidays.json
+      │
+      ▼
+src/domain/      시간 계산·휴관 판정·이동 시간 추정 (순수 함수 + 테스트)
+src/map/         MapProvider 인터페이스, Leaflet 구현, 카카오맵 구현, 마커 묶기
+src/state/       설정·즐겨찾기·출발지·메모·테마·글자 크기 저장 (localStorage)
+src/components/  상단 바, 목록, 지도, 상세, 달력, 설정, 바텀 시트 등</code></pre>
+<ul><li>모든 시간 계산은 기기 시간대와 상관없이 <strong>Asia/Seoul</strong> 기준입니다.</li><li>상태 판정 순서: 임시 휴관 → 정기 휴관 → 공휴일 → 요일·계절별 운영시간.</li><li>데스크톱(1200px 이상)은 목록·지도·상세 3단, 태블릿은 접히는 패널, 스마트폰은 바텀 시트와 아래 탭 바를 씁니다.</li></ul>
+    </section>
+    <section id="sec-5" class="card">
+      <h2>5. 개발 과정 (타임라인)</h2>
+<h3>M0. 준비와 데이터 수집 (2026-11-18)</h3>
+<ul><li>전국도서관표준데이터와 서울시 공공도서관 현황정보 원본 CSV 추가</li><li>구로구·영등포구·양천구 도서관 홈페이지를 하나씩 대조해 34곳의 자료실·열람실 시간과 휴관 규칙을 <code>overrides</code>로 정리하고 교차검증 기록을 남김</li><li>Vite + React + TS 초기 설정, 테마 토큰 3종, GitHub Pages 배포</li><li>데이터 빌드 스크립트와 검증 단계 완성</li></ul>
+<h3>M1. 지도와 상태 표시 (2026-11-18)</h3>
+<ul><li>휴관 판정·운영 상태·이용 가능 시간 계산 엔진과 단위 테스트</li><li>지도·목록·상세 3단 화면, 이용 모드, 상태 배지</li></ul>
+<h3>M2. 출발지와 남은 이용 시간 (2026-11-18)</h3>
+<ul><li>출발지(현재 위치·집·직장), 이동 시간 추정, 도착 기준 이용 시간</li><li>필터·정렬, 카카오맵·네이버 지도 길찾기 링크</li></ul>
+<h3>M3. 상세, 달력, 반응형 (2026-11-19)</h3>
+<ul><li>휴관 달력, 즐겨찾기, 설정 화면, 스마트폰 바텀 시트</li><li>Playwright 화면 테스트 도입(1440×900·390×844 × 테마 3종)</li></ul>
+<h3>M4. 다듬기와 배포 (2026-11-19)</h3>
+<ul><li>기준 시각 바꾸기, 내 메모·임시 휴관 입력, 내 데이터 내보내기·가져오기</li><li>홈 화면 설치(PWA)·오프라인 보기, README와 스크린샷</li></ul>
+<h3>M5. 확장 (2026-11-20 ~ 11-21)</h3>
+<ul><li>링크 공유, 카카오맵 키 환경 변수 준비</li><li>서울 25개 구로 확대(220곳 자동 변환·미검수 표시), 지역 선택 패널, 마커 묶기, "검수된 곳만" 필터</li><li>목록 필터를 한 줄로 정리('21시 이후' 필터 제거)</li><li>소장 도서 검색 링크 → 테마별 모양을 입힌 카드형 링크로 개선</li><li>카카오맵 지도 추가와 카카오맵용 마커 묶기</li><li>글자 크기 3단계, 아이콘 버튼 툴팁, 큰 글자에서 깨지던 화면 수정</li><li>설정의 데이터 정보 요약(범위·검수 현황·기준일 범위)</li></ul>
+<h3>마무리 정리 (2026-11-21)</h3>
+<ul><li>PRD v0.4·DESIGN v0.3을 실제 앱에 맞게 갱신, 만들지 않은 기능은 "(미구현)"으로 표시</li><li>스마트폰 상단 바 줄바꿈 수정, 화면 문구 맞춤법 점검과 수정</li></ul>
+    </section>
+    <section id="sec-6" class="card">
+      <h2>6. 주요 의사결정과 이유</h2>
+<div class="table-wrap"><table><thead><tr><th>결정</th><th>이유</th></tr></thead><tbody><tr><td>서버·DB 없는 정적 방식</td><td>비용 0원, 개인 사용, GitHub Pages만으로 배포. 데이터는 빌드 때 JSON으로 만듦</td></tr><tr><td>자료실과 열람실을 항상 따로 계산</td><td>"책 빌리기"와 "공부하기"의 답이 다르기 때문. 열람실이 없으면 비워 둠</td></tr><tr><td>운영시간을 추측해서 채우지 않음</td><td>틀린 값은 헛걸음으로 이어짐. 해석하지 못한 값은 "운영시간 확인 필요"로 표시</td></tr><tr><td>25개 구를 한 번에 넣고 "미검수" 표시</td><td>220곳을 모두 홈페이지와 대조하려면 시간이 오래 걸림. 범위는 먼저 넓히고 검수는 구 단위로 천천히</td></tr><tr><td>공휴일은 API 대신 수기 JSON</td><td>키 발급과 실행 중 API 호출을 피함. 연 1회 정리로 충분</td></tr><tr><td>이동 시간은 직선거리 기반 추정</td><td>경로 API는 키·비용이 듦. "추정"으로 표기하고 정확한 경로는 외부 지도 앱으로 넘김</td></tr><tr><td>Leaflet을 react-leaflet 없이 직접 사용</td><td>카카오맵과 같은 <code>MapProvider</code> 인터페이스 뒤에 두기 쉬움</td></tr><tr><td>카카오맵은 선택 사항</td><td>키가 없거나 불러오지 못해도 OSM으로 동작하게 해 장애에 강하게 함</td></tr><tr><td>책 검색은 링크 방식</td><td>도서관 정보나루 API는 키와 서버 중계가 필요해 정적 방식과 맞지 않음. 먼저 도서관 검색 페이지로 연결</td></tr><tr><td>기본 지도 중심은 신도림역 부근</td><td>구로·영등포·양천 세 구의 가운데. 집 좌표는 Public 저장소에 넣지 않음</td></tr><tr><td>'21시 이후' 필터 제거</td><td>필터 줄이 길어지고, 남은 시간순 정렬로 같은 목적을 이룰 수 있음</td></tr><tr><td>커밋은 사용자가 직접</td><td>개발 과정을 사용자가 확인하며 기록을 관리하기 위함</td></tr></tbody></table></div>
+    </section>
+    <section id="sec-7" class="card">
+      <h2>7. 문제 해결 기록</h2>
+<h3>공공데이터의 운영시간 형식이 제각각</h3>
+<ul><li>문제: 자동 변환한 220곳 중 휴관일 문장("매월첫째셋째월요일+정부지정공휴일", "월(격주)+일(2·4주)")과 "00:00~00:00" 같은 빈 시간이 섞여 있었습니다.</li><li>해결: 해석할 수 있는 규칙만 변환하고, 해석하지 못한 22곳은 "확인 필요"로 비워 두었습니다. 빌드할 때마다 <code>data/auto-review.md</code>에 검수 목록과 사유를 자동으로 남깁니다.</li></ul>
+<h3>카카오맵에는 Leaflet의 마커 묶기를 쓸 수 없음</h3>
+<ul><li>문제: leaflet.markercluster는 Leaflet 전용이라 카카오맵에서는 마커가 겹쳤습니다.</li><li>해결: 화면 좌표 기준으로 가까운 마커를 묶는 함수(<code>groupPoints</code>)를 따로 만들고 단위 테스트를 붙였습니다. 고른 도서관은 묶음에서 빼서 늘 보이게 했습니다.</li></ul>
+<h3>테마 필터가 카카오맵 타일에만 걸리게 하기</h3>
+<ul><li>문제: 테마별 지도 색 필터를 카카오맵 전체에 걸면 마커와 팝업까지 색이 바뀌었습니다.</li><li>해결: 타일 이미지만 고르는 선택자(<code>.ln-kakao img[src*='/api/v1/tile/']</code>)에 필터를 적용했습니다.</li></ul>
+<h3>큰 글자에서 화면이 깨짐</h3>
+<ul><li>문제: 글자 크기를 키우자 긴 도서관 이름, 카드 장식, 길찾기 버튼이 넘쳤습니다.</li><li>해결: 이름 줄바꿈을 허용하고 버튼 높이를 글자에 맞춰 늘렸으며, 테마 장식이 크기·배치를 바꾸지 않도록 정리했습니다.</li></ul>
+<h3>스마트폰 상단 바에 빈 줄이 생김</h3>
+<ul><li>문제: 390px 폭에서 "지금 · 11월 21일(토) 10:29" 칩이 길어 글자 크기 버튼이 혼자 다음 줄로 내려가 상단 바가 약 200px가 되었습니다.</li><li>해결: 스마트폰에서는 시각을 "11.21 10:29"로 줄이고 앱 이름 크기를 고정했습니다. 상단 바가 보통·크게에서 159px, 아주 크게에서 203px로 줄었습니다(기존 201px·250px).</li></ul>
+<h3>개발 환경 문제</h3>
+<ul><li>전날 켜 둔 개발 서버가 5173 포트를 차지해 새 서버가 뜨지 않은 일이 있어, 확인 뒤 정리했습니다.</li><li>공공데이터 사이트 접속이 막히는 경우를 대비해 원본 CSV를 직접 내려받아 <code>data/raw/</code>에 두는 방식으로 정했습니다.</li></ul>
+    </section>
+    <section id="sec-8" class="card">
+      <h2>8. 보안/성능 고려사항</h2>
+<ul><li><strong>개인정보</strong>: 위치와 집·직장 좌표는 브라우저에만 저장하고 밖으로 보내지 않습니다. 예외는 사용자가 길찾기 링크를 누를 때뿐입니다. 공유 링크에도 위치는 담지 않습니다.</li><li><strong>키 관리</strong>: 카카오맵 JavaScript 키는 <code>.env</code>(git 제외)와 GitHub Actions 비밀 값으로만 다룹니다. 키가 없으면 카카오맵 선택지를 숨깁니다.</li><li><strong>저장 실패 대비</strong>: localStorage 읽기·쓰기를 모두 <code>try/catch</code>로 감싸 저장이 막힌 브라우저에서도 앱이 동작합니다. 저장 형식에는 버전 번호를 둡니다.</li><li><strong>지도 타일 정책</strong>: OSM 출처를 표기하고, 서비스 워커에서 지도 타일을 저장하지 않습니다. 카카오맵 SDK·타일도 저장하지 않습니다.</li><li><strong>성능</strong>: 도서관 데이터는 254곳 약 270KB로 목표(서울 전체 500KB 이하) 안에 있습니다. 카카오맵 SDK는 사용자가 고를 때만 불러옵니다.</li></ul>
+    </section>
+    <section id="sec-9" class="card">
+      <h2>9. 테스트 및 검증</h2>
+<div class="table-wrap"><table><thead><tr><th>구분</th><th>내용</th><th>결과 (2026-11-21)</th></tr></thead><tbody><tr><td>단위 테스트(Vitest)</td><td>휴관 판정, 상태, 이용 가능 시간, 이동 시간, 달력, 목록 필터·정렬, 링크 공유, 마커 묶기, 설정·메모 저장, 데이터 변환</td><td>12개 파일 127개 통과</td></tr><tr><td>화면 테스트(Playwright)</td><td>1440×900·390×844 × 테마 3종 화면, 기준 시각, 메모·임시 휴관, 카카오맵 전환, 글자 크기, 툴팁, 마커 묶음, 오프라인</td><td>20개 통과</td></tr><tr><td>데이터 검증</td><td><code>npm run data:build</code>가 필수 값·시간 형식·좌표를 검사하고 실패하면 중단</td><td>통과</td></tr><tr><td>빌드·코드 검사</td><td><code>npm run build</code>(타입 검사 포함), <code>npm run lint</code>(ESLint·Prettier)</td><td>통과</td></tr><tr><td>직접 확인</td><td>화면을 바꿀 때마다 두 화면 크기와 테마 3종으로 확인, 가로 스크롤 없음 확인</td><td>확인</td></tr></tbody></table></div>
+    </section>
+    <section id="sec-10" class="card">
+      <h2>10. 배포</h2>
+<ul><li>GitHub Actions가 <code>main</code>에 올라온 코드를 빌드해 GitHub Pages에 배포합니다.</li><li>배포 주소: https://poguni.github.io/library-now/</li><li>카카오맵 키는 저장소 비밀 값으로 빌드에 넣습니다. 키가 없으면 OSM만 보입니다.</li></ul>
+    </section>
+    <section id="sec-11" class="card">
+      <h2>11. 알려진 한계</h2>
+<ul><li><strong>미검수 220곳</strong>: 22개 구 도서관은 공공데이터 값뿐이라 실제와 다를 수 있고 자료실·열람실 구분이 없습니다. 22곳은 운영시간을 알 수 없어 "확인 필요"로 표시됩니다.</li><li><strong>임시 휴관</strong>: 공사·행사·시험 기간 연장 운영은 데이터에 없습니다. 홈페이지 공지를 확인하거나 직접 입력해야 합니다.</li><li><strong>이동 시간은 추정값</strong>입니다. 실제 대중교통 경로와 다를 수 있습니다.</li><li><strong>실제 기기 확인 남음</strong>: 길찾기 링크의 대중교통 탭, 공유 창, 홈 화면 설치를 PC·Android·iPhone에서 아직 확인하지 못했습니다.</li><li><strong>데이터 라이선스 칸</strong>: 전국도서관표준데이터의 이용 조건(공공누리 유형)을 확인하지 못해 <code>meta.json</code>의 라이선스 칸이 비어 있습니다.</li><li><strong>미구현 기능</strong>: 내 주변 반경 보기, 주말 운영 필터, 키보드 단축키, 구 경계선, 다크 모드.</li></ul>
+    </section>
+    <section id="sec-12" class="card">
+      <h2>12. 향후 개선 아이디어 / 업데이트 계획</h2>
+<h3>다음 업데이트: 도서 통합 검색</h3>
+<p>책 제목을 한 번 입력하면 여러 도서관의 소장 여부를 함께 찾고, <strong>"이 책이 있고 지금 문 연 도서관"</strong>을 지도와 목록에 보여 주는 기능입니다. 지금은 도서관마다 검색 페이지로 따로 들어가야 하는데, 이를 한곳에서 끝내는 것이 목표입니다.</p>
+<ol><li><strong>1단계: 구로구·영등포구·양천구 중심</strong><ul><li>홈페이지를 검수한 34곳부터 시작합니다.</li><li>검색 결과에 앱의 장점인 운영 상태와 "지금 가면 몇 시간"을 함께 붙여, 책이 있는 도서관 중 지금 갈 수 있는 곳을 먼저 보여 줍니다.</li></ul></li><li><strong>2단계: 서울시 통합 검색</strong><ul><li>25개 구 254곳으로 넓힙니다. 미검수 도서관의 검수와 함께 진행합니다.</li></ul></li></ol>
+<p>구현 전에 정해야 할 것:</p>
+<ul><li><strong>소장 정보를 어디서 가져올지</strong>: 도서관 정보나루 API는 소장 도서관 조회가 가능하지만 인증키가 필요하고, 브라우저에서 바로 부를 수 있는지(CORS)와 하루 호출 한도를 확인해야 합니다.</li><li><strong>정적 방식 원칙과의 관계</strong>: 키를 공개 저장소·브라우저에 드러내지 않으려면 작은 중계 서버(서버리스 함수)가 필요할 수 있습니다. 이 경우 "서버 없음" 원칙을 바꿀지 결정이 필요합니다.</li><li><strong>서버 없이 가는 대안</strong>: 검색어를 넣은 상태로 각 도서관(또는 구별 통합 도서관)의 검색 페이지를 여는 방식. 각 검색 페이지가 주소에 검색어를 받는지 확인이 필요합니다.</li><li><strong>화면 위치</strong>: 상단 바의 검색 진입점, 결과를 목록 필터("이 책이 있는 곳")로 보여 줄지 별도 화면으로 보여 줄지.</li></ul>
+<h3>다음에 하면 좋을 것</h3>
+<ul><li>미검수 220곳 홈페이지 대조: 구 단위로 차례로 검수하고 <code>overrides</code>로 옮기기. "확인 필요" 22곳부터 우선</li><li>실제 기기 확인: 길찾기 링크, 공유 창, 홈 화면 설치를 PC·Android·iPhone에서 확인</li><li>데이터 라이선스(공공누리 유형) 확인 후 <code>meta.json</code>과 설정 화면 출처에 표기</li><li>2027년 이후 공휴일 JSON 추가와 데이터 월 1회 갱신 절차 정리</li></ul>
+<h3>여유가 있으면</h3>
+<ul><li>다크 모드(테마 3종 각각의 어두운 버전)</li><li>주말 운영 필터, "내 주변 반경" 보기</li><li>구 경계선 표시</li><li>키보드 단축키(목록 이동, 모드 전환)</li><li>'아주 크게' 글자에서 스마트폰 상단 바의 출발·지역 칩이 두 줄이 되는 문제 정리</li></ul>
+<h3>아이디어 수준</h3>
+<ul><li>시험 기간 연장 운영처럼 자주 바뀌는 정보를 사용자가 한 번에 입력하는 "기간 일정" 기능</li><li>즐겨찾기 도서관이 곧 문을 닫을 때 알려 주는 알림(PWA 알림 권한 필요)</li><li>자주 가는 시간대를 기억해 "평소 가는 시각" 기준으로 보여 주기</li></ul>
+    </section>
+    <p class="foot">지금 열린 도서관 · 개발 보고서 v1</p>
+  </main>
+</div>
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('navToggle');
+  const links = document.querySelectorAll('nav.sidebar a');
+  const sections = [...links].map(a => document.querySelector(a.getAttribute('href')));
+  const setActive = (id) => links.forEach(a => {
+    const on = a.getAttribute('href') === '#' + id;
+    a.classList.toggle('active', on);
+    if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => { if (entry.isIntersecting) setActive(entry.target.id); });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach((el) => el && observer.observe(el));
+  // 모바일: 목차 접기·펼치기, 항목을 누르면 접는다
+  toggle.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  links.forEach(a => a.addEventListener('click', () => {
+    setActive(a.getAttribute('href').slice(1));
+    sidebar.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+  if (sections[0]) setActive(sections[0].id);
+</script>
+</body>
+</html>
