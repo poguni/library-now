@@ -88,7 +88,7 @@ export function ClosureCalendar(props: Props) {
         </ul>
       ) : (
         <p className={styles.note}>
-          즐겨찾기가 없어 날짜마다 문 여는 도서관 수를 보여 줍니다 ({ROOM_NAME[room]} 기준).
+          즐겨찾기가 없어 날짜마다 문 여는 도서관 수를 보여 줍니다({ROOM_NAME[room]} 기준).
         </p>
       )}
 

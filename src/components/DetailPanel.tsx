@@ -193,7 +193,7 @@ function Summary({
       <section className={styles.sec}>
         <h3 className={`${styles.secTitle} ln-sec-title`}>즐겨찾기</h3>
         {favRows.length === 0 ? (
-          <p className={styles.hint}>목록이나 상세에서 별을 누르면 여기에 모아 봅니다.</p>
+          <p className={styles.hint}>목록이나 상세에서 별을 누르면 여기에 모입니다.</p>
         ) : (
           <ul className={styles.favs}>
             {favRows.map((r) => (
@@ -431,7 +431,7 @@ function HoursTable({ lib, today }: { lib: Library; today: DateKey }) {
           <tr key={key} data-today={key === todayKey || undefined}>
             <th scope="row">
               {label}
-              {key === todayKey && ' (오늘)'}
+              {key === todayKey && '(오늘)'}
             </th>
             <td>{cell(lib.rooms.lending, lending, key)}</td>
             <td>{cell(lib.rooms.reading, reading, key)}</td>

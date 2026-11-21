@@ -67,7 +67,7 @@ export function MyNotes({ lib, today, memo, closures, ...props }: Props) {
                     {c.to !== c.from && ` ~ ${formatDate(c.to)}`}
                   </b>{' '}
                   {c.reason}
-                  {hasReading && c.rooms.length === 1 && ` (${ROOM_NAME[c.rooms[0]!]}만)`}
+                  {hasReading && c.rooms.length === 1 && `(${ROOM_NAME[c.rooms[0]!]}만)`}
                 </span>
                 <button
                   type="button"
@@ -105,7 +105,7 @@ export function MyNotes({ lib, today, memo, closures, ...props }: Props) {
           />
         </label>
         <label className={`${styles.field} ${styles.wide}`}>
-          <span>사유 (선택)</span>
+          <span>사유(선택)</span>
           <input
             type="text"
             maxLength={CLOSURE_REASON_MAX}

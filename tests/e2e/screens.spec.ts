@@ -161,7 +161,7 @@ test('내 메모·임시 휴관은 저장되어 상태에 반영되고 파일로
   await page.getByRole('button', { name: '꿈마을도서관', exact: true }).click();
   const panel = page.getByRole('tabpanel');
   await panel.getByLabel('메모').fill('3층 창가 자리 좋음');
-  await panel.getByLabel('사유 (선택)').fill('시설 공사');
+  await panel.getByLabel('사유(선택)').fill('시설 공사');
   await panel.getByRole('button', { name: '휴관 추가' }).click();
   await expect(panel.locator('.ln-badge').first()).toContainText('오늘 휴관');
   await expect(panel.getByText('시설 공사').first()).toBeVisible();
@@ -355,7 +355,9 @@ test('오프라인이면 지도에 안내를 보여 주고 목록은 그대로 (
   await page.setViewportSize({ width: 390, height: 844 });
   await open(page);
   await context.setOffline(true);
-  await expect(page.getByText('오프라인입니다. 지도 배경은 연결되면 보입니다.')).toBeVisible();
+  await expect(
+    page.getByText('오프라인입니다. 지도 배경은 인터넷에 연결되면 보입니다.'),
+  ).toBeVisible();
   await expect(page.locator('.ln-card').first()).toBeVisible();
   await context.setOffline(false);
   await expect(page.getByText('오프라인입니다.', { exact: false })).toBeHidden();

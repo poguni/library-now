@@ -42,7 +42,7 @@ export function describeReason(reason: ClosedReason): string {
     case 'monthly':
       return `매월 ${NTH[reason.nth]} ${WEEKDAYS[reason.weekday]}요일`;
     case 'holiday':
-      return `공휴일 (${reason.name})`;
+      return `공휴일(${reason.name})`;
     case 'noHours':
       return '오늘 운영하지 않음';
   }
@@ -81,7 +81,7 @@ export function describeClosedRule(rule: ClosedRule): string {
   if (holiday) parts.push(holiday);
   if (parts.length === 0) return '정기 휴관 없음';
   const text = parts.join(', ');
-  return rule.appliesTo.length === 1 ? `${text} (${ROOM_NAME[rule.appliesTo[0]!]}만)` : text;
+  return rule.appliesTo.length === 1 ? `${text}(${ROOM_NAME[rule.appliesTo[0]!]}만)` : text;
 }
 
 export interface StatusView {

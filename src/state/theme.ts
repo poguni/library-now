@@ -33,7 +33,7 @@ export const THEME_FONTS: Record<Theme, string> = {
 export const THEME_LABEL: Record<Theme, { name: string; desc: string }> = {
   library: { name: '서재', desc: '종이 바탕, 짙은 녹색, 명조 제목' },
   pastel: { name: '말랑', desc: '파스텔, 둥글고 귀여운 느낌' },
-  mono: { name: '모노', desc: '검정·회색과 코발트 블루' },
+  mono: { name: '모노', desc: '검정·회색과 코발트블루' },
 };
 
 /** 화면에 테마를 적용하고, 그 테마 글꼴이 없으면 불러옵니다 */

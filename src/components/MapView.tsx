@@ -104,7 +104,7 @@ export function MapView(props: Props) {
 
       {!online && !pickLabel && (
         <div className={styles.pick} role="status">
-          <span>오프라인입니다. 지도 배경은 연결되면 보입니다.</span>
+          <span>오프라인입니다. 지도 배경은 인터넷에 연결되면 보입니다.</span>
         </div>
       )}
 

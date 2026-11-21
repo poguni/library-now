@@ -99,8 +99,8 @@ export function DirectionsBar({ lib, origin, mode }: Props) {
             href={lib.homepage}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="홈페이지 (임시 휴관 공지 확인)"
-            data-tip="홈페이지 (임시 휴관 공지)"
+            aria-label="홈페이지(임시 휴관 공지 확인)"
+            data-tip="홈페이지(임시 휴관 공지)"
             data-tip-pos="end"
           >
             <LinkIcon size={18} strokeWidth={1.8} aria-hidden="true" />

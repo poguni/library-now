@@ -83,7 +83,7 @@ export function ArrivalBox({ row, mode, now, customTime, originName }: Props) {
         </span>
         {travel && (
           <span>
-            <b>{formatTime(arrival)}</b>도착 · {formatTravel(travel)} (추정)
+            <b>{formatTime(arrival)}</b>도착 · {formatTravel(travel)}(추정)
           </span>
         )}
         {usable.waitsForOpen && (

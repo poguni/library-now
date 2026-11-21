@@ -55,7 +55,7 @@ describe('문구 도우미', () => {
     expect(describeReason({ type: 'weekly', weekday: 1 })).toBe('매주 월요일');
     expect(describeReason({ type: 'monthly', nth: 3, weekday: 3 })).toBe('매월 셋째 수요일');
     expect(describeReason({ type: 'monthly', nth: -1, weekday: 2 })).toBe('매월 마지막 주 화요일');
-    expect(describeReason({ type: 'holiday', name: '어린이날' })).toBe('공휴일 (어린이날)');
+    expect(describeReason({ type: 'holiday', name: '어린이날' })).toBe('공휴일(어린이날)');
     expect(describeReason({ type: 'closure', reason: '시설 공사' })).toBe('시설 공사');
   });
 
@@ -81,7 +81,7 @@ describe('문구 도우미', () => {
     expect(describeClosedRule(rule({ weekly: [1, 5], holiday: 'open' }))).toBe('매주 월·금요일');
     expect(describeClosedRule(rule({ holiday: 'open' }))).toBe('정기 휴관 없음');
     expect(describeClosedRule(rule({ weekly: [1], appliesTo: ['lending'] }))).toBe(
-      '매주 월요일, 법정공휴일 (자료실만)',
+      '매주 월요일, 법정공휴일(자료실만)',
     );
   });
 });
