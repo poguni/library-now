@@ -2,6 +2,7 @@
 import { Download, MapPin, Trash2, Upload, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { PLACE_LABEL, type PlaceKind, type Places } from '../state/places';
+import { describeCoverage, describeDateRange } from '../domain/present';
 import type { MapKind } from '../state/settings';
 import { THEMES, THEME_LABEL, type Theme } from '../state/theme';
 import type { MetaFile } from '../state/useLibraryData';
@@ -21,6 +22,8 @@ interface Props {
   onDeletePlace(kind: PlaceKind): void;
   meta: MetaFile | null;
   libraryCount: number;
+  /** 홈페이지와 대조한(검수된) 도서관 수 */
+  reviewedCount: number;
   onReset(): void;
   onExport(): void;
   /** 실패하면 안내 문구, 성공하면 null (새로고침) */
@@ -180,11 +183,18 @@ export function SettingsDialog(props: Props) {
           {meta ? (
             <dl className={styles.info}>
               <dt>범위</dt>
+              <dd>{describeCoverage(meta.districts, props.libraryCount)}</dd>
+              <dt>검수</dt>
               <dd>
-                {meta.districts.join(' · ')} 공공도서관 {props.libraryCount}곳
+                홈페이지 확인 {props.reviewedCount}곳 · 공공데이터 자동 변환(미검수){' '}
+                {props.libraryCount - props.reviewedCount}곳
               </dd>
               <dt>데이터 기준일</dt>
-              <dd>{meta.baseDates.join(', ')}</dd>
+              <dd>
+                {describeDateRange(meta.baseDates)}
+                <br />
+                <span className={styles.hint}>도서관마다 다르며, 상세 화면 아래에 표시합니다</span>
+              </dd>
               <dt>만든 날</dt>
               <dd>{meta.generatedAt.slice(0, 10)}</dd>
               <dt>공휴일</dt>
@@ -205,8 +215,8 @@ export function SettingsDialog(props: Props) {
             <p className={styles.hint}>데이터를 불러오는 중입니다.</p>
           )}
           <p className={styles.hint}>
-            운영시간은 각 도서관 홈페이지에서 확인한 값입니다. 임시 휴관은 홈페이지 공지를 함께
-            확인해 주세요.
+            검수된 도서관의 운영시간은 홈페이지에서 확인한 값이고, 미검수 도서관은 공공데이터
+            값입니다. 임시 휴관은 홈페이지 공지를 함께 확인해 주세요.
           </p>
         </section>
 

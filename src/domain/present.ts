@@ -232,3 +232,23 @@ export const TONE_ORDER: Record<Tone, number> = {
   unknown: 5,
   none: 6,
 };
+
+/** 서울 자치구 수. 설정 '데이터 정보'에서 전체 범위를 짧게 쓸 때 씁니다 */
+const SEOUL_DISTRICT_COUNT = 25;
+
+/** 설정 '데이터 정보'의 범위 (PRD 8.5): 25개 구가 다 있으면 "서울 25개 구" */
+export function describeCoverage(districts: readonly string[], libraryCount: number): string {
+  const where =
+    districts.length === SEOUL_DISTRICT_COUNT
+      ? `서울 ${SEOUL_DISTRICT_COUNT}개 구`
+      : [...districts].sort((a, b) => a.localeCompare(b, 'ko')).join(' · ');
+  return `${where} 공공도서관 ${libraryCount}곳`;
+}
+
+/** 여러 기준일을 "가장 이른 날 ~ 가장 늦은 날"로 */
+export function describeDateRange(dates: readonly string[]): string {
+  const sorted = [...dates].sort();
+  if (sorted.length === 0) return '–';
+  if (sorted.length === 1 || sorted[0] === sorted.at(-1)) return sorted[0]!;
+  return `${sorted[0]} ~ ${sorted.at(-1)}`;
+}

@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   applyUsable,
   describeClosedRule,
+  describeCoverage,
+  describeDateRange,
   describeNextOpen,
   describeReason,
   formatDate,
@@ -16,6 +18,25 @@ const rule = (r: Partial<ClosedRule>): ClosedRule => ({
   holiday: 'closed',
   appliesTo: ['lending', 'reading'],
   ...r,
+});
+
+describe('설정 데이터 정보 (PRD 8.5)', () => {
+  const all = Array.from({ length: 25 }, (_, i) => `구${i}`);
+
+  it('25개 구가 다 있으면 짧게, 아니면 구 이름', () => {
+    expect(describeCoverage(all, 254)).toBe('서울 25개 구 공공도서관 254곳');
+    expect(describeCoverage(['양천구', '구로구', '영등포구'], 34)).toBe(
+      '구로구 · 양천구 · 영등포구 공공도서관 34곳',
+    );
+  });
+
+  it('기준일은 처음 ~ 끝', () => {
+    expect(describeDateRange(['2026-10-14', '2018-05-01', '2025-06-18'])).toBe(
+      '2018-05-01 ~ 2026-10-14',
+    );
+    expect(describeDateRange(['2026-10-14'])).toBe('2026-10-14');
+    expect(describeDateRange([])).toBe('–');
+  });
 });
 
 describe('문구 도우미', () => {

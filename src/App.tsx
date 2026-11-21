@@ -21,7 +21,7 @@ import {
   soonestOpening,
   sortRows,
 } from './domain/list';
-import { formatDate, ROOM_NAME } from './domain/present';
+import { formatDate, isUnreviewed, ROOM_NAME } from './domain/present';
 import { parseShare } from './domain/shareLink';
 import { formatTime, toSeoul } from './domain/time';
 import { formatKm } from './domain/travel';
@@ -471,6 +471,7 @@ export default function App() {
         onDeletePlace={deletePlace}
         meta={ready?.meta ?? null}
         libraryCount={ready?.libraries.length ?? 0}
+        reviewedCount={ready?.libraries.filter((l) => !isUnreviewed(l)).length ?? 0}
         onReset={resetAll}
         onExport={exportFile}
         onImport={importFile}
