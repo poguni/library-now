@@ -98,6 +98,10 @@
   color: var(--top-text);
 }
 
+.nowShort {
+  display: none;
+}
+
 /* 기준 시각을 직접 고르면 강조 (F13) */
 .now[data-custom] {
   border-color: var(--top-on);
@@ -200,8 +204,13 @@
     min-width: 0;
   }
 
+  /* 앱 이름은 로고처럼 크기를 고정해, 아주 큰 글자에서도 시각·글자 크기 버튼과 한 줄에 둡니다 */
   .brandText b {
-    font-size: calc(18px * var(--font-scale));
+    font-size: 18px;
+  }
+
+  .brandText span {
+    font-size: 11px;
   }
 
   /* 보이는 크기는 작게, 누르는 영역은 44px */
@@ -220,8 +229,13 @@
   }
 
   .now .label,
-  .now svg {
+  .now svg,
+  .now .nowText {
     display: none;
+  }
+
+  .now .nowShort {
+    display: inline;
   }
 
   .seg {

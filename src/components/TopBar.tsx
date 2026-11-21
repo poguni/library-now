@@ -39,6 +39,9 @@ export function TopBar(props: Props) {
   const { districts, offDistricts, mode, onMode, now, places } = props;
   const seoul = toSeoul(now);
   const timeText = `${props.customTime ? '직접' : '지금'} · ${formatDate(seoul.date)} ${formatTime(seoul.minutes)}`;
+  // 스마트폰은 폭이 좁아 "11.21 10:29"처럼 줄여 씁니다 (직접 고른 시각은 테두리 강조로 구분)
+  const [, month, day] = seoul.date.split('-').map(Number);
+  const shortText = `${month}.${day} ${formatTime(seoul.minutes)}`;
 
   const onOriginChange = (value: string) => {
     if (value === 'pick-home' || value === 'pick-work') {
@@ -115,6 +118,7 @@ export function TopBar(props: Props) {
         <Clock size={16} strokeWidth={1.8} aria-hidden="true" />
         <span className={styles.label}>기준</span>
         <span className={styles.nowText}>{timeText}</span>
+        <span className={styles.nowShort}>{shortText}</span>
       </button>
 
       <FontSizePicker value={props.fontSize} onChange={props.onFontSize} />
